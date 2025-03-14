@@ -1,8 +1,0 @@
-<resources>
-    <string-array name="in_case_of_danger_defaults">
-        <item>Nach Einatmen: An die frische Luft bringen. Sofort Arzt hinzuziehen.</item>
-        <item>Nach Hautkontakt: Sofort mit Wasser abwaschen. Kontaminierte Kleidung entfernen. Sofort Arzt hinzuziehen.</item>
-        <item>Nach Verschlucken: Mund mit Wasser spülen, Wasser trinken lassen. Kein Erbrechen auslösen. Nur bei Bewusstsein!</item>
-        <item>Nach Augenkontakt: Mit Wasser spülen. Falls vorhanden nach Möglichkeit Kontaktlinsen entfernen und weiter spülen. Sofort Augenarzt hinzuziehen.</item>
-    </string-array>
-</resources>
