@@ -95,52 +95,62 @@ fun Preview(
             ListRow {
                 TextBlock(
                     weight = 6f,
-                    title = Res.string.used_substances
+                    title = Res.string.used_substances,
+                    textAlign = TextAlign.Center
                 )
                 TextBlock(
                     weight = 4f,
-                    title = Res.string.molar_mass_with_unit
+                    title = Res.string.molar_mass_with_unit,
+                    textAlign = TextAlign.Center
                 )
                 TextBlock(
                     weight = 4f,
-                    title = Res.string.temperatures
+                    title = Res.string.temperatures,
+                    textAlign = TextAlign.Center
                 )
                 TextBlock(
                     weight = 6f,
-                    title = Res.string.ghs_pictograms
+                    title = Res.string.ghs_pictograms,
+                    textAlign = TextAlign.Center
                 )
                 TextBlock(
                     weight = 6f,
-                    title = Res.string.h_and_p_phrases_number
+                    title = Res.string.h_and_p_phrases_number,
+                    textAlign = TextAlign.Center
                 )
                 TextBlock(
                     weight = 4f,
-                    title = Res.string.mak_ld50_wgk
+                    title = Res.string.mak_ld50_wgk,
+                    textAlign = TextAlign.Center
                 )
                 TextBlock(
                     weight = 4f,
-                    title = Res.string.quantity_required
+                    title = Res.string.quantity_required,
+                    textAlign = TextAlign.Center
                 )
             }
             substanceList.forEach {
                 ListRow {
                     SubstanceColumn(6f) {
-                        Text(it.name)
+                        CenteredText(it.name)
                         if (it.formattedMolecularFormula.isNotBlank()) {
-                            it.FormattedMolecularFormula()
+                            it.FormattedMolecularFormula(modifier = Modifier.fillMaxWidth())
                         } else {
-                            Text(it.molecularFormula)
+                            CenteredText(it.molecularFormula)
                         }
                     }
                     SubstanceColumn(4f) {
-                        Text(valueOrDash(it.molarMass))
+                        CenteredText(valueOrDash(it.molarMass))
                     }
                     SubstanceColumn(4f) {
-                        Text(valueOrDash(it.boilingPoint, stringResource(Res.string.celsius_unit)))
-                        Text(valueOrDash(it.meltingPoint, stringResource(Res.string.celsius_unit)))
+                        CenteredText(valueOrDash(it.boilingPoint, stringResource(Res.string.celsius_unit)))
+                        CenteredText(valueOrDash(it.meltingPoint, stringResource(Res.string.celsius_unit)))
                     }
                     SubstanceColumn(6f) {
-                        Row {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
                             it.ghsPictograms.forEach {
                                 Column(
                                     modifier = Modifier.sizeIn(maxWidth = 50.dp, maxHeight = 50.dp).weight(1f)
@@ -152,20 +162,20 @@ fun Preview(
                                 }
                             }
                         }
-                        Text(it.signalWord)
+                        CenteredText(it.signalWord)
                     }
                     SubstanceColumn(6f) {
-                        Text(it.hPhrases.joinToString("-") { it.first })
+                        CenteredText(it.hPhrases.joinToString("-") { it.first })
                         Text("")
-                        Text(it.pPhrases.joinToString("-") { it.first })
+                        CenteredText(it.pPhrases.joinToString("-") { it.first })
                     }
                     SubstanceColumn(4f) {
-                        Text(valueOrDash(it.mak, stringResource(Res.string.mak_unit)))
-                        Text(valueOrDash(it.lethalDose, stringResource(Res.string.lethal_dose_unit)))
-                        Text(valueOrDash(it.wgk))
+                        CenteredText(valueOrDash(it.mak, stringResource(Res.string.mak_unit)))
+                        CenteredText(valueOrDash(it.lethalDose, stringResource(Res.string.lethal_dose_unit)))
+                        CenteredText(valueOrDash(it.wgk))
                     }
                     SubstanceColumn(4f) {
-                        Text(if (it.quantity.value.isNotBlank()) "${it.quantity.value} ${it.quantity.unit}" else "")
+                        CenteredText(if (it.quantity.value.isNotBlank()) "${it.quantity.value} ${it.quantity.unit}" else "")
                     }
                 }
             }
@@ -240,6 +250,15 @@ fun Preview(
 
 
 @Composable
+fun CenteredText(content: String) {
+    Text(
+        modifier = Modifier.fillMaxWidth(),
+        text = content,
+        textAlign = TextAlign.Center
+    )
+}
+
+@Composable
 fun RowScope.SubstanceColumn(weight: Float, content: @Composable (ColumnScope.() -> Unit)) {
     Column(
         modifier = Modifier.fillMaxWidth().border(1.dp, Color.White).padding(10.dp).fillMaxHeight().weight(weight),
@@ -297,12 +316,16 @@ fun ListRow(content: @Composable (RowScope.() -> Unit)) {
 }
 
 @Composable
-fun RowScope.TextBlock(weight: Float, title: StringResource, content: String? = null) {
+fun RowScope.TextBlock(weight: Float, title: StringResource, content: String? = null, textAlign: TextAlign = TextAlign.Start) {
     Column(
         modifier = modifier.weight(weight).fillMaxHeight(),
         verticalArrangement = Arrangement.Center
     ) {
-        Text(stringResource(title))
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = stringResource(title),
+            textAlign = textAlign
+        )
         if (content != null) {
             Text(content)
         }

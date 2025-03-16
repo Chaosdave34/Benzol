@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.BaselineShift
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import io.github.chaosdave34.benzol.search.Source
 import kotlinx.serialization.Serializable
@@ -192,7 +193,8 @@ data class Substance(
                     }
                     sub = !sub
                 }
-            }
+            },
+            textAlign = TextAlign.Center
         )
     }
 }

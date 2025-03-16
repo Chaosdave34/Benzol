@@ -1,30 +1,6 @@
 package io.github.chaosdave34.benzol.files
 
-import benzol.composeapp.generated.resources.Res
-import benzol.composeapp.generated.resources.assistant
-import benzol.composeapp.generated.resources.celsius_unit
-import benzol.composeapp.generated.resources.disposal
-import benzol.composeapp.generated.resources.ghs_pictograms
-import benzol.composeapp.generated.resources.h_and_p_phrases_number
-import benzol.composeapp.generated.resources.human_and_environment_danger
-import benzol.composeapp.generated.resources.in_case_of_danger
-import benzol.composeapp.generated.resources.lethal_dose_unit
-import benzol.composeapp.generated.resources.location_and_date
-import benzol.composeapp.generated.resources.mak_ld50_wgk
-import benzol.composeapp.generated.resources.mak_unit
-import benzol.composeapp.generated.resources.molar_mass_with_unit
-import benzol.composeapp.generated.resources.name_with_plural
-import benzol.composeapp.generated.resources.place
-import benzol.composeapp.generated.resources.preparation
-import benzol.composeapp.generated.resources.quantity_required
-import benzol.composeapp.generated.resources.rules_of_conduct
-import benzol.composeapp.generated.resources.signature
-import benzol.composeapp.generated.resources.signature_1
-import benzol.composeapp.generated.resources.signature_2
-import benzol.composeapp.generated.resources.sources
-import benzol.composeapp.generated.resources.temperatures
-import benzol.composeapp.generated.resources.title_h_and_p_phrases
-import benzol.composeapp.generated.resources.used_substances
+import benzol.composeapp.generated.resources.*
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.nodes.Document
 import io.github.chaosdave34.benzol.Substance
@@ -128,7 +104,7 @@ class HtmlFile(
                         }
                         substanceList.forEach { substance ->
                             tr {
-                                td("min-width-5cm") {
+                                td("min-width-5cm center") {
                                     colSpan = "6"
                                     +substance.name
                                     br
@@ -151,17 +127,17 @@ class HtmlFile(
                                         +substance.molecularFormula
                                     }
                                 }
-                                td("min-width-2cm value-with-unit") {
+                                td("min-width-2cm value-with-unit center") {
                                     colSpan = "4"
                                     +valueOrDash(substance.molarMass)
                                 }
-                                td("min-width-2cm value-with-unit") {
+                                td("min-width-2cm value-with-unit center") {
                                     colSpan = "4"
                                     +valueOrDash(substance.boilingPoint, celsiusUnit)
                                     br
                                     +valueOrDash(substance.meltingPoint, celsiusUnit)
                                 }
-                                td("min-width-ghs-symbols") {
+                                td("min-width-ghs-symbols center") {
                                     colSpan = "6"
                                     substance.ghsPictograms.forEach {
                                         img(classes = "ghs") {
@@ -175,14 +151,14 @@ class HtmlFile(
                                         }
                                     }
                                 }
-                                td("phrase-numbers") {
+                                td("phrase-numbers center") {
                                     colSpan = "6"
                                     +substance.hPhrases.joinToString("-") { it.first }
                                     br
                                     br
                                     +substance.pPhrases.joinToString("-") { it.first }
                                 }
-                                td("min-width-2cm value-with-unit") {
+                                td("min-width-2cm value-with-unit center") {
                                     colSpan = "4"
                                     +valueOrDash(substance.mak, makUnit)
                                     br
@@ -190,7 +166,7 @@ class HtmlFile(
                                     br
                                     +valueOrDash(substance.wgk)
                                 }
-                                td {
+                                td("center") {
                                     colSpan = "4"
                                     if (substance.quantity.value.isNotBlank()) {
                                         +substance.quantity.value
@@ -202,7 +178,7 @@ class HtmlFile(
                         }
 
                         // h and p
-                        tr("no-break-after"){
+                        tr("no-break-after") {
                             td("center") {
                                 colSpan = "34"
                                 +hAndPPhrasesTitle
@@ -315,7 +291,7 @@ class HtmlFile(
     }
 
     fun TR.ingredientTitle(weight: Int, title: String) {
-        td {
+        td("center") {
             colSpan = weight.toString()
             val iterator = title.split("\n").iterator()
             while (iterator.hasNext()) {
