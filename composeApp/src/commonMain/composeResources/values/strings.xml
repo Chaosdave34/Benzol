@@ -65,7 +65,7 @@
     <string name="preview">Vorschau:</string>
     <string name="name_with_plural">Name(n)</string>
 
-    <string name="used_substances">eingesetze Stoff\nund Produkte</string>
+    <string name="used_substances">eingesetze Stoffe\nund Produkte</string>
     <string name="molar_mass_with_unit">MG\n[g/mol]</string>
     <string name="temperatures">Sdp.\nSmp.</string>
     <string name="h_and_p_phrases_number">H/P-Sätze\n(Nummern)</string>
