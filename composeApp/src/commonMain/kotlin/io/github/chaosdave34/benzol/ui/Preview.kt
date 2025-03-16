@@ -240,7 +240,7 @@ fun Preview(
 
 
 @Composable
-fun RowScope.SubstanceColumn(weight: Float, content: @Composable (ColumnScope.() -> Unit)) { // Todo move modifier global
+fun RowScope.SubstanceColumn(weight: Float, content: @Composable (ColumnScope.() -> Unit)) {
     Column(
         modifier = Modifier.fillMaxWidth().border(1.dp, Color.White).padding(10.dp).fillMaxHeight().weight(weight),
         verticalArrangement = Arrangement.Center,
