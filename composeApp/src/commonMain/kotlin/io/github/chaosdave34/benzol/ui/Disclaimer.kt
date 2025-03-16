@@ -64,6 +64,5 @@ fun Disclaimer() {
                 }
             }
         }
-
     }
 }

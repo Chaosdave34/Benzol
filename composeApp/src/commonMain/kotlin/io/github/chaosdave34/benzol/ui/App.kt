@@ -27,15 +27,11 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import benzol.composeapp.generated.resources.*
-import io.github.chaosdave34.benzol.FileOpener
-import io.github.chaosdave34.benzol.FileSaver
+import io.github.chaosdave34.benzol.FileDialogs
 import io.github.chaosdave34.benzol.GHSPictogram
-import io.github.chaosdave34.benzol.PdfExport
 import io.github.chaosdave34.benzol.Substance
-import io.github.chaosdave34.benzol.files.CaBr2File
-import io.github.chaosdave34.benzol.files.HtmlFile
+import io.github.chaosdave34.benzol.files.InputData
 import io.github.chaosdave34.benzol.getSettings
 import io.github.chaosdave34.benzol.search.Source
 import kotlinx.coroutines.launch
@@ -45,24 +41,40 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringArrayResource
 import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun App() {
     val coroutineScope = rememberCoroutineScope()
+    val focusManager = LocalFocusManager.current
+
+    val settings = getSettings()
 
     coroutineScope.launch {
         GHSPictogram.Companion.setBase64()
     }
 
-    val settings = getSettings()
-    val focusManager = LocalFocusManager.current
-    val scrollState = rememberScrollState()
+    var darkTheme = remember { mutableStateOf(settings.getBoolean("dark_theme", false)) }
 
+    var fileChooserVisible = remember { mutableStateOf(false) }
+    var fileSaverVisible = remember { mutableStateOf(false) }
+    var pdfExportVisible = remember { mutableStateOf(false) }
+
+    var settingsVisible = remember { mutableStateOf(false) }
+
+    // Links
+    var openLink: String? by remember { mutableStateOf(null) }
+    openLink?.let {
+        LocalUriHandler.current.openUri(it)
+        openLink = null
+    }
+
+    // default values
     val documentTitleDefault = stringResource(Res.string.document_title_default)
     val organisationDefault = stringResource(Res.string.organisation_default)
     val courseDefault = stringResource(Res.string.course_default)
     val inCaseOfDangerDefaults = stringArrayResource(Res.array.in_case_of_danger_defaults)
 
+    // input
     val fileName = remember { mutableStateOf("") }
 
     val documentTitle = remember { mutableStateOf(documentTitleDefault) }
@@ -80,137 +92,63 @@ fun App() {
 
     val substanceList = remember { mutableStateListOf<Substance>() }
 
-    var searchTypeIndex by remember { mutableStateOf(0) }
+    FileDialogs(
+        coroutineScope = coroutineScope,
+        fileChooserVisible = fileChooserVisible,
+        fileSaverVisible = fileSaverVisible,
+        pdfExportVisible = pdfExportVisible,
+        import = { inputData ->
+            fileName.value = inputData.fileName
+            documentTitle.value = inputData.documentTitle
+            organisation.value = inputData.organisation
+            course.value = inputData.course
+            name.value = inputData.name
+            place.value = inputData.place
+            assistant.value = inputData.assistant
+            preparation.value = inputData.preparation
 
-    var dialogOpen: Int? by remember { mutableStateOf(null) }
+            substanceList.clear()
+            substanceList.addAll(inputData.substanceList)
 
-    var sidebarDropdownExpanded by remember { mutableStateOf(false) }
+            humanAndEnvironmentDanger.clear()
+            humanAndEnvironmentDanger.addAll(inputData.humanAndEnvironmentDanger)
 
-    var fileOpenerVisible by remember { mutableStateOf(false) }
-    var fileSaverVisible by remember { mutableStateOf(false) }
+            rulesOfConduct.clear()
+            rulesOfConduct.addAll(inputData.rulesOfConduct)
 
-    var pdfExportVisible by remember { mutableStateOf(false) }
+            inCaseOfDanger.clear()
+            inCaseOfDanger.addAll(inputData.inCaseOfDanger)
 
-    var openLink: String? by remember { mutableStateOf(null) }
-
-    var darkTheme = remember { mutableStateOf(settings.getBoolean("dark_theme", false)) }
-    var settingsOpen = remember { mutableStateOf(false) }
-
-    openLink?.let {
-        LocalUriHandler.current.openUri(it)
-        openLink = null
-    }
+            disposal.clear()
+            disposal.addAll(inputData.disposal)
+        },
+        export = {
+            InputData(
+                fileName = fileName.value,
+                documentTitle = documentTitle.value,
+                organisation = organisation.value,
+                course = course.value,
+                name = name.value,
+                place = place.value,
+                assistant = assistant.value,
+                preparation = preparation.value,
+                substanceList = substanceList,
+                humanAndEnvironmentDanger = humanAndEnvironmentDanger,
+                rulesOfConduct = rulesOfConduct,
+                inCaseOfDanger = inCaseOfDanger,
+                disposal = disposal
+            )
+        }
+    )
 
     MaterialTheme(
         colorScheme = if (darkTheme.value) darkColorScheme() else lightColorScheme()
     ) {
-        if (settingsOpen.value) {
-            Settings(settingsOpen, darkTheme)
-        }
-
+        Settings(
+            open = settingsVisible,
+            darkTheme = darkTheme
+        )
         Disclaimer()
-
-        if (fileOpenerVisible) {
-            FileOpener(
-                coroutineScope,
-                result = { json, file ->
-                    if (json != null) {
-                        val caBr2File = CaBr2File.fromJson(json)
-                        if (caBr2File != null) {
-                            val header = caBr2File.header
-                            documentTitle.value = header.documentTitle
-                            organisation.value = header.organisation
-                            course.value = header.labCourse
-                            name.value = header.name
-                            place.value = header.place
-                            assistant.value = header.assistant
-                            preparation.value = header.preparation
-
-                            humanAndEnvironmentDanger.clear()
-                            humanAndEnvironmentDanger.addAll(caBr2File.humanAndEnvironmentDanger)
-
-                            rulesOfConduct.clear()
-                            rulesOfConduct.addAll(caBr2File.rulesOfConduct)
-
-                            inCaseOfDanger.clear()
-                            inCaseOfDanger.addAll(caBr2File.inCaseOfDanger)
-
-                            disposal.clear()
-                            disposal.addAll(caBr2File.disposal)
-
-                            substanceList.clear()
-                            substanceList.addAll(caBr2File.substanceData.map { it.import() })
-
-                            fileName.value = file.replace("\\.[^.]*$".toRegex(), "")
-                        }
-                    }
-                }
-            ) {
-                fileOpenerVisible = false
-            }
-        }
-
-        if (fileSaverVisible) {
-            FileSaver(
-                coroutineScope,
-                fileName = fileName.value,
-                output = {
-                    val header = CaBr2File.CaBr2Data.Header(
-                        documentTitle.value.trim(),
-                        organisation.value.trim(),
-                        course.value.trim(),
-                        name.value.trim(),
-                        place.value.trim(),
-                        assistant.value.trim(),
-                        preparation.value.trim()
-                    )
-
-                    val content = CaBr2File.CaBr2Data(
-                        header,
-                        substanceList.map { CaBr2File.CaBr2Data.SubstanceData.export(it) },
-                        humanAndEnvironmentDanger.map { it.trim() },
-                        rulesOfConduct.map { it.trim() },
-                        inCaseOfDanger.map { it.trim() },
-                        disposal.map { it.trim() }
-                    )
-
-                    CaBr2File.toJson(content)
-                }
-            ) {
-                fileSaverVisible = false
-            }
-        }
-
-        if (pdfExportVisible) {
-            Dialog(
-                onDismissRequest = {}
-            ) {
-                CircularProgressIndicator()
-            }
-
-            PdfExport(
-                coroutineScope,
-                fileName = fileName.value,
-                output = {
-                    HtmlFile(
-                        documentTitle.value.trim(),
-                        organisation.value.trim(),
-                        course.value.trim(),
-                        name.value.trim(),
-                        place.value.trim(),
-                        assistant.value.trim(),
-                        preparation.value.trim(),
-                        substanceList,
-                        humanAndEnvironmentDanger.map { it.trim(); it.replace("\n", "") },
-                        rulesOfConduct.map { it.trim(); it.replace("\n", "") },
-                        inCaseOfDanger.map { it.trim(); it.replace("\n", "") },
-                        disposal.map { it.trim(); it.replace("\n", "") }
-                    )
-                }
-            ) {
-                pdfExportVisible = false
-            }
-        }
 
         Row(
             Modifier.pointerInput(Unit) {
@@ -219,321 +157,388 @@ fun App() {
                 }
             }
         ) {
-            Surface(
-                tonalElevation = 8.dp
-            ) {
-                Column(
-                    Modifier.padding(10.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
+            Sidebar(
+                openFileChooser = { fileChooserVisible.value = true },
+                openFileSaver = { fileSaverVisible.value = true },
+                openPdfExport = { pdfExportVisible.value = true },
+                openSettings = { settingsVisible.value = true },
+                openLink = { openLink = it },
+                resetInput = {
+                    fileName.value = ""
+
+                    documentTitle.value = documentTitleDefault
+                    organisation.value = organisationDefault
+                    course.value = courseDefault
+                    name.value = ""
+                    place.value = ""
+                    assistant.value = ""
+                    preparation.value = ""
+
+                    humanAndEnvironmentDanger.clear()
+                    rulesOfConduct.clear()
+                    inCaseOfDanger.clear()
+                    inCaseOfDanger.addAll(inCaseOfDangerDefaults)
+                    disposal.clear()
+
+                    substanceList.clear()
+                }
+            )
+
+            Content(
+                fileName = fileName,
+                documentTitle = documentTitle,
+                organisation = organisation,
+                course = course,
+                name = name,
+                place = place,
+                assistant = assistant,
+                preparation = preparation,
+                substanceList = substanceList,
+                humanAndEnvironmentDanger = humanAndEnvironmentDanger,
+                rulesOfConduct = rulesOfConduct,
+                inCaseOfDanger = inCaseOfDanger,
+                disposal = disposal,
+                openFileSaver = { fileSaverVisible.value = true },
+                openPdfExport = { pdfExportVisible.value = true },
+                openLink = { openLink = it }
+            )
+        }
+    }
+}
+
+@Composable
+fun Sidebar(
+    openFileChooser: () -> Unit,
+    openFileSaver: () -> Unit,
+    openPdfExport: () -> Unit,
+    openSettings: () -> Unit,
+    openLink: (String) -> Unit,
+    resetInput: () -> Unit
+) {
+    var dropdownExpanded by remember { mutableStateOf(false) }
+
+    Surface(
+        tonalElevation = 8.dp
+    ) {
+        Column(
+            Modifier.padding(10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Box {
+                Button(
+                    onClick = { dropdownExpanded = true }
                 ) {
-                    Box {
-                        Button(
-                            onClick = { sidebarDropdownExpanded = true }
-                        ) {
-                            Icon(Icons.Rounded.Menu, stringResource(Res.string.open_settings))
-                        }
+                    Icon(Icons.Rounded.Menu, stringResource(Res.string.open_settings))
+                }
 
-                        DropdownMenu(
-                            expanded = sidebarDropdownExpanded,
-                            onDismissRequest = { sidebarDropdownExpanded = false }
-                        ) {
-                            DropdownMenuItem(
-                                text = { Text(stringResource(Res.string.new_file)) },
-                                onClick = {
-                                    sidebarDropdownExpanded = false
-                                    fileName.value = ""
-
-                                    documentTitle.value = documentTitleDefault
-                                    organisation.value = organisationDefault
-                                    course.value = courseDefault
-                                    name.value = ""
-                                    place.value = ""
-                                    assistant.value = ""
-                                    preparation.value = ""
-
-                                    humanAndEnvironmentDanger.clear()
-                                    rulesOfConduct.clear()
-                                    inCaseOfDanger.clear()
-                                    inCaseOfDanger.addAll(inCaseOfDangerDefaults)
-                                    disposal.clear()
-
-                                    substanceList.clear()
-                                }
-                            )
-                            DropdownMenuItem(
-                                text = { Text(stringResource(Res.string.open_file)) },
-                                onClick = {
-                                    sidebarDropdownExpanded = false
-                                    fileOpenerVisible = true
-                                }
-                            )
-                            DropdownMenuItem(
-                                {
-                                    Text(stringResource(Res.string.save_file))
-                                },
-                                onClick = {
-                                    sidebarDropdownExpanded = false
-                                    fileSaverVisible = true
-                                }
-                            )
-                            DropdownMenuItem(
-                                { Text(stringResource(Res.string.export_file)) },
-                                onClick = {
-                                    sidebarDropdownExpanded = false
-                                    pdfExportVisible = true
-                                }
-                            )
-                            HorizontalDivider()
-                            DropdownMenuItem(
-                                { Text(stringResource(Res.string.settings)) },
-                                onClick = {
-                                    sidebarDropdownExpanded = false
-                                    settingsOpen.value = true
-                                }
-                            )
-                        }
-                    }
-
-                    Spacer(Modifier.weight(1f))
-
-                    Button(
+                DropdownMenu(
+                    expanded = dropdownExpanded,
+                    onDismissRequest = { dropdownExpanded = false }
+                ) {
+                    DropdownMenuItem(
+                        text = { Text(stringResource(Res.string.new_file)) },
                         onClick = {
-                            openLink = "https://github.com/Chaosdave34/"
+                            dropdownExpanded = false
+                            resetInput()
                         }
-                    ) {
-                        Image(
-                            modifier = Modifier.size(ButtonDefaults.IconSize),
-                            painter = painterResource(Res.drawable.github),
-                            contentDescription = stringResource(Res.string.github)
-                        )
-                    }
-
-                    Text(text = "1.0.0")
+                    )
+                    DropdownMenuItem(
+                        text = { Text(stringResource(Res.string.open_file)) },
+                        onClick = {
+                            dropdownExpanded = false
+                            openFileChooser()
+                        }
+                    )
+                    DropdownMenuItem(
+                        {
+                            Text(stringResource(Res.string.save_file))
+                        },
+                        onClick = {
+                            dropdownExpanded = false
+                            openFileSaver()
+                        }
+                    )
+                    DropdownMenuItem(
+                        { Text(stringResource(Res.string.export_file)) },
+                        onClick = {
+                            dropdownExpanded = false
+                            openPdfExport()
+                        }
+                    )
+                    HorizontalDivider()
+                    DropdownMenuItem(
+                        { Text(stringResource(Res.string.settings)) },
+                        onClick = {
+                            dropdownExpanded = false
+                            openSettings()
+                        }
+                    )
                 }
             }
 
-            Surface {
+            Spacer(Modifier.weight(1f))
+
+            Button(
+                onClick = {
+                    openLink("https://github.com/Chaosdave34/Benzol")
+                }
+            ) {
+                Image(
+                    modifier = Modifier.size(ButtonDefaults.IconSize),
+                    painter = painterResource(Res.drawable.github),
+                    contentDescription = stringResource(Res.string.github)
+                )
+            }
+            Text("1.0.0")
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Content(
+    fileName: MutableState<String>,
+    documentTitle: MutableState<String>,
+    organisation: MutableState<String>,
+    course: MutableState<String>,
+    name: MutableState<String>,
+    place: MutableState<String>,
+    assistant: MutableState<String>,
+    preparation: MutableState<String>,
+    substanceList: SnapshotStateList<Substance>,
+    humanAndEnvironmentDanger: SnapshotStateList<String>,
+    rulesOfConduct: SnapshotStateList<String>,
+    inCaseOfDanger: SnapshotStateList<String>,
+    disposal: SnapshotStateList<String>,
+    openFileSaver: () -> Unit,
+    openPdfExport: () -> Unit,
+    openLink: (String) -> Unit
+) {
+    val scrollState = rememberScrollState()
+
+    var searchTypeIndex by remember { mutableStateOf(0) }
+    var dialogOpen: Int? by remember { mutableStateOf(null) }
+
+    Surface {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            Row(
+                modifier = Modifier.weight(1f)
+            ) {
                 Column(
-                    modifier = Modifier.fillMaxSize(),
+                    Modifier
+                        .fillMaxSize()
+                        .padding(10.dp)
+                        .verticalScroll(scrollState)
+                        .weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    Row(
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Column(
-                            Modifier
-                                .fillMaxSize()
-                                .padding(10.dp)
-                                .verticalScroll(scrollState)
-                                .weight(1f),
-                            verticalArrangement = Arrangement.spacedBy(10.dp)
+                    DefaultColumn {
+                        Input(
+                            value = fileName,
+                            label = Res.string.file_name
+                        )
+                        HorizontalDivider()
+                        Input(
+                            value = documentTitle,
+                            label = Res.string.document_title
+                        )
+                        Input(
+                            value = organisation,
+                            label = Res.string.organisation
+                        )
+                        Input(
+                            value = course,
+                            label = Res.string.course
+                        )
+                        Input(
+                            value = name,
+                            label = Res.string.name
+                        )
+                        Input(
+                            value = place,
+                            label = Res.string.place
+                        )
+                        Input(
+                            value = assistant,
+                            label = Res.string.assistant
+                        )
+                        Input(
+                            value = preparation,
+                            label = Res.string.preparation
+                        )
+                    }
+
+                    DefaultColumn {
+                        TabRow(
+                            selectedTabIndex = searchTypeIndex,
+                            containerColor = MaterialTheme.colorScheme.surfaceContainer
                         ) {
-                            DefaultColumn {
-                                Input(
-                                    value = fileName,
-                                    label = Res.string.file_name
+                            Tab(
+                                selected = searchTypeIndex == 0,
+                                onClick = { searchTypeIndex = 0 },
+                                text = { Text(stringResource(Res.string.gestis)) },
+                            )
+
+                            Tab(
+                                selected = searchTypeIndex == 1,
+                                enabled = false,
+                                onClick = { searchTypeIndex = 1 },
+                                text = { Text("") },
+                            )
+                        }
+
+                        when (searchTypeIndex) {
+                            0 -> GestisSearch(
+                                onResult = { substanceList.add(it) }
+                            )
+                        }
+
+                        HorizontalDivider(thickness = 2.dp)
+                        Text(stringResource(Res.string.edit_substance))
+
+                        Column {
+                            Row(
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(
+                                    modifier = Modifier.weight(0.25f),
+                                    text = stringResource(Res.string.name)
                                 )
-                                HorizontalDivider()
-                                Input(
-                                    value = documentTitle,
-                                    label = Res.string.document_title
+                                Text(
+                                    modifier = Modifier.weight(0.25f),
+                                    text = stringResource(Res.string.molecular_formula)
                                 )
-                                Input(
-                                    value = organisation,
-                                    label = Res.string.organisation
+                                Text(
+                                    modifier = Modifier.weight(0.15f),
+                                    text = stringResource(Res.string.cas_number)
                                 )
-                                Input(
-                                    value = course,
-                                    label = Res.string.course
-                                )
-                                Input(
-                                    value = name,
-                                    label = Res.string.name
-                                )
-                                Input(
-                                    value = place,
-                                    label = Res.string.place
-                                )
-                                Input(
-                                    value = assistant,
-                                    label = Res.string.assistant
-                                )
-                                Input(
-                                    value = preparation,
-                                    label = Res.string.preparation
-                                )
+                                Spacer(Modifier.weight(0.35f))
                             }
 
-                            DefaultColumn {
-                                TabRow(
-                                    selectedTabIndex = searchTypeIndex,
-                                    containerColor = MaterialTheme.colorScheme.surfaceContainer
-                                ) {
-                                    Tab(
-                                        selected = searchTypeIndex == 0,
-                                        onClick = { searchTypeIndex = 0 },
-                                        text = { Text(stringResource(Res.string.gestis)) },
-                                    )
-
-                                    Tab(
-                                        selected = searchTypeIndex == 1,
-                                        enabled = false,
-                                        onClick = { searchTypeIndex = 1 },
-                                        text = { Text("") },
-                                    )
-                                }
-
-                                when (searchTypeIndex) {
-                                    0 -> GestisSearch(
-                                        onResult = { substanceList.add(it) }
-                                    )
-                                }
-
+                            substanceList.forEachIndexed { index, substance ->
                                 HorizontalDivider(thickness = 2.dp)
-                                Text(stringResource(Res.string.edit_substance))
+                                Row(
+                                    modifier = Modifier.fillMaxWidth().clickable(onClick = { dialogOpen = index }),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Text(
+                                        modifier = Modifier.weight(0.25f),
+                                        text = substance.name
+                                    )
 
-                                Column {
+                                    val formula = substance.formattedMolecularFormula
+                                    if (formula.isNotBlank()) {
+                                        substance.FormattedMolecularFormula(Modifier.weight(0.25f))
+                                    } else {
+                                        Text(
+                                            modifier = Modifier.weight(0.25f),
+                                            text = substance.molecularFormula
+                                        )
+                                    }
+                                    Text(
+                                        modifier = Modifier.weight(0.15f),
+                                        text = substance.casNumber
+                                    )
                                     Row(
-                                        modifier = Modifier.fillMaxWidth()
+                                        modifier = Modifier.weight(0.35f).padding(end = 10.dp),
+                                        horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.End)
                                     ) {
-                                        Text(
-                                            modifier = Modifier.weight(0.25f),
-                                            text = stringResource(Res.string.name)
-                                        )
-                                        Text(
-                                            modifier = Modifier.weight(0.25f),
-                                            text = stringResource(Res.string.molecular_formula)
-                                        )
-                                        Text(
-                                            modifier = Modifier.weight(0.15f),
-                                            text = stringResource(Res.string.cas_number)
-                                        )
-                                        Spacer(Modifier.weight(0.35f))
-                                    }
-
-                                    substanceList.forEachIndexed { index, substance ->
-                                        HorizontalDivider(thickness = 2.dp)
-                                        Row(
-                                            modifier = Modifier.fillMaxWidth().clickable(onClick = { dialogOpen = index }),
-                                            verticalAlignment = Alignment.CenterVertically,
+                                        Button(
+                                            onClick = {
+                                                openLink(substance.source.second)
+                                            },
+                                            enabled = substance.source.first != Source.CUSTOM
                                         ) {
-                                            Text(
-                                                modifier = Modifier.weight(0.25f),
-                                                text = substance.name
-                                            )
-
-                                            val formula = substance.formattedMolecularFormula
-                                            if (formula.isNotBlank()) {
-                                                substance.FormattedMolecularFormula(Modifier.weight(0.25f))
-                                            } else {
-                                                Text(
-                                                    modifier = Modifier.weight(0.25f),
-                                                    text = substance.molecularFormula
-                                                )
-                                            }
-                                            Text(
-                                                modifier = Modifier.weight(0.15f),
-                                                text = substance.casNumber
-                                            )
-                                            Row(
-                                                modifier = Modifier.weight(0.35f).padding(end = 10.dp),
-                                                horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.End)
-                                            ) {
-                                                Button(
-                                                    onClick = {
-                                                        openLink = substance.source.second
-                                                    },
-                                                    enabled = substance.source.first != Source.CUSTOM
-                                                ) {
-                                                    Text(substance.source.first.displayName)
-                                                }
-                                                Button(
-                                                    onClick = { dialogOpen = index }
-                                                ) {
-                                                    Icon(Icons.Rounded.Edit, stringResource(Res.string.open_settings))
-                                                }
-                                                MoveUpAndDown(
-                                                    list = substanceList,
-                                                    index = index
-                                                )
-                                                RemoveListElementButton(
-                                                    list = substanceList,
-                                                    index = index
-                                                )
-                                            }
+                                            Text(substance.source.first.displayName)
                                         }
-                                    }
-                                    val index = dialogOpen
-                                    if (index != null) {
-                                        EditSubstanceDialog(
+                                        Button(
+                                            onClick = { dialogOpen = index }
+                                        ) {
+                                            Icon(Icons.Rounded.Edit, stringResource(Res.string.open_settings))
+                                        }
+                                        MoveUpAndDown(
                                             list = substanceList,
-                                            index = index,
-                                            onClose = { dialogOpen = null }
+                                            index = index
+                                        )
+                                        RemoveListElementButton(
+                                            list = substanceList,
+                                            index = index
                                         )
                                     }
                                 }
-                                AddListElementButton(
+                            }
+                            val index = dialogOpen
+                            if (index != null) {
+                                EditSubstanceDialog(
                                     list = substanceList,
-                                    element = Substance()
-                                )
-                            }
-
-                            ListInput(
-                                title = Res.string.human_and_environment_danger,
-                                list = humanAndEnvironmentDanger
-                            )
-                            ListInput(
-                                title = Res.string.rules_of_conduct,
-                                list = rulesOfConduct
-                            )
-                            ListInput(
-                                title = Res.string.in_case_of_danger,
-                                list = inCaseOfDanger
-                            )
-                            ListInput(
-                                title = Res.string.disposal,
-                                list = disposal
-                            )
-
-                            DefaultColumn {
-                                Preview(
-                                    documentTitle.value.trim(),
-                                    organisation.value.trim(),
-                                    course.value.trim(),
-                                    name.value.trim(),
-                                    place.value.trim(),
-                                    assistant.value.trim(),
-                                    preparation.value.trim(),
-                                    substanceList,
-                                    humanAndEnvironmentDanger,
-                                    rulesOfConduct,
-                                    inCaseOfDanger,
-                                    disposal
+                                    index = index,
+                                    onClose = { dialogOpen = null }
                                 )
                             }
                         }
-
-                       Scrollbar(scrollState)
+                        AddListElementButton(
+                            list = substanceList,
+                            element = Substance()
+                        )
                     }
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth().padding(end = 20.dp, bottom = 10.dp),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.End)
-                    ) {
-                        Button(
-                            onClick = {
-                                fileSaverVisible = true
-                            }
-                        ) {
-                            Text(stringResource(Res.string.save_file))
-                        }
-                        Button(
-                            onClick = {
-                                pdfExportVisible = true
-                            }
-                        ) {
-                            Text(stringResource(Res.string.export_file))
-                        }
+                    ListInput(
+                        title = Res.string.human_and_environment_danger,
+                        list = humanAndEnvironmentDanger
+                    )
+                    ListInput(
+                        title = Res.string.rules_of_conduct,
+                        list = rulesOfConduct
+                    )
+                    ListInput(
+                        title = Res.string.in_case_of_danger,
+                        list = inCaseOfDanger
+                    )
+                    ListInput(
+                        title = Res.string.disposal,
+                        list = disposal
+                    )
+
+                    DefaultColumn {
+                        Preview(
+                            documentTitle.value.trim(),
+                            organisation.value.trim(),
+                            course.value.trim(),
+                            name.value.trim(),
+                            place.value.trim(),
+                            assistant.value.trim(),
+                            preparation.value.trim(),
+                            substanceList,
+                            humanAndEnvironmentDanger,
+                            rulesOfConduct,
+                            inCaseOfDanger,
+                            disposal
+                        )
                     }
+                }
+
+                Scrollbar(scrollState)
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(end = 20.dp, bottom = 10.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.End)
+            ) {
+                Button(
+                    onClick = {
+                        openFileSaver()
+                    }
+                ) {
+                    Text(stringResource(Res.string.save_file))
+                }
+                Button(
+                    onClick = {
+                        openPdfExport()
+                    }
+                ) {
+                    Text(stringResource(Res.string.export_file))
                 }
             }
         }

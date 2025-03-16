@@ -32,39 +32,41 @@ import org.jetbrains.compose.resources.stringResource
 fun Settings(open: MutableState<Boolean>, darkTheme: MutableState<Boolean>) {
     val settings = getSettings()
 
-    Dialog(
-        onDismissRequest = { open.value = false }
-    ) {
-        Card {
-            Column(
-                modifier = Modifier.padding(10.dp).width(IntrinsicSize.Max),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                Text(stringResource(Res.string.settings))
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+    if (open.value) {
+        Dialog(
+            onDismissRequest = { open.value = false }
+        ) {
+            Card {
+                Column(
+                    modifier = Modifier.padding(10.dp).width(IntrinsicSize.Max),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    Checkbox(
-                        checked = darkTheme.value,
-                        onCheckedChange = {
-                            darkTheme.value = it
-                            settings["dark_theme"] = it
-                        }
-                    )
+                    Text(stringResource(Res.string.settings))
 
-                    Text(stringResource(Res.string.dark_theme))
-                }
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    Button(
-                        onClick = { open.value = false }
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        Icon(Icons.Rounded.Close, stringResource(Res.string.close))
+                        Checkbox(
+                            checked = darkTheme.value,
+                            onCheckedChange = {
+                                darkTheme.value = it
+                                settings["dark_theme"] = it
+                            }
+                        )
+
+                        Text(stringResource(Res.string.dark_theme))
+                    }
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        Button(
+                            onClick = { open.value = false }
+                        ) {
+                            Icon(Icons.Rounded.Close, stringResource(Res.string.close))
+                        }
                     }
                 }
             }

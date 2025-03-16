@@ -14,7 +14,7 @@ import org.w3c.files.File
 import org.w3c.files.FileReader
 
 @Composable
-actual fun FileOpener(
+actual fun FileChooser(
     coroutineScope: CoroutineScope,
     result: (String?, String) -> Unit,
     onClose: () -> Unit
@@ -55,28 +55,37 @@ actual fun FileOpener(
 }
 
 @Composable
-actual fun FileSaver(coroutineScope: CoroutineScope, fileName: String, output: () -> String, onClose: () -> Unit) {
-    val fileName = if (fileName.isEmpty()) "Unbenannt.cb2" else "$fileName.cb2"
+actual fun FileSaver(
+    coroutineScope: CoroutineScope,
+    output: () -> Pair<String,String>,
+    onClose: () -> Unit
+) {
+    coroutineScope.launch {
+        val output = output()
 
-    val jsArray = JsArray<JsAny?>()
+        val jsArray = JsArray<JsAny?>()
+        val byteArray = output.first.encodeToByteArray().map { it.toInt().toJsNumber() }.toJsArray()
+        jsArray[0] = Int8Array(byteArray)
 
-    val byteArray = output().encodeToByteArray().map { it.toInt().toJsNumber() }.toJsArray()
-    jsArray[0] = Int8Array(byteArray)
+        val file = File(jsArray, output.second)
+        val a = document.createElement("a") as HTMLAnchorElement
+        a.href = URL.createObjectURL(file)
+        a.download = output.second
+        a.click()
 
-    val file = File(jsArray, fileName)
-    val a = document.createElement("a") as HTMLAnchorElement
-    a.href = URL.createObjectURL(file)
-    a.download = fileName
-    a.click()
-
-    onClose()
+        onClose()
+    }
 }
 
 @Composable
-actual fun PdfExport(coroutineScope: CoroutineScope, fileName: String, output: () -> HtmlFile, onClose: () -> Unit) {
+actual fun PdfExport(
+    coroutineScope: CoroutineScope,
+    output: () -> Pair<HtmlFile, String>,
+    onClose: () -> Unit
+) {
     coroutineScope.launch {
-        val fileName = if (fileName.isEmpty()) "Unbenannt.pdf" else "$fileName.pdf"
-        htmlToPdf(output().create(), "", fileName)
+        val output = output()
+        htmlToPdf(output.first.create(), "", output.second)
         onClose()
     }
 }
