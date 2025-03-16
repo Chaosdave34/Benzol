@@ -2,22 +2,7 @@ package io.github.chaosdave34.benzol.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -29,36 +14,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import benzol.composeapp.generated.resources.Res
-import benzol.composeapp.generated.resources.assistant
-import benzol.composeapp.generated.resources.celsius_unit
-import benzol.composeapp.generated.resources.disposal
-import benzol.composeapp.generated.resources.ghs_pictograms
-import benzol.composeapp.generated.resources.h_and_p_phrases_number
-import benzol.composeapp.generated.resources.human_and_environment_danger
-import benzol.composeapp.generated.resources.in_case_of_danger
-import benzol.composeapp.generated.resources.lethal_dose_unit
-import benzol.composeapp.generated.resources.location_and_date
-import benzol.composeapp.generated.resources.mak_ld50_wgk
-import benzol.composeapp.generated.resources.mak_unit
-import benzol.composeapp.generated.resources.molar_mass_with_unit
-import benzol.composeapp.generated.resources.name_with_plural
-import benzol.composeapp.generated.resources.place
-import benzol.composeapp.generated.resources.preparation
-import benzol.composeapp.generated.resources.preview
-import benzol.composeapp.generated.resources.quantity_required
-import benzol.composeapp.generated.resources.rules_of_conduct
-import benzol.composeapp.generated.resources.signature
-import benzol.composeapp.generated.resources.signature_1
-import benzol.composeapp.generated.resources.signature_2
-import benzol.composeapp.generated.resources.temperatures
-import benzol.composeapp.generated.resources.title_h_and_p_phrases
-import benzol.composeapp.generated.resources.used_substances
+import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.Substance
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import kotlin.text.Typography.nbsp
+
+private val modifier = Modifier.fillMaxWidth().border(1.dp, Color.White).padding(10.dp)
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -76,10 +39,7 @@ fun Preview(
     inCaseOfDanger: SnapshotStateList<String>,
     disposal: SnapshotStateList<String>
 ) {
-    val modifier = Modifier.fillMaxWidth().border(1.dp, Color.White).padding(10.dp)
-
     Text(stringResource(Res.string.preview))
-
 
     FlowRow(
         modifier = Modifier.fillMaxWidth()
@@ -108,17 +68,17 @@ fun Preview(
             )
             ListRow {
                 TextBlock(
-                    modifier = modifier.weight(13f),
+                    weight = 13f,
                     title = Res.string.name_with_plural,
                     content = name
                 )
                 TextBlock(
-                    modifier = modifier.weight(8f),
+                    weight = 8f,
                     title = Res.string.place,
                     content = place
                 )
                 TextBlock(
-                    modifier = modifier.weight(13f),
+                    weight = 13f,
                     title = Res.string.assistant,
                     content = assistant
                 )
@@ -134,31 +94,31 @@ fun Preview(
             }
             ListRow {
                 TextBlock(
-                    modifier = modifier.weight(6f).fillMaxHeight(),
+                    weight = 6f,
                     title = Res.string.used_substances
                 )
                 TextBlock(
-                    modifier = modifier.weight(4f).fillMaxHeight(),
+                    weight = 4f,
                     title = Res.string.molar_mass_with_unit
                 )
                 TextBlock(
-                    modifier = modifier.weight(4f).fillMaxHeight(),
+                    weight = 4f,
                     title = Res.string.temperatures
                 )
                 TextBlock(
-                    modifier = modifier.weight(6f).fillMaxHeight(),
+                    weight = 6f,
                     title = Res.string.ghs_pictograms
                 )
                 TextBlock(
-                    modifier = modifier.weight(6f).fillMaxHeight(),
+                    weight = 6f,
                     title = Res.string.h_and_p_phrases_number
                 )
                 TextBlock(
-                    modifier = modifier.weight(4f).fillMaxHeight(),
+                    weight = 4f,
                     title = Res.string.mak_ld50_wgk
                 )
                 TextBlock(
-                    modifier = modifier.weight(4f).fillMaxHeight(),
+                    weight = 4f,
                     title = Res.string.quantity_required
                 )
             }
@@ -216,12 +176,12 @@ fun Preview(
             )
             ListRow {
                 PhraseList(
-                    modifier = modifier.weight(1f),
+                    weight = 1f,
                     list = substanceList,
                     transform = { it.hPhrases }
                 )
                 PhraseList(
-                    modifier = modifier.weight(1f),
+                    weight = 1f,
                     list = substanceList,
                     transform = { it.pPhrases }
                 )
@@ -265,11 +225,11 @@ fun Preview(
 
             ListRow {
                 SignatureBox(
-                    modifier = modifier.weight(7f),
+                    weight = 7f,
                     signatureDescription = Res.string.signature_1
                 )
                 SignatureBox(
-                    modifier = modifier.weight(5f),
+                    weight = 5f,
                     signatureDescription = Res.string.signature_2
                 )
             }
@@ -282,7 +242,7 @@ fun Preview(
 @Composable
 fun RowScope.SubstanceColumn(weight: Float, content: @Composable (ColumnScope.() -> Unit)) { // Todo move modifier global
     Column(
-        modifier = Modifier.fillMaxWidth().border(1.dp, Color.White).padding(10.dp).weight(weight).fillMaxHeight(),
+        modifier = Modifier.fillMaxWidth().border(1.dp, Color.White).padding(10.dp).fillMaxHeight().weight(weight),
         verticalArrangement = Arrangement.Center,
         content = content
     )
@@ -318,9 +278,9 @@ fun ListWithTitle(modifier: Modifier, title: StringResource, list: SnapshotState
 }
 
 @Composable
-fun PhraseList(modifier: Modifier, list: SnapshotStateList<Substance>, transform: (Substance) -> List<Pair<String, String>>) {
+fun RowScope.PhraseList(weight: Float, list: SnapshotStateList<Substance>, transform: (Substance) -> List<Pair<String, String>>) {
     Column(
-        modifier = modifier.fillMaxHeight()
+        modifier = modifier.weight(weight).fillMaxHeight()
     ) {
         Substance.formatPhrases(list, transform).iterator().forEach {
             Text("${it.first}: ${it.second}")
@@ -337,9 +297,9 @@ fun ListRow(content: @Composable (RowScope.() -> Unit)) {
 }
 
 @Composable
-fun TextBlock(modifier: Modifier, title: StringResource, content: String? = null) {
+fun RowScope.TextBlock(weight: Float, title: StringResource, content: String? = null) {
     Column(
-        modifier = modifier,
+        modifier = modifier.weight(weight).fillMaxHeight(),
         verticalArrangement = Arrangement.Center
     ) {
         Text(stringResource(title))
@@ -350,9 +310,9 @@ fun TextBlock(modifier: Modifier, title: StringResource, content: String? = null
 }
 
 @Composable
-fun SignatureBox(modifier: Modifier, signatureDescription: StringResource) {
+fun RowScope.SignatureBox(weight: Float, signatureDescription: StringResource) {
     Column(
-        modifier = modifier.fillMaxHeight()
+        modifier = modifier.weight(weight).fillMaxHeight()
     ) {
         Text(stringResource(signatureDescription))
 
