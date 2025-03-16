@@ -184,7 +184,7 @@ class HtmlFile(
                                 +hAndPPhrasesTitle
                             }
                         }
-                        tr("full-height no-break") {
+                        tr("no-break") {
                             phrasesList { it.hPhrases }
                             phrasesList { it.pPhrases }
                         }
@@ -265,7 +265,7 @@ class HtmlFile(
     }
 
     fun TR.phrasesList(transform: (Substance) -> List<Pair<String, String>>) {
-        td("full-height top phrases") {
+        td("top phrases") {
             colSpan = "17"
             val iterator = Substance.formatPhrases(substanceList, transform).iterator()
             while (iterator.hasNext()) {
