@@ -3,10 +3,9 @@ package io.github.chaosdave34.benzol.search
 import io.github.chaosdave34.benzol.GHSPictogram
 import io.github.chaosdave34.benzol.Substance
 import io.github.chaosdave34.benzol.getHttpClient
-import io.ktor.client.call.body
-import io.ktor.client.request.get
-import io.ktor.client.request.header
-import io.ktor.http.HttpStatusCode
+import io.ktor.client.call.*
+import io.ktor.client.request.*
+import io.ktor.http.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -208,7 +207,9 @@ object Gestis {
         private fun getHPhrases(): List<Pair<String, String>> {
             val chapter = getChapter("1100", "1303").getContent()
 
-            val matches = ">(?<number>H[0-9]{3}(?:\\+P[0-9]{3})*): (?<phrase>.+?\\.)(?=<br />|</td>)".toRegex().findAll(chapter)
+            println(chapter)
+
+            val matches = ">(?<number>H[0-9]{3}(?:\\+H[0-9]{3})*): (?<phrase>.+?\\.)(?=<br />|</td>)".toRegex().findAll(chapter)
 
             return matches.map { Pair(it.groups["number"]?.value ?: "", it.groups["phrase"]?.value ?: "") }.toList()
         }
