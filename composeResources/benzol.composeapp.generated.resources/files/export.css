@@ -28,8 +28,8 @@ tr th {
 
 tr td {
     text-align: left;
-    padding: 8px;
-    font-size: 12px;
+    padding: 6px;
+    font-size: 13px;
 }
 
 li {
@@ -37,7 +37,6 @@ li {
 }
 
 .full-height {
-    height: unset !important;
 }
 
 .top {
@@ -81,7 +80,7 @@ li {
 
 .phrase-numbers {
     max-width: 4cm;
-    font-size: xx-small;
+    font-size: 10px;
 }
 
 .value-with-unit {
@@ -127,7 +126,6 @@ li {
 }
 
 .signature-location-date .signature {
-    padding-right: auto;
     padding-left: 10px;
 }
 
@@ -144,4 +142,8 @@ li {
 
 .no-break-after {
     page-break-after: avoid;
+}
+
+.center {
+    text-align: center;
 }
