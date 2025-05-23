@@ -43,11 +43,9 @@ actual fun FileChooser(
                     super.setVisible(visible)
                     if (visible) {
                         if (directory != null && file != null) {
-                            coroutineScope.launch {
-                                withContext(Dispatchers.IO) {
-                                    result(File(directory + file).readText(), file)
-                                    onClose()
-                                }
+                            coroutineScope.launch(Dispatchers.IO) {
+                                result(File(directory + file).readText(), file)
+                                onClose()
                             }
                             preferences.put(LAST_USED_FOLDER_OPEN, directory)
                         } else {
@@ -82,11 +80,9 @@ actual fun FileSaver(
                     super.setVisible(visible)
                     if (visible) {
                         if (directory != null && file != null) {
-                            coroutineScope.launch {
-                                withContext(Dispatchers.IO) {
-                                    File(directory, file).writeText(output.first)
-                                    onClose()
-                                }
+                            coroutineScope.launch(Dispatchers.IO) {
+                                File(directory, file).writeText(output.first)
+                                onClose()
                             }
                             preferences.put(LAST_USED_FOLDER_SAVE, directory)
                         } else {
