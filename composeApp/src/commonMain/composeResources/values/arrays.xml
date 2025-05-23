@@ -5,4 +5,8 @@
         <item>Nach Verschlucken: Mund mit Wasser spülen, Wasser trinken lassen. Kein Erbrechen auslösen. Nur bei Bewusstsein!</item>
         <item>Nach Augenkontakt: Mit Wasser spülen. Falls vorhanden nach Möglichkeit Kontaktlinsen entfernen und weiter spülen. Sofort Augenarzt hinzuziehen.</item>
     </string-array>
+
+    <string-array name="rules_of_conduct_defaults">
+        <item>Hautschutz und Schutzkleidung mit Schutzbrille tragen.</item>
+    </string-array>
 </resources>

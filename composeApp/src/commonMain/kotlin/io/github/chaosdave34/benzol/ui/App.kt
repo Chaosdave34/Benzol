@@ -1,18 +1,10 @@
 package io.github.chaosdave34.benzol.ui
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.VerticalScrollbar
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.defaultScrollbarStyle
+import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
@@ -35,11 +27,7 @@ import io.github.chaosdave34.benzol.files.InputData
 import io.github.chaosdave34.benzol.getSettings
 import io.github.chaosdave34.benzol.search.Source
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.StringResource
-import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.resources.stringArrayResource
-import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.*
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -73,6 +61,7 @@ fun App() {
     val organisationDefault = stringResource(Res.string.organisation_default)
     val courseDefault = stringResource(Res.string.course_default)
     val inCaseOfDangerDefaults = stringArrayResource(Res.array.in_case_of_danger_defaults)
+    val rulesOfConductDefaults = stringArrayResource(Res.array.rules_of_conduct_defaults)
 
     // input
     val fileName = remember { mutableStateOf("") }
@@ -86,7 +75,7 @@ fun App() {
     val preparation = remember { mutableStateOf("") }
 
     val humanAndEnvironmentDanger = remember { mutableStateListOf<String>() }
-    val rulesOfConduct = remember { mutableStateListOf<String>() }
+    val rulesOfConduct = remember { rulesOfConductDefaults.toMutableStateList() }
     val inCaseOfDanger = remember { inCaseOfDangerDefaults.toMutableStateList() }
     val disposal = remember { mutableStateListOf<String>() }
 
