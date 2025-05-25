@@ -33,7 +33,6 @@ fun Content(
     disposal: SnapshotStateList<String>,
     openFileSaver: () -> Unit,
     openPdfExport: () -> Unit,
-    openLink: (String) -> Unit
 ) {
     val scrollState = rememberScrollState()
 
@@ -138,8 +137,7 @@ fun Content(
                             }
 
                             SubstanceList(
-                                substanceList = substanceList,
-                                openLink = openLink
+                                substanceList = substanceList
                             )
                         }
                         AddListElementButton(

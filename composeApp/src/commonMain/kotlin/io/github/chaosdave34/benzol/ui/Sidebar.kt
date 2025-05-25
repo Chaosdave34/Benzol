@@ -8,6 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.painterResource
@@ -19,9 +20,10 @@ fun Sidebar(
     openFileSaver: () -> Unit,
     openPdfExport: () -> Unit,
     openSettings: () -> Unit,
-    openLink: (String) -> Unit,
     resetInput: () -> Unit
 ) {
+    val uriHandler = LocalUriHandler.current
+
     var dropdownExpanded by remember { mutableStateOf(false) }
 
     Surface(
@@ -87,7 +89,7 @@ fun Sidebar(
 
             Button(
                 onClick = {
-                    openLink("https://github.com/Chaosdave34/Benzol")
+                    uriHandler.openUri("https://github.com/Chaosdave34/Benzol")
                 }
             ) {
                 Image(

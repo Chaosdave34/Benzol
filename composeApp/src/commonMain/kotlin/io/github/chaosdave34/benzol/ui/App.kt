@@ -9,7 +9,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalUriHandler
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.FileDialogs
 import io.github.chaosdave34.benzol.GHSPictogram
@@ -36,13 +35,6 @@ fun App() {
     val pdfExportVisible = remember { mutableStateOf(false) }
 
     val settingsVisible = remember { mutableStateOf(false) }
-
-    // Links
-    var openLink: String? by remember { mutableStateOf(null) }
-    openLink?.let {
-        LocalUriHandler.current.openUri(it)
-        openLink = null
-    }
 
     // input
     val fileName = remember { mutableStateOf("") }
@@ -146,7 +138,6 @@ fun App() {
                 openFileSaver = { fileSaverVisible.value = true },
                 openPdfExport = { pdfExportVisible.value = true },
                 openSettings = { settingsVisible.value = true },
-                openLink = { openLink = it },
                 resetInput = {
                     fileName.value = ""
 
@@ -187,8 +178,7 @@ fun App() {
                 inCaseOfDanger = inCaseOfDanger,
                 disposal = disposal,
                 openFileSaver = { fileSaverVisible.value = true },
-                openPdfExport = { pdfExportVisible.value = true },
-                openLink = { openLink = it }
+                openPdfExport = { pdfExportVisible.value = true }
             )
         }
     }

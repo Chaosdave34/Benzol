@@ -15,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.Res
 import benzol.composeapp.generated.resources.open_settings
@@ -24,9 +25,10 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SubstanceList(
-    substanceList: SnapshotStateList<Substance>,
-    openLink: (String) -> Unit
+    substanceList: SnapshotStateList<Substance>
 ) {
+    val uriHandler = LocalUriHandler.current
+
     var dialogOpen: Int? by remember { mutableStateOf(null) }
 
     substanceList.forEachIndexed { index, substance ->
@@ -59,7 +61,7 @@ fun SubstanceList(
             ) {
                 Button(
                     onClick = {
-                        openLink(substance.source.second)
+                        uriHandler.openUri(substance.source.second)
                     },
                     enabled = substance.source.first != Source.CUSTOM
                 ) {
