@@ -111,11 +111,7 @@ data class Substance(
 
     }
 
-    data class Quantity(val value: String = "", val unit: String = "g") {
-        companion object {
-            val units = listOf("g", "mg", "µg", "L", "mL", "µL", "mol", "mmol", "Stk.", "mol/L", "mmol/L", "µmol/L", "g/L", "mg/L")
-        }
-    }
+    data class Quantity(val value: String = "", val unit: String = "g")
 
     private class StringPairDelegate(val stringPair: StringPair) : ReadWriteProperty<Substance, String> {
         override fun getValue(thisRef: Substance, property: KProperty<*>) = stringPair.get()
