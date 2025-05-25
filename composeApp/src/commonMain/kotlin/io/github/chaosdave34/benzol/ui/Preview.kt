@@ -134,7 +134,7 @@ fun Preview(
                     SubstanceColumn(6f) {
                         CenteredText(substance.name)
                         if (substance.formattedMolecularFormula.isNotBlank()) {
-                            substance.FormattedMolecularFormula(modifier = Modifier.fillMaxWidth())
+                            substance.FormattedMolecularFormula(modifier = Modifier.fillMaxWidth(), align = TextAlign.Center)
                         } else {
                             CenteredText(substance.molecularFormula)
                         }

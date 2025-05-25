@@ -168,7 +168,7 @@ data class Substance(
     }
 
     @Composable
-    fun FormattedMolecularFormula(modifier: Modifier = Modifier, formula: String = formattedMolecularFormula) {
+    fun FormattedMolecularFormula(modifier: Modifier = Modifier, formula: String = formattedMolecularFormula, align: TextAlign? = null) {
         var sub = formula.startsWith("<")
         val splits = formula.split("[<>]".toRegex())
         Text(
@@ -190,7 +190,7 @@ data class Substance(
                     sub = !sub
                 }
             },
-            textAlign = TextAlign.Center
+            textAlign = align
         )
     }
 }
