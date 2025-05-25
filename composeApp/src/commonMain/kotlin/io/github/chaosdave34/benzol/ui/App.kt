@@ -41,13 +41,13 @@ fun App() {
         GHSPictogram.Companion.setBase64()
     }
 
-    var darkTheme = remember { mutableStateOf(settings.getBoolean("dark_theme", false)) }
+    val darkTheme = remember { mutableStateOf(settings.getBoolean("dark_theme", false)) }
 
-    var fileChooserVisible = remember { mutableStateOf(false) }
-    var fileSaverVisible = remember { mutableStateOf(false) }
-    var pdfExportVisible = remember { mutableStateOf(false) }
+    val fileChooserVisible = remember { mutableStateOf(false) }
+    val fileSaverVisible = remember { mutableStateOf(false) }
+    val pdfExportVisible = remember { mutableStateOf(false) }
 
-    var settingsVisible = remember { mutableStateOf(false) }
+    val settingsVisible = remember { mutableStateOf(false) }
 
     // Links
     var openLink: String? by remember { mutableStateOf(null) }
