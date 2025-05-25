@@ -186,8 +186,6 @@ object Gestis {
             val match = "<td align=\"left\"> (?<mak>[0-9,.]+) (?:mg/m³|ppm)</td>".toRegex().find(table)
 
             return match?.groups["mak"]?.value ?: ""
-
-            return chapter
         }
 
         private fun getMeltingPoint(): String { // °C can be C° sometimes, see https://gestis.dguv.de/data?name=520030&lang=de
