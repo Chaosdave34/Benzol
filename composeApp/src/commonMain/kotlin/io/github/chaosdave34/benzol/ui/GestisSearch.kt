@@ -2,16 +2,7 @@ package io.github.chaosdave34.benzol.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -19,27 +10,8 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MenuAnchorType
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.toMutableStateList
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
@@ -49,15 +21,7 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import benzol.composeapp.generated.resources.Res
-import benzol.composeapp.generated.resources.add
-import benzol.composeapp.generated.resources.close
-import benzol.composeapp.generated.resources.delete
-import benzol.composeapp.generated.resources.do_search
-import benzol.composeapp.generated.resources.exact_search
-import benzol.composeapp.generated.resources.gestis_hint
-import benzol.composeapp.generated.resources.search
-import benzol.composeapp.generated.resources.search_option
+import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.Substance
 import io.github.chaosdave34.benzol.search.Gestis
 import kotlinx.coroutines.launch
@@ -72,7 +36,7 @@ fun GestisSearch(
     val coroutineScope = rememberCoroutineScope()
 
     val allowedSearchTypes = remember { Gestis.SearchType.entries.toMutableStateList() }
-    val searchArguments = remember { mutableStateListOf<Gestis.SearchArgument>(Gestis.SearchArgument(allowedSearchTypes.removeFirst(), "")) }
+    val searchArguments = remember { mutableStateListOf(Gestis.SearchArgument(allowedSearchTypes.removeFirst(), "")) }
 
     var exactSearch by remember { mutableStateOf(false) }
 
