@@ -1,5 +1,7 @@
 package io.github.chaosdave34.benzol.ui
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -11,6 +13,8 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -18,6 +22,7 @@ import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.GHSPictogram
 import io.github.chaosdave34.benzol.Substance
 import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -358,4 +363,17 @@ fun PhraseInput(
             element = Pair("", "")
         )
     }
+}
+
+@Composable
+fun GHSPictogram(modifier: Modifier = Modifier, pictogram: GHSPictogram, selected: SnapshotStateList<GHSPictogram>) {
+    val isSelected = selected.contains(pictogram)
+    Image(
+        modifier = modifier.clickable(onClick = {
+            if (isSelected) selected.remove(pictogram) else selected.add(pictogram)
+        }),
+        painter = painterResource(pictogram.drawableResource),
+        contentDescription = pictogram.alt,
+        colorFilter = if (!isSelected) ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) }) else null
+    )
 }
