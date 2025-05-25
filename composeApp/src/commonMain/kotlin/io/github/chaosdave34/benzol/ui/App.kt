@@ -16,9 +16,10 @@ import io.github.chaosdave34.benzol.GHSPictogram
 import io.github.chaosdave34.benzol.Substance
 import io.github.chaosdave34.benzol.files.InputData
 import io.github.chaosdave34.benzol.getSettings
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.stringArrayResource
-import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.getStringArray
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -27,10 +28,6 @@ fun App() {
     val focusManager = LocalFocusManager.current
 
     val settings = getSettings()
-
-    LaunchedEffect(Unit) {
-        GHSPictogram.Companion.setBase64()
-    }
 
     val darkTheme = remember { mutableStateOf(settings.getBoolean("dark_theme", false)) }
 
@@ -47,30 +44,37 @@ fun App() {
         openLink = null
     }
 
-    // default values
-    val documentTitleDefault = stringResource(Res.string.document_title_default)
-    val organisationDefault = stringResource(Res.string.organisation_default)
-    val courseDefault = stringResource(Res.string.course_default)
-    val inCaseOfDangerDefaults = stringArrayResource(Res.array.in_case_of_danger_defaults)
-    val rulesOfConductDefaults = stringArrayResource(Res.array.rules_of_conduct_defaults)
-
     // input
     val fileName = remember { mutableStateOf("") }
 
-    val documentTitle = remember { mutableStateOf(documentTitleDefault) }
-    val organisation = remember { mutableStateOf(organisationDefault) }
-    val course = remember { mutableStateOf(courseDefault) }
+    val documentTitle = remember { mutableStateOf("") }
+    val organisation = remember { mutableStateOf("") }
+    val course = remember { mutableStateOf("") }
     val name = remember { mutableStateOf("") }
     val place = remember { mutableStateOf("") }
     val assistant = remember { mutableStateOf("") }
     val preparation = remember { mutableStateOf("") }
 
     val humanAndEnvironmentDanger = remember { mutableStateListOf<String>() }
-    val rulesOfConduct = remember { rulesOfConductDefaults.toMutableStateList() }
-    val inCaseOfDanger = remember { inCaseOfDangerDefaults.toMutableStateList() }
+    val rulesOfConduct = remember { mutableStateListOf<String>() }
+    val inCaseOfDanger = remember { mutableStateListOf<String>() }
     val disposal = remember { mutableStateListOf<String>() }
 
     val substanceList = remember { mutableStateListOf<Substance>() }
+
+    suspend fun defaultValues() {
+        documentTitle.value = getString(Res.string.document_title_default)
+        organisation.value = getString(Res.string.organisation_default)
+        course.value = getString(Res.string.course_default)
+        inCaseOfDanger.addAll(getStringArray(Res.array.in_case_of_danger_defaults))
+        rulesOfConduct.addAll(getStringArray(Res.array.rules_of_conduct_defaults))
+    }
+
+    LaunchedEffect(Unit) {
+        GHSPictogram.Companion.setBase64()
+
+        defaultValues()
+    }
 
     FileDialogs(
         coroutineScope = coroutineScope,
@@ -146,9 +150,9 @@ fun App() {
                 resetInput = {
                     fileName.value = ""
 
-                    documentTitle.value = documentTitleDefault
-                    organisation.value = organisationDefault
-                    course.value = courseDefault
+                    documentTitle.value = ""
+                    organisation.value = ""
+                    course.value = ""
                     name.value = ""
                     place.value = ""
                     assistant.value = ""
@@ -157,10 +161,14 @@ fun App() {
                     humanAndEnvironmentDanger.clear()
                     rulesOfConduct.clear()
                     inCaseOfDanger.clear()
-                    inCaseOfDanger.addAll(inCaseOfDangerDefaults)
+                    inCaseOfDanger.clear()
                     disposal.clear()
 
                     substanceList.clear()
+
+                    coroutineScope.launch {
+                        defaultValues()
+                    }
                 }
             )
 
