@@ -129,29 +129,29 @@ fun Preview(
                     textAlign = TextAlign.Center
                 )
             }
-            substanceList.forEach {
+            substanceList.forEach { substance ->
                 ListRow {
                     SubstanceColumn(6f) {
-                        CenteredText(it.name)
-                        if (it.formattedMolecularFormula.isNotBlank()) {
-                            it.FormattedMolecularFormula(modifier = Modifier.fillMaxWidth())
+                        CenteredText(substance.name)
+                        if (substance.formattedMolecularFormula.isNotBlank()) {
+                            substance.FormattedMolecularFormula(modifier = Modifier.fillMaxWidth())
                         } else {
-                            CenteredText(it.molecularFormula)
+                            CenteredText(substance.molecularFormula)
                         }
                     }
                     SubstanceColumn(4f) {
-                        CenteredText(valueOrDash(it.molarMass))
+                        CenteredText(valueOrDash(substance.molarMass))
                     }
                     SubstanceColumn(4f) {
-                        CenteredText(valueOrDash(it.boilingPoint, stringResource(Res.string.celsius_unit)))
-                        CenteredText(valueOrDash(it.meltingPoint, stringResource(Res.string.celsius_unit)))
+                        CenteredText(valueOrDash(substance.boilingPoint, stringResource(Res.string.celsius_unit)))
+                        CenteredText(valueOrDash(substance.meltingPoint, stringResource(Res.string.celsius_unit)))
                     }
                     SubstanceColumn(6f) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.Center
                         ) {
-                            it.ghsPictograms.forEach {
+                            substance.ghsPictograms.forEach {
                                 Column(
                                     modifier = Modifier.sizeIn(maxWidth = 50.dp, maxHeight = 50.dp).weight(1f)
                                 ) {
@@ -162,20 +162,20 @@ fun Preview(
                                 }
                             }
                         }
-                        CenteredText(it.signalWord)
+                        CenteredText(substance.signalWord)
                     }
                     SubstanceColumn(6f) {
-                        CenteredText(it.hPhrases.joinToString("-") { it.first })
+                        CenteredText(substance.hPhrases.joinToString("-") { it.first })
                         Text("")
-                        CenteredText(it.pPhrases.joinToString("-") { it.first })
+                        CenteredText(substance.pPhrases.joinToString("-") { it.first })
                     }
                     SubstanceColumn(4f) {
-                        CenteredText(valueOrDash(it.mak, stringResource(Res.string.mak_unit)))
-                        CenteredText(valueOrDash(it.lethalDose, stringResource(Res.string.lethal_dose_unit)))
-                        CenteredText(valueOrDash(it.wgk))
+                        CenteredText(valueOrDash(substance.mak, stringResource(Res.string.mak_unit)))
+                        CenteredText(valueOrDash(substance.lethalDose, stringResource(Res.string.lethal_dose_unit)))
+                        CenteredText(valueOrDash(substance.wgk))
                     }
                     SubstanceColumn(4f) {
-                        CenteredText(if (it.quantity.value.isNotBlank()) "${it.quantity.value} ${it.quantity.unit}" else "")
+                        CenteredText(if (substance.quantity.value.isNotBlank()) "${substance.quantity.value} ${substance.quantity.unit}" else "")
                     }
                 }
             }
