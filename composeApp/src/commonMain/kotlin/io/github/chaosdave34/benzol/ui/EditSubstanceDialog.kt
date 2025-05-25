@@ -60,20 +60,20 @@ fun EditSubstanceDialog(
 
     val fillSubstanceOnClose = {
         list[index] = substance.copyAsModified(
-            name.value,
-            casNumber.value,
-            molecularFormula.value,
-            formattedMolecularFormula.value,
-            wgk.value,
-            signalWord.value,
-            molarMass.value,
-            lethalDose.value,
-            mak.value,
-            meltingPoint.value,
-            boilingPoint.value,
-            Substance.Quantity(quantity.value, quantityUnit.value),
-            hPhrases,
-            pPhrases,
+            name.value.trim(),
+            casNumber.value.trim(),
+            molecularFormula.value.trim(),
+            formattedMolecularFormula.value.trim(),
+            wgk.value.trim(),
+            signalWord.value.trim(),
+            molarMass.value.trim(),
+            lethalDose.value.trim(),
+            mak.value.trim(),
+            meltingPoint.value.trim(),
+            boilingPoint.value.trim(),
+            Substance.Quantity(quantity.value.trim(), quantityUnit.value.trim()),
+            hPhrases.map { Pair(it.first.trim(), it.second.trim()) },
+            pPhrases.map { Pair(it.first.trim(), it.second.trim()) },
             ghsPictograms
         )
         onClose()
