@@ -353,8 +353,8 @@ fun RowScope.SignatureBox(weight: Float, signatureDescription: StringResource) {
                 modifier = Modifier.fillMaxWidth(0.7f).padding(start = 10.dp, end = 10.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(stringResource(Res.string.signature))
-                Text(stringResource(Res.string.location_and_date))
+                Text(stringResource(Res.string.signature), Modifier.weight(1f))
+                Text(stringResource(Res.string.location_and_date), Modifier.weight(1f))
             }
         }
     }
