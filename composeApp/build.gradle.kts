@@ -75,7 +75,6 @@ compose.desktop {
         }
 
         buildTypes.release.proguard {
-            version.set("7.6.1")
             configurationFiles.from("proguard.pro")
         }
     }
