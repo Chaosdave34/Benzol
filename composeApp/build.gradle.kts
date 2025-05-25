@@ -6,10 +6,10 @@ import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.composeHotReload)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.serialization)
-    alias(libs.plugins.hotReload)
 }
 
 kotlin {
@@ -47,9 +47,11 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+
             implementation(libs.kotlinx.html)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.bundles.ktor.common)
+            implementation(compose.materialIconsExtended)
 
             implementation(libs.ksoup)
             implementation(libs.russhwolf.multiplatform.settings)
@@ -58,6 +60,7 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
+
             implementation(libs.ktor.client.cio)
             implementation(libs.bundles.openhtmltopdf.common)
         }
@@ -82,7 +85,6 @@ compose.desktop {
 
 compose.resources {
     generateResClass = auto
-
 }
 
 composeCompiler {
