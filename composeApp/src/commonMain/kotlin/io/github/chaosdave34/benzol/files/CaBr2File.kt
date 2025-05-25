@@ -117,10 +117,10 @@ object CaBr2File {
                     meltingPoint.toStringPair { replace(" °C", "") },
                     boilingPoint.toStringPair { replace(" °C", "") },
                     amount?.toQuantity()?: Substance.Quantity(),
-                    hPhrases.toListPair { Pair(it.getOrElse(0) { "" }, it.getOrElse(1) { "" }) },
-                    pPhrases.toListPair { Pair(it.getOrElse(0) { "" }, it.getOrElse(1) { "" }) },
+                    hPhrases.toListPair { Pair(it.getOrElse(0) { "" }.trim(), it.getOrElse(1) { "" }.trim()) },
+                    pPhrases.toListPair { Pair(it.getOrElse(0) { "" }.trim(), it.getOrElse(1) { "" }.trim()) },
                     symbols.toListPair { GHSPictogram.fromId(it) },
-                    Pair(source.getSource(), source.url)
+                    Pair(source.getSource(), source.url.trim())
                 )
             }
         }
@@ -157,7 +157,7 @@ object CaBr2File {
         ) {
             companion object {
                 fun ValuePair<String>.toStringPair(transformer: String.() -> String = { this }): Substance.StringPair {
-                    return Substance.StringPair(originalData?.run(transformer) ?: "", modifiedData?.run(transformer))
+                    return Substance.StringPair(originalData?.run(transformer)?.trim() ?: "", modifiedData?.run(transformer)?.trim())
                 }
 
                 fun <I, O> ValuePair<List<I>>.toListPair(map: (I) -> O?): Substance.ListPair<O> {
@@ -165,7 +165,7 @@ object CaBr2File {
                 }
 
                 fun Substance.StringPair.toValuePair(transformer: String.() -> String = { this }): ValuePair<String> {
-                    return ValuePair(this.original.run(transformer), this.modified?.run(transformer))
+                    return ValuePair(this.original.run(transformer).trim(), this.modified?.run(transformer)?.trim())
                 }
 
                 fun <I, O> Substance.ListPair<I>.toValuePair(map: (I) -> O): ValuePair<List<O>> {
