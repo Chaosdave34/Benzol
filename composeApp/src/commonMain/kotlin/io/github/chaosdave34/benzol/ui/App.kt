@@ -26,7 +26,6 @@ import io.github.chaosdave34.benzol.Substance
 import io.github.chaosdave34.benzol.files.InputData
 import io.github.chaosdave34.benzol.getSettings
 import io.github.chaosdave34.benzol.search.Source
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.*
 
 @OptIn(ExperimentalResourceApi::class)
@@ -37,7 +36,7 @@ fun App() {
 
     val settings = getSettings()
 
-    coroutineScope.launch {
+    LaunchedEffect(Unit) {
         GHSPictogram.Companion.setBase64()
     }
 
