@@ -40,19 +40,22 @@ fun GestisSearch(
 
     var exactSearch by remember { mutableStateOf(false) }
 
-    var doSearch by remember { mutableStateOf(false) }
     var searchResultOpen by remember { mutableStateOf(false) }
     var getSubstanceInformation: String? by remember { mutableStateOf(null) }
 
     val searchResults = remember { mutableStateListOf<Gestis.SearchResult>() }
+    var failed by remember { mutableStateOf(false) }
 
-    if (doSearch) {
+    fun search() {
         searchResultOpen = true
-        doSearch = false
         searchResults.clear()
+        failed = false
 
         coroutineScope.launch {
-            searchResults.addAll(Gestis.search(Gestis.Search(searchArguments, exactSearch)))
+            val results = Gestis.search(Gestis.Search(searchArguments, exactSearch))
+
+            if (results.isNotEmpty()) searchResults.addAll(results)
+            else failed = true
         }
     }
 
@@ -61,9 +64,10 @@ fun GestisSearch(
             exactSearch = exactSearch,
             toggleExactSearch = {
                 exactSearch = it
-                doSearch = true
+                search()
             },
             result = searchResults,
+            failed = failed,
             onClose = { searchResultOpen = false },
             onSelect = { getSubstanceInformation = it.zgvNumber }
         )
@@ -140,7 +144,7 @@ fun GestisSearch(
                             .onFocusChanged { focused = it.hasFocus }
                             .onKeyEvent { event ->
                                 if (event.key == Key.Enter) {
-                                    doSearch = true
+                                    search()
                                     focusManager.clearFocus()
                                     true
                                 }
@@ -207,7 +211,7 @@ fun GestisSearch(
         }
 
         Button(
-            onClick = { doSearch = true },
+            onClick = { search() },
         ) { Text(stringResource(Res.string.do_search)) }
 
         Spacer(Modifier.width(ButtonDefaults.MinWidth))
@@ -221,6 +225,7 @@ fun SearchResultDialog(
     toggleExactSearch: (Boolean) -> Unit,
     onClose: () -> Unit,
     result: List<Gestis.SearchResult>,
+    failed: Boolean,
     onSelect: (Gestis.SearchResult) -> Unit,
 ) {
     Dialog(
@@ -257,7 +262,11 @@ fun SearchResultDialog(
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                CircularProgressIndicator()
+                                if (failed) {
+                                    Text(stringResource(Res.string.failed_search))
+                                } else {
+                                    CircularProgressIndicator()
+                                }
                             }
                         } else {
 

@@ -59,6 +59,7 @@
     <string name="search">Suche</string>
     <string name="do_search">Suchen</string>
     <string name="exact_search">Exakte Suche</string>
+    <string name="failed_search">Keine Ergebnisse</string>
 
     <string name="dark_theme">Dunkles Thema</string>
 
