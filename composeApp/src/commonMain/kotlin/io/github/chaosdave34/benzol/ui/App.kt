@@ -9,12 +9,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.intl.Locale
 import benzol.composeapp.generated.resources.*
-import io.github.chaosdave34.benzol.FileDialogs
-import io.github.chaosdave34.benzol.GHSPictogram
-import io.github.chaosdave34.benzol.Substance
+import com.russhwolf.settings.set
+import io.github.chaosdave34.benzol.*
 import io.github.chaosdave34.benzol.files.InputData
-import io.github.chaosdave34.benzol.getSettings
+import io.ktor.util.*
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.getString
@@ -29,6 +29,9 @@ fun App() {
     val settings = getSettings()
 
     val darkTheme = remember { mutableStateOf(settings.getBoolean("dark_theme", false)) }
+
+    val locale = if (PlatformUtils.IS_BROWSER) Locale.current.language else settings.getString("language", SupportedLanguage.GERMAN.locale)
+    var appLanguage by remember { mutableStateOf(SupportedLanguage.fromLocale(locale) ?: SupportedLanguage.GERMAN) }
 
     val fileChooserVisible = remember { mutableStateOf(false) }
     val fileSaverVisible = remember { mutableStateOf(false) }
@@ -62,124 +65,139 @@ fun App() {
         rulesOfConduct.addAll(getStringArray(Res.array.rules_of_conduct_defaults))
     }
 
-    LaunchedEffect(Unit) {
-        GHSPictogram.Companion.setBase64()
-
-        defaultValues()
+    if (Locale.current.language != appLanguage.locale) {
+        setLanguage(appLanguage)
     }
 
-    FileDialogs(
-        coroutineScope = coroutineScope,
-        fileChooserVisible = fileChooserVisible,
-        fileSaverVisible = fileSaverVisible,
-        pdfExportVisible = pdfExportVisible,
-        import = { inputData ->
-            fileName.value = inputData.fileName
-            documentTitle.value = inputData.documentTitle
-            organisation.value = inputData.organisation
-            course.value = inputData.course
-            name.value = inputData.name
-            place.value = inputData.place
-            assistant.value = inputData.assistant
-            preparation.value = inputData.preparation
+    val localLanguage = compositionLocalOf { appLanguage }
+    CompositionLocalProvider(localLanguage provides appLanguage) {
 
-            substanceList.clear()
-            substanceList.addAll(inputData.substanceList)
-
-            humanAndEnvironmentDanger.clear()
-            humanAndEnvironmentDanger.addAll(inputData.humanAndEnvironmentDanger)
-
-            rulesOfConduct.clear()
-            rulesOfConduct.addAll(inputData.rulesOfConduct)
-
-            inCaseOfDanger.clear()
-            inCaseOfDanger.addAll(inputData.inCaseOfDanger)
-
-            disposal.clear()
-            disposal.addAll(inputData.disposal)
-        },
-        export = {
-            InputData(
-                fileName = fileName.value,
-                documentTitle = documentTitle.value,
-                organisation = organisation.value,
-                course = course.value,
-                name = name.value,
-                place = place.value,
-                assistant = assistant.value,
-                preparation = preparation.value,
-                substanceList = substanceList,
-                humanAndEnvironmentDanger = humanAndEnvironmentDanger,
-                rulesOfConduct = rulesOfConduct,
-                inCaseOfDanger = inCaseOfDanger,
-                disposal = disposal
-            )
+        LaunchedEffect(Unit) {
+            GHSPictogram.Companion.setBase64()
+            defaultValues()
         }
-    )
 
-    MaterialTheme(
-        colorScheme = if (darkTheme.value) darkColorScheme() else lightColorScheme()
-    ) {
-        Settings(
-            open = settingsVisible,
-            darkTheme = darkTheme
-        )
-        Disclaimer()
+        FileDialogs(
+            coroutineScope = coroutineScope,
+            fileChooserVisible = fileChooserVisible,
+            fileSaverVisible = fileSaverVisible,
+            pdfExportVisible = pdfExportVisible,
+            import = { inputData ->
+                fileName.value = inputData.fileName
+                documentTitle.value = inputData.documentTitle
+                organisation.value = inputData.organisation
+                course.value = inputData.course
+                name.value = inputData.name
+                place.value = inputData.place
+                assistant.value = inputData.assistant
+                preparation.value = inputData.preparation
 
-        Row(
-            Modifier.pointerInput(Unit) {
-                detectTapGestures {
-                    focusManager.clearFocus()
-                }
+                substanceList.clear()
+                substanceList.addAll(inputData.substanceList)
+
+                humanAndEnvironmentDanger.clear()
+                humanAndEnvironmentDanger.addAll(inputData.humanAndEnvironmentDanger)
+
+                rulesOfConduct.clear()
+                rulesOfConduct.addAll(inputData.rulesOfConduct)
+
+                inCaseOfDanger.clear()
+                inCaseOfDanger.addAll(inputData.inCaseOfDanger)
+
+                disposal.clear()
+                disposal.addAll(inputData.disposal)
+            },
+            export = {
+                InputData(
+                    fileName = fileName.value,
+                    documentTitle = documentTitle.value,
+                    organisation = organisation.value,
+                    course = course.value,
+                    name = name.value,
+                    place = place.value,
+                    assistant = assistant.value,
+                    preparation = preparation.value,
+                    substanceList = substanceList,
+                    humanAndEnvironmentDanger = humanAndEnvironmentDanger,
+                    rulesOfConduct = rulesOfConduct,
+                    inCaseOfDanger = inCaseOfDanger,
+                    disposal = disposal
+                )
             }
+        )
+
+        MaterialTheme(
+            colorScheme = if (darkTheme.value) darkColorScheme() else lightColorScheme()
         ) {
-            Sidebar(
-                openFileChooser = { fileChooserVisible.value = true },
-                openFileSaver = { fileSaverVisible.value = true },
-                openPdfExport = { pdfExportVisible.value = true },
-                openSettings = { settingsVisible.value = true },
-                resetInput = {
-                    fileName.value = ""
+            Settings(
+                open = settingsVisible,
+                language = appLanguage,
+                setLanguage = { newLanguage ->
+                    appLanguage = newLanguage
+                    setLanguage(newLanguage)
+                    settings["language"] = newLanguage.locale
 
-                    documentTitle.value = ""
-                    organisation.value = ""
-                    course.value = ""
-                    name.value = ""
-                    place.value = ""
-                    assistant.value = ""
-                    preparation.value = ""
+                    println(Locale.current.language)
+                },
+                darkTheme = darkTheme
+            )
+            Disclaimer()
 
-                    humanAndEnvironmentDanger.clear()
-                    rulesOfConduct.clear()
-                    inCaseOfDanger.clear()
-                    inCaseOfDanger.clear()
-                    disposal.clear()
-
-                    substanceList.clear()
-
-                    coroutineScope.launch {
-                        defaultValues()
+            Row(
+                Modifier.pointerInput(Unit) {
+                    detectTapGestures {
+                        focusManager.clearFocus()
                     }
                 }
-            )
+            ) {
+                Sidebar(
+                    openFileChooser = { fileChooserVisible.value = true },
+                    openFileSaver = { fileSaverVisible.value = true },
+                    openPdfExport = { pdfExportVisible.value = true },
+                    openSettings = { settingsVisible.value = true },
+                    resetInput = {
+                        fileName.value = ""
 
-            Content(
-                fileName = fileName,
-                documentTitle = documentTitle,
-                organisation = organisation,
-                course = course,
-                name = name,
-                place = place,
-                assistant = assistant,
-                preparation = preparation,
-                substanceList = substanceList,
-                humanAndEnvironmentDanger = humanAndEnvironmentDanger,
-                rulesOfConduct = rulesOfConduct,
-                inCaseOfDanger = inCaseOfDanger,
-                disposal = disposal,
-                openFileSaver = { fileSaverVisible.value = true },
-                openPdfExport = { pdfExportVisible.value = true }
-            )
+                        documentTitle.value = ""
+                        organisation.value = ""
+                        course.value = ""
+                        name.value = ""
+                        place.value = ""
+                        assistant.value = ""
+                        preparation.value = ""
+
+                        humanAndEnvironmentDanger.clear()
+                        rulesOfConduct.clear()
+                        inCaseOfDanger.clear()
+                        inCaseOfDanger.clear()
+                        disposal.clear()
+
+                        substanceList.clear()
+
+                        coroutineScope.launch {
+                            defaultValues()
+                        }
+                    }
+                )
+
+                Content(
+                    fileName = fileName,
+                    documentTitle = documentTitle,
+                    organisation = organisation,
+                    course = course,
+                    name = name,
+                    place = place,
+                    assistant = assistant,
+                    preparation = preparation,
+                    substanceList = substanceList,
+                    humanAndEnvironmentDanger = humanAndEnvironmentDanger,
+                    rulesOfConduct = rulesOfConduct,
+                    inCaseOfDanger = inCaseOfDanger,
+                    disposal = disposal,
+                    openFileSaver = { fileSaverVisible.value = true },
+                    openPdfExport = { pdfExportVisible.value = true }
+                )
+            }
         }
     }
 }

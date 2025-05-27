@@ -1,36 +1,32 @@
 package io.github.chaosdave34.benzol.ui
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import benzol.composeapp.generated.resources.Res
-import benzol.composeapp.generated.resources.close
-import benzol.composeapp.generated.resources.dark_theme
-import benzol.composeapp.generated.resources.settings
+import benzol.composeapp.generated.resources.*
 import com.russhwolf.settings.set
+import io.github.chaosdave34.benzol.SupportedLanguage
 import io.github.chaosdave34.benzol.getSettings
+import io.ktor.util.*
 import org.jetbrains.compose.resources.stringResource
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Settings(open: MutableState<Boolean>, darkTheme: MutableState<Boolean>) {
+fun Settings(
+    open: MutableState<Boolean>,
+    language: SupportedLanguage,
+    setLanguage: (SupportedLanguage) -> Unit,
+    darkTheme: MutableState<Boolean>
+) {
     val settings = getSettings()
+
+    var languageDropdownExpanded by remember { mutableStateOf(false) }
 
     if (open.value) {
         Dialog(
@@ -56,6 +52,41 @@ fun Settings(open: MutableState<Boolean>, darkTheme: MutableState<Boolean>) {
                         )
 
                         Text(stringResource(Res.string.dark_theme))
+                    }
+
+                    val languageLocked = PlatformUtils.IS_BROWSER
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        ExposedDropdownMenuBox(
+                            expanded = languageDropdownExpanded && !languageLocked,
+                            onExpandedChange = { languageDropdownExpanded = it }
+                        ) {
+                            TextField(
+                                modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable),
+                                value = stringResource(language.resource),
+                                readOnly = true,
+                                onValueChange = {},
+                                label = { Text(stringResource(Res.string.search_option)) },
+                                enabled = !languageLocked
+                            )
+
+                            ExposedDropdownMenu(
+                                expanded = languageDropdownExpanded && !languageLocked,
+                                onDismissRequest = { languageDropdownExpanded = false }
+                            ) {
+                                SupportedLanguage.entries.forEach {
+                                    DropdownMenuItem(
+                                        text = { Text(stringResource(it.resource)) },
+                                        onClick = {
+                                            languageDropdownExpanded = false
+                                            setLanguage(it)
+                                        }
+                                    )
+                                }
+                            }
+                        }
                     }
 
                     Row(

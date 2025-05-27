@@ -1,0 +1,110 @@
+<resources>
+    <string name="new_file">New safety datasheet</string>
+    <string name="open_file">Open safety datasheet</string>
+    <string name="save_file">Save</string>
+    <string name="export_file">Export as PDF</string>
+
+    <string name="settings">Settings</string>
+
+    <string name="file_name">Filename</string>
+    <string name="document_title">Document Title</string>
+    <string name="organisation">Organisation</string>
+    <string name="course">Course/Lab</string>
+    <string name="place">Place</string>
+    <string name="name">Name</string>
+    <string name="assistant">Assistant</string>
+    <string name="preparation">Preparation</string>
+
+    <!--    <string name="document_title_default">Operating instructions according to EC No. 1272/2008</string>-->
+    <!--    <string name="organisation_default">For chemical laboratories of the University of Regensburg</string>-->
+    <!--    <string name="course_default">Inorganic chemistry lab course</string>-->
+
+    <string name="gestis">Gestis</string>
+
+    <string name="edit_substance">Click on substance to edit.</string>
+    <string name="molecular_formula">Molecular formula</string>
+    <string name="cas_number">CAS number</string>
+
+    <string name="formatted_molecular_formula_with_hint">Formatted molecular formula (use &lt;*&gt; for subscript)</string>
+    <string name="wgk">Water hazard class</string>
+    <string name="signal_word">Signal word</string>
+
+    <string name="molar_mass">Molar mass</string>
+    <string name="molar_mass_unit">g/mol</string>
+    <string name="lethal_dose">Lethal dose</string>
+    <string name="lethal_dose_unit">mg/kg</string>
+    <string name="mak">MAK</string>
+    <string name="mak_unit">ppm</string>
+    <string name="melting_point">Melting point</string>
+    <string name="boiling_point">Boiling point</string>
+    <string name="celsius_unit">°C</string>
+    <string name="quantity">Quantity</string>
+    <string name="unit">Unit</string>
+
+    <string name="human_and_environment_danger">Hazards to humans and the environment posed by the starting materials or products, insofar as they are not covered by the information given (e.g.
+        carcinogenic, teratogenic, skin-absorptive):
+    </string>
+    <string name="rules_of_conduct">Protective measures and rules of conduct:</string>
+    <string name="in_case_of_danger">Behavior in case of danger, first aid measures (attach a copy of the relevant literature if necessary):</string>
+    <string name="disposal">Disposal:</string>
+
+    <string name="h_phrases">H-phrases</string>
+    <string name="p-phrases">P-phrases</string>
+
+    <string name="ghs_pictograms">GHS pictograms</string>
+    <string name="ghs_pictograms_hint">Click on the symbol to add or remove.</string>
+
+    <string name="cancel">Cancel</string>
+
+    <string name="gestis_hint">Gestis rarely provides data on experimental products.</string>
+    <string name="search_option">Search option</string>
+    <string name="search">Search</string>
+    <string name="do_search">Search</string>
+    <string name="exact_search">Exact search</string>
+    <string name="failed_search">No results</string>
+
+    <string name="dark_theme">Dark theme</string>
+    <string name="language">Language</string>
+
+    <string name="preview">Preview:</string>
+    <string name="name_with_plural">Name(s)</string>
+
+    <string name="used_substances">Substances\nand products used</string>
+    <string name="molar_mass_with_unit">Molar mass\n[g/mol]</string>
+    <string name="temperatures">Bp.\nMp.</string>
+    <string name="h_and_p_phrases_number">H/P-phrases\n(numbers)</string>
+    <string name="mak_ld50_wgk">MAK\nLD50\nWHC</string>
+    <string name="quantity_required">Required for preparation</string>
+
+    <string name="sources">Sources:</string>
+
+    <string name="title_h_and_p_phrases">Wording of the main H and P phrases mentioned above:</string>
+
+    <string name="signature_1">I hereby undertake to carry out the experiment in accordance with the safety regulations listed in these operating instructions.</string>
+    <string name="signature_2">Preparation for synthesis approved with the quantities of chemicals calculated on the front.</string>
+    <string name="signature">Signature</string>
+    <string name="location_and_date">(Place, date)</string>
+
+    <string name="close">Close</string>
+    <string name="reset">Reset</string>
+    <string name="accept">Confirm</string>
+    <string name="open_settings">Open settings</string>
+    <string name="edit">Edit</string>
+    <string name="add">Add</string>
+    <string name="delete">Delete</string>
+    <string name="github">Github</string>
+
+    <string name="disclaimer">Benzol is an open-source project and therefore the use of the generated operating instructions is at your own risk. Neither the program nor the developers are responsible
+        for the content and cannot be held liable for incorrect or incomplete information.
+    </string>
+
+    <string name="important">Important!</string>
+
+    <string name="up">Up</string>
+    <string name="down">Down</string>
+
+    <string name="chemical_name">Chemical Name</string>
+    <string name="number">Number</string>
+    <string name="full_text">Full Text</string>
+</resources>
+
