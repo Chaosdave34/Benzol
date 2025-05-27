@@ -1,5 +1,6 @@
 package io.github.chaosdave34.benzol.search
 
+import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.GHSPictogram
 import io.github.chaosdave34.benzol.Substance
 import io.github.chaosdave34.benzol.getHttpClient
@@ -8,6 +9,7 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.jetbrains.compose.resources.StringResource
 
 private const val BASE_URL = "https://gestis-api.dguv.de/api"
 private const val TOKEN = "dddiiasjhduuvnnasdkkwUUSHhjaPPKMasd" // Dont ask
@@ -61,11 +63,11 @@ object Gestis {
         var value: String,
     )
 
-    enum class SearchType(val displayText: String, val parameterName: String) {
-        CHEMICAL_NAME("Stoffname", "stoffname"),
-        MOLECULAR_FORMULA("Summenformel", "summenformel"),
-        NUMBER("Nummer", "nummern"),
-        FULL_TEXT("Volltext", "volltextsuche")
+    enum class SearchType(val stringResource: StringResource, val parameterName: String) {
+        CHEMICAL_NAME(Res.string.chemical_name, "stoffname"),
+        MOLECULAR_FORMULA(Res.string.molecular_formula, "summenformel"),
+        CAS_NUMBER(Res.string.number, "nummern"),
+        FULL_TEXT(Res.string.full_text, "volltextsuche")
     }
 
     @Serializable

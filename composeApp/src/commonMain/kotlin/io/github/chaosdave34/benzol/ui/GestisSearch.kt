@@ -105,7 +105,7 @@ fun GestisSearch(
                 ) {
                     TextField(
                         modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable),
-                        value = argument.searchType.displayText,
+                        value = stringResource(argument.searchType.stringResource),
                         readOnly = true,
                         onValueChange = {},
                         label = { Text(stringResource(Res.string.search_option)) },
@@ -118,7 +118,7 @@ fun GestisSearch(
                     ) {
                         Gestis.SearchType.entries.forEach {
                             DropdownMenuItem(
-                                text = { Text(it.displayText) },
+                                text = { Text(stringResource(it.stringResource)) },
                                 onClick = {
                                     allowedSearchTypes.add(argument.searchType)
                                     allowedSearchTypes.remove(it)

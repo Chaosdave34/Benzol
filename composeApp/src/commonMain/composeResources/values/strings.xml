@@ -98,4 +98,11 @@
 
     <string name="up">Hoch</string>
     <string name="down">Runter</string>
+
+    <string name="german">Deutsch</string>
+    <string name="english">English</string>
+
+    <string name="chemical_name">Stoffname</string>
+    <string name="number">Nummer</string>
+    <string name="full_text">Volltext</string>
 </resources>
