@@ -91,10 +91,6 @@ compose.desktop {
     }
 }
 
-compose.resources {
-    generateResClass = auto
-}
-
 composeCompiler {
     featureFlags.add(ComposeFeatureFlag.OptimizeNonSkippingGroups)
 }
