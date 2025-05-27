@@ -6,6 +6,7 @@ string|boiling_point|U2llZGVwdW5rdA==
 string|cancel|QWJicmVjaGVu
 string|cas_number|Q0FTIE51bW1lcg==
 string|celsius_unit|wrBD
+string|chemical_name|U3RvZmZuYW1l
 string|close|U2NobGllw59lbg==
 string|course_default|UHJha3Rpa3VtIGFub3JnYW5pc2NoZSBDaGVtaWU=
 string|course|S3Vycy9MYWI=
@@ -19,10 +20,14 @@ string|document_title|RG9rdW1lbnQgVGl0ZWw=
 string|down|UnVudGVy
 string|edit_substance|WnVtIEJlYXJiZWl0ZW4gYXVmIFN1YnN0YW56IGtsaWNrZW4u
 string|edit|QmVhcmJlaXRlbg==
+string|english|RW5nbGlzaA==
 string|exact_search|RXhha3RlIFN1Y2hl
 string|export_file|QWxzIFBERiBleHBvcnRpZXJlbg==
+string|failed_search|S2VpbmUgRXJnZWJuaXNzZQ==
 string|file_name|RGF0ZWluYW1l
 string|formatted_molecular_formula_with_hint|Rm9ybWF0aWVydGUgU3VtbWVuZm9ybWVsIChtaXQgPCo+IHRpZWZlcnN0ZWxsZW4p
+string|full_text|Vm9sbHRleHQ=
+string|german|RGV1dHNjaA==
 string|gestis_hint|R2VzdGlzIGJpZXRldCBudXIgc2VsdGVuIERhdGVuIHp1IFZlcnN1Y2hzcHJvZHVrdGVuLg==
 string|gestis|R2VzdGlz
 string|ghs_pictograms_hint|WnVtIEVudGZlcm5lbiBvZGVyIEhpbnp1ZsO8Z2VuIGF1ZiBkYXMgU3ltYm9sIGtsaWNrZW4u
@@ -33,6 +38,7 @@ string|h_phrases|SC1Tw6R0emU=
 string|human_and_environment_danger|R2VmYWhyZW4gZsO8ciBNZW5zY2ggdW5kIFVtd2VsdCwgZGllIHZvbiBkZW4gQXVzZ2FuZ3NtYXRlcmlhbGllbiBiencuIGRlbiBQcm9kdWt0ZW4gYXVzZ2VoZW4sIHNvd2VpdCBzaWUgbmljaHQgZHVyY2ggZ2VuYW5udGUgQW5nYWJlbiBhYmdlZGVja3Qgc2luZCAoei5CLiBrcmVic2VycmVnZW5kLCBmcnVjaHRzY2jDpGRpZ2VuZCwgaGF1dHJlc29ycHRpdik6
 string|important|V2ljaHRpZyE=
 string|in_case_of_danger|VmVyaGFsdGVuIGltIEdlZmFocmVuZmFsbCwgRXJzdGUtSGlsZmUtTWHDn25haG1lbiAoZ2VnZWJlbmVuZmFsbHMgS29waWUgZGVyIGVudHNwcmVjaGVuZGVuIExpdGVyYXR1cnN0ZWxsZSBiZWloZWZ0ZW4pOg==
+string|language|U3ByYWNoZQ==
 string|lethal_dose_unit|bWcva2c=
 string|lethal_dose|TGV0YWxlIERvc2lz
 string|location_and_date|KE9ydCwgRGF0dW0p
@@ -47,7 +53,8 @@ string|molecular_formula|U3VtbWVuZm9ybWVs
 string|name_with_plural|TmFtZShuKQ==
 string|name|TmFtZQ==
 string|new_file|TmV1ZSBCZXRyaWVic2Fud2Vpc3VuZw==
-string|open_file|QmVzdGVoZW5kZSBCZXRyaWVic2Fud2Vpc3VuZyDDtmZmbmVu
+string|number|TnVtbWVy
+string|open_file|QmV0cmllYnNhbndlaXN1bmcgw7ZmZm5lbg==
 string|open_settings|RWluc3RlbGx1bmdlbiDDtmZmbmVu
 string|organisation_default|RsO8ciBjaGVtaXNjaGUgTGFib3JhdG9yaWVuIGRlciBVbml2ZXJzaXTDpHQgUmVnZW5zYnVyZw==
 string|organisation|T3JnYW5pc2F0aW9u
