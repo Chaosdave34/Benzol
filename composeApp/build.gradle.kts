@@ -71,9 +71,18 @@ compose.desktop {
         mainClass = "io.github.chaosdave34.benzol.MainKt"
 
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Exe, TargetFormat.AppImage)
-            packageName = "io.github.chaosdave34.benzol"
+            targetFormats(TargetFormat.Dmg, TargetFormat.Exe, TargetFormat.AppImage, TargetFormat.Rpm)
+            packageName = rootProject.name
             packageVersion = "1.2.0"
+            linux {
+                iconFile.set(project.file("src/desktopMain/resources/logo.png"))
+            }
+            macOS {
+                iconFile.set(project.file("src/desktopMain/resources/logo.icns"))
+            }
+            windows {
+                iconFile.set(project.file("src/desktopMain/resources/logo.ico"))
+            }
         }
 
         buildTypes.release.proguard {
