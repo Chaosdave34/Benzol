@@ -74,7 +74,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Exe, TargetFormat.AppImage)
             packageName = "io.github.chaosdave34.benzol"
-            packageVersion = "1.1.1"
+            packageVersion = "1.2.0"
         }
 
         buildTypes.release.proguard {
