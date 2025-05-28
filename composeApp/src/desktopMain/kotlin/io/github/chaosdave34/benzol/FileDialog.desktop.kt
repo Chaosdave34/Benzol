@@ -1,7 +1,6 @@
 package io.github.chaosdave34.benzol
 
 import androidx.compose.runtime.Composable
-
 import androidx.compose.ui.window.AwtWindow
 import benzol.composeapp.generated.resources.Res
 import benzol.composeapp.generated.resources.export_file
@@ -12,7 +11,6 @@ import io.github.chaosdave34.benzol.files.htmlToPdf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.stringResource
 import java.awt.FileDialog
 import java.awt.Frame
@@ -117,12 +115,10 @@ actual fun PdfExport(
                     super.setVisible(visible)
                     if (visible) {
                         if (directory != null && file != null) {
-                            coroutineScope.launch {
-                                withContext(Dispatchers.IO) {
-                                    val html = output.first
-                                    htmlToPdf(html.create(), directory, file)
-                                    onClose()
-                                }
+                            coroutineScope.launch(Dispatchers.IO) {
+                                val html = output.first
+                                htmlToPdf(html.create(), directory, file)
+                                onClose()
                             }
                             preferences.put(LAST_USED_FOLDER_EXPORT, directory)
                         } else {
