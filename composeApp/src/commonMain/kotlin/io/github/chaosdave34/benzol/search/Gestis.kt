@@ -207,8 +207,6 @@ object Gestis {
         private fun getHPhrases(): List<Pair<String, String>> {
             val chapter = getChapter("1100", "1303").getContent()
 
-            println(chapter)
-
             val matches = ">(?<number>H[0-9]{3}(?:\\+H[0-9]{3})*): (?<phrase>.+?\\.)(?=<br />|</td>)".toRegex().findAll(chapter)
 
             return matches.map { Pair(it.groups["number"]?.value ?: "", it.groups["phrase"]?.value ?: "") }.toList()

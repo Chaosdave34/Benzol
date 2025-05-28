@@ -136,8 +136,6 @@ fun App() {
                     appLanguage = newLanguage
                     setLanguage(newLanguage)
                     settings["language"] = newLanguage.locale
-
-                    println(Locale.current.language)
                 },
                 darkTheme = darkTheme
             )
