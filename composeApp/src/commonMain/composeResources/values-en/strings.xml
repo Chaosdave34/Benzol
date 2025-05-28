@@ -106,5 +106,7 @@
     <string name="chemical_name">Chemical Name</string>
     <string name="number">Number</string>
     <string name="full_text">Full Text</string>
+
+    <string name="unnamed_file">Untitled</string>
 </resources>
 

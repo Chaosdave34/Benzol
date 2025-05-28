@@ -106,4 +106,6 @@
     <string name="chemical_name">Stoffname</string>
     <string name="number">Nummer</string>
     <string name="full_text">Volltext</string>
+
+    <string name="unnamed_file">Unbenannt</string>
 </resources>

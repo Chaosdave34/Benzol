@@ -2,10 +2,13 @@ package io.github.chaosdave34.benzol
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import benzol.composeapp.generated.resources.Res
+import benzol.composeapp.generated.resources.unnamed_file
 import io.github.chaosdave34.benzol.files.CaBr2File
 import io.github.chaosdave34.benzol.files.HtmlFile
 import io.github.chaosdave34.benzol.files.InputData
 import kotlinx.coroutines.CoroutineScope
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun FileDialogs(
@@ -16,6 +19,8 @@ fun FileDialogs(
     import: (InputData) -> Unit,
     export: () -> InputData,
 ) {
+    val unnamed = stringResource(Res.string.unnamed_file)
+
     if (fileChooserVisible.value) {
         FileChooser(
             coroutineScope = coroutineScope,
@@ -76,7 +81,7 @@ fun FileDialogs(
                     inputData.disposal.map { it.trim() }
                 )
 
-                val fileName = if (inputData.fileName.isEmpty()) "Unbenannt.cb2" else "${inputData.fileName}.cb2"
+                val fileName = if (inputData.fileName.isEmpty()) "$unnamed.cb2" else "${inputData.fileName}.cb2"
 
                 Pair(CaBr2File.toJson(content), fileName)
             },
@@ -107,7 +112,7 @@ fun FileDialogs(
                     inputData.disposal.map { it.trim(); it.replace("\n", "") }
                 )
 
-                val fileName = if (inputData.fileName.isEmpty()) "Unbenannt.pdf" else "${inputData.fileName}.pdf"
+                val fileName = if (inputData.fileName.isEmpty()) "$unnamed.pdf" else "${inputData.fileName}.pdf"
 
                 Pair(htmlFile, fileName)
             },
