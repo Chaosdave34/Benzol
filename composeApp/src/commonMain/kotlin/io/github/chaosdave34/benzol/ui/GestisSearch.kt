@@ -238,41 +238,38 @@ fun SearchResultDialog(
                 Modifier.padding(start = 10.dp, bottom = 10.dp, top = 10.dp).fillMaxHeight(0.7f),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Checkbox(
-                        checked = exactSearch,
-                        onCheckedChange = toggleExactSearch
-                    )
-                    Text(stringResource(Res.string.exact_search))
-                }
-                Row(
-                    modifier = Modifier.weight(1f),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    Column(
-                        modifier = Modifier.verticalScroll(scrollState).weight(1f),
-                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                if (result.isEmpty()) {
+                    Box(
+                        modifier = Modifier.weight(1f).fillMaxWidth(),
+                        contentAlignment = Alignment.Center,
                     ) {
-                        if (result.isEmpty()) {
-                            Column(
-                                modifier = Modifier.fillMaxSize(),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                if (failed) {
-                                    Text(stringResource(Res.string.failed_search))
-                                } else {
-                                    CircularProgressIndicator()
-                                }
-                            }
+                        if (failed) {
+                            Text(stringResource(Res.string.failed_search))
                         } else {
+                            CircularProgressIndicator()
+                        }
+                    }
+                } else {
+                    Row(
+                        modifier = Modifier.weight(1f),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier.verticalScroll(scrollState).weight(1f),
+                            verticalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
 
                             DefaultColumn {
+                                Row {
+                                    Text(
+                                        text = stringResource(Res.string.cas_number),
+                                        modifier = Modifier.width(120.dp)
+                                    )
+                                    Text(stringResource(Res.string.name))
+                                }
+                                HorizontalDivider()
                                 result.forEach {
-                                    Column(
+                                    Row(
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .clickable(
@@ -282,22 +279,30 @@ fun SearchResultDialog(
                                                 }
                                             )
                                     ) {
-
-                                        Text("${it.casNumber ?: "-"} ${it.name}")
+                                        Text(
+                                            text = it.casNumber ?: "-",
+                                            modifier = Modifier.width(100.dp)
+                                        )
+                                        Spacer(Modifier.width(20.dp))
+                                        Text(it.name)
                                     }
                                 }
                             }
                         }
+                        Scrollbar(scrollState)
                     }
-
-                    Scrollbar(scrollState)
-
                 }
-
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(end = 20.dp),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.End)
+                    horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.End),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
+                    Checkbox(
+                        checked = exactSearch,
+                        onCheckedChange = toggleExactSearch
+                    )
+                    Text(stringResource(Res.string.exact_search))
+                    Spacer(Modifier.weight(1f))
                     Button(
                         onClick = onClose
                     ) {
