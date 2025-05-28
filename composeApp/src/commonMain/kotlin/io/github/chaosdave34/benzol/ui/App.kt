@@ -2,14 +2,15 @@ package io.github.chaosdave34.benzol.ui
 
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.*
 import com.russhwolf.settings.set
 import io.github.chaosdave34.benzol.*
@@ -25,6 +26,8 @@ import org.jetbrains.compose.resources.getStringArray
 fun App() {
     val coroutineScope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
+
+    val snackbarHostState = remember { SnackbarHostState() }
 
     val settings = getSettings()
 
@@ -82,6 +85,7 @@ fun App() {
             fileChooserVisible = fileChooserVisible,
             fileSaverVisible = fileSaverVisible,
             pdfExportVisible = pdfExportVisible,
+            snackbarHostState = snackbarHostState,
             import = { inputData ->
                 fileName.value = inputData.fileName
                 documentTitle.value = inputData.documentTitle
@@ -141,60 +145,71 @@ fun App() {
             )
             Disclaimer()
 
-            Row(
-                Modifier.pointerInput(Unit) {
-                    detectTapGestures {
-                        focusManager.clearFocus()
-                    }
+            Scaffold(
+                snackbarHost = {
+                    SnackbarHost(
+                        hostState = snackbarHostState,
+                        modifier = Modifier
+                            .padding(bottom = 60.dp)
+                            .fillMaxWidth(0.7f),
+                    )
                 }
             ) {
-                Sidebar(
-                    openFileChooser = { fileChooserVisible.value = true },
-                    openFileSaver = { fileSaverVisible.value = true },
-                    openPdfExport = { pdfExportVisible.value = true },
-                    openSettings = { settingsVisible.value = true },
-                    resetInput = {
-                        fileName.value = ""
-
-                        documentTitle.value = ""
-                        organisation.value = ""
-                        course.value = ""
-                        name.value = ""
-                        place.value = ""
-                        assistant.value = ""
-                        preparation.value = ""
-
-                        humanAndEnvironmentDanger.clear()
-                        rulesOfConduct.clear()
-                        inCaseOfDanger.clear()
-                        inCaseOfDanger.clear()
-                        disposal.clear()
-
-                        substanceList.clear()
-
-                        coroutineScope.launch {
-                            defaultValues()
+                Row(
+                    Modifier.pointerInput(Unit) {
+                        detectTapGestures {
+                            focusManager.clearFocus()
                         }
                     }
-                )
+                ) {
+                    Sidebar(
+                        openFileChooser = { fileChooserVisible.value = true },
+                        openFileSaver = { fileSaverVisible.value = true },
+                        openPdfExport = { pdfExportVisible.value = true },
+                        openSettings = { settingsVisible.value = true },
+                        resetInput = {
+                            fileName.value = ""
 
-                Content(
-                    fileName = fileName,
-                    documentTitle = documentTitle,
-                    organisation = organisation,
-                    course = course,
-                    name = name,
-                    place = place,
-                    assistant = assistant,
-                    preparation = preparation,
-                    substanceList = substanceList,
-                    humanAndEnvironmentDanger = humanAndEnvironmentDanger,
-                    rulesOfConduct = rulesOfConduct,
-                    inCaseOfDanger = inCaseOfDanger,
-                    disposal = disposal,
-                    openFileSaver = { fileSaverVisible.value = true },
-                    openPdfExport = { pdfExportVisible.value = true }
-                )
+                            documentTitle.value = ""
+                            organisation.value = ""
+                            course.value = ""
+                            name.value = ""
+                            place.value = ""
+                            assistant.value = ""
+                            preparation.value = ""
+
+                            humanAndEnvironmentDanger.clear()
+                            rulesOfConduct.clear()
+                            inCaseOfDanger.clear()
+                            inCaseOfDanger.clear()
+                            disposal.clear()
+
+                            substanceList.clear()
+
+                            coroutineScope.launch {
+                                defaultValues()
+                            }
+                        }
+                    )
+
+                    Content(
+                        fileName = fileName,
+                        documentTitle = documentTitle,
+                        organisation = organisation,
+                        course = course,
+                        name = name,
+                        place = place,
+                        assistant = assistant,
+                        preparation = preparation,
+                        substanceList = substanceList,
+                        humanAndEnvironmentDanger = humanAndEnvironmentDanger,
+                        rulesOfConduct = rulesOfConduct,
+                        inCaseOfDanger = inCaseOfDanger,
+                        disposal = disposal,
+                        openFileSaver = { fileSaverVisible.value = true },
+                        openPdfExport = { pdfExportVisible.value = true }
+                    )
+                }
             }
         }
     }

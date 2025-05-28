@@ -1,13 +1,17 @@
 package io.github.chaosdave34.benzol
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import benzol.composeapp.generated.resources.Res
+import benzol.composeapp.generated.resources.pdf_export_success
 import benzol.composeapp.generated.resources.unnamed_file
 import io.github.chaosdave34.benzol.files.CaBr2File
 import io.github.chaosdave34.benzol.files.HtmlFile
 import io.github.chaosdave34.benzol.files.InputData
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -16,6 +20,7 @@ fun FileDialogs(
     fileChooserVisible: MutableState<Boolean>,
     fileSaverVisible: MutableState<Boolean>,
     pdfExportVisible: MutableState<Boolean>,
+    snackbarHostState: SnackbarHostState,
     import: (InputData) -> Unit,
     export: () -> InputData,
 ) {
@@ -118,6 +123,9 @@ fun FileDialogs(
             },
             onClose = {
                 pdfExportVisible.value = false
+                coroutineScope.launch {
+                    snackbarHostState.showSnackbar(getString(Res.string.pdf_export_success))
+                }
             }
         )
     }

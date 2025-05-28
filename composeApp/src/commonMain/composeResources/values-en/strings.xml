@@ -107,6 +107,7 @@
     <string name="number">Number</string>
     <string name="full_text">Full Text</string>
 
+    <string name="pdf_export_success">PDF was created successfully</string>
     <string name="unnamed_file">Untitled</string>
 </resources>
 
