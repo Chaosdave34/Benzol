@@ -9,13 +9,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.*
 import com.russhwolf.settings.set
 import io.github.chaosdave34.benzol.*
 import io.github.chaosdave34.benzol.files.InputData
-import io.ktor.util.*
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.getString
@@ -33,8 +31,8 @@ fun App() {
 
     val darkTheme = remember { mutableStateOf(settings.getBoolean("dark_theme", false)) }
 
-    val locale = if (PlatformUtils.IS_BROWSER) Locale.current.language else settings.getString("language", SupportedLanguage.GERMAN.locale)
-    var appLanguage by remember { mutableStateOf(SupportedLanguage.fromLocale(locale) ?: SupportedLanguage.GERMAN) }
+    val locale = SupportedLanguage.fromLocale(settings.getString("language", SupportedLanguage.GERMAN.locale)) ?: SupportedLanguage.GERMAN
+    var appLanguage by remember { mutableStateOf(locale) }
 
     val fileChooserVisible = remember { mutableStateOf(false) }
     val fileSaverVisible = remember { mutableStateOf(false) }
@@ -68,12 +66,8 @@ fun App() {
         rulesOfConduct.addAll(getStringArray(Res.array.rules_of_conduct_defaults))
     }
 
-    if (Locale.current.language != appLanguage.locale) {
-        setLanguage(appLanguage)
-    }
-
-    val localLanguage = compositionLocalOf { appLanguage }
-    CompositionLocalProvider(localLanguage provides appLanguage) {
+    AppEnvironment {
+        LocalAppLocale.provides(appLanguage.locale)
 
         LaunchedEffect(Unit) {
             GHSPictogram.Companion.setBase64()
@@ -138,7 +132,6 @@ fun App() {
                 language = appLanguage,
                 setLanguage = { newLanguage ->
                     appLanguage = newLanguage
-                    setLanguage(newLanguage)
                     settings["language"] = newLanguage.locale
                 },
                 darkTheme = darkTheme

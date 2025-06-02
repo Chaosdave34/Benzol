@@ -13,7 +13,6 @@ import benzol.composeapp.generated.resources.*
 import com.russhwolf.settings.set
 import io.github.chaosdave34.benzol.SupportedLanguage
 import io.github.chaosdave34.benzol.getSettings
-import io.ktor.util.*
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,13 +53,11 @@ fun Settings(
                         Text(stringResource(Res.string.dark_theme))
                     }
 
-                    val languageLocked = PlatformUtils.IS_BROWSER
-
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         ExposedDropdownMenuBox(
-                            expanded = languageDropdownExpanded && !languageLocked,
+                            expanded = languageDropdownExpanded,
                             onExpandedChange = { languageDropdownExpanded = it }
                         ) {
                             TextField(
@@ -69,11 +66,10 @@ fun Settings(
                                 readOnly = true,
                                 onValueChange = {},
                                 label = { Text(stringResource(Res.string.search_option)) },
-                                enabled = !languageLocked
                             )
 
                             ExposedDropdownMenu(
-                                expanded = languageDropdownExpanded && !languageLocked,
+                                expanded = languageDropdownExpanded,
                                 onDismissRequest = { languageDropdownExpanded = false }
                             ) {
                                 SupportedLanguage.entries.forEach {
