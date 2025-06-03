@@ -54,6 +54,7 @@ string|open_file|T3BlbiBzYWZldHkgZGF0YXNoZWV0
 string|open_settings|T3BlbiBzZXR0aW5ncw==
 string|organisation|T3JnYW5pc2F0aW9u
 string|p-phrases|UC1waHJhc2Vz
+string|pdf_export_success|UERGIHdhcyBjcmVhdGVkIHN1Y2Nlc3NmdWxseQ==
 string|place|UGxhY2U=
 string|preparation|UHJlcGFyYXRpb24=
 string|preview|UHJldmlldzo=
@@ -73,6 +74,7 @@ string|sources|U291cmNlczo=
 string|temperatures|QnAuCk1wLg==
 string|title_h_and_p_phrases|V29yZGluZyBvZiB0aGUgbWFpbiBIIGFuZCBQIHBocmFzZXMgbWVudGlvbmVkIGFib3ZlOg==
 string|unit|VW5pdA==
+string|unnamed_file|VW50aXRsZWQ=
 string|up|VXA=
 string|used_substances|U3Vic3RhbmNlcwphbmQgcHJvZHVjdHMgdXNlZA==
 string|wgk|V2F0ZXIgaGF6YXJkIGNsYXNz

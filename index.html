@@ -1,11 +1,25 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Benzol</title>
     <link type="text/css" rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/x-icon" href="composeResources/benzol.composeapp.generated.resources/drawable/logo.svg">
+    <script>
+        const currentLanguagesImplementation = Object.getOwnPropertyDescriptor(Navigator.prototype, "languages");
+        const newLanguagesImplementation = Object.assign({}, currentLanguagesImplementation, {
+            get: function () {
+                if (window.__customLocale) {
+                    return [window.__customLocale];
+                } else {
+                    return currentLanguagesImplementation.get.apply(this);
+                }
+            }
+        });
+
+        Object.defineProperty(Navigator.prototype, "languages", newLanguagesImplementation)
+    </script>
     <!--suppress HtmlUnknownTarget -->
     <script type="application/javascript" src="composeApp.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
