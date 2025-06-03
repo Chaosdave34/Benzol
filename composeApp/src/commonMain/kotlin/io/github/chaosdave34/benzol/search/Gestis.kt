@@ -3,10 +3,12 @@ package io.github.chaosdave34.benzol.search
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.GHSPictogram
 import io.github.chaosdave34.benzol.Substance
-import io.github.chaosdave34.benzol.getHttpClient
+import io.ktor.client.*
 import io.ktor.client.call.*
+import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.StringResource
@@ -15,7 +17,11 @@ private const val BASE_URL = "https://gestis-api.dguv.de/api"
 private const val TOKEN = "dddiiasjhduuvnnasdkkwUUSHhjaPPKMasd" // Dont ask
 
 object Gestis {
-    val client = getHttpClient()
+    private val client = HttpClient {
+        install(ContentNegotiation) {
+            json()
+        }
+    }
 
     suspend fun search(search: Search): List<SearchResult> {
         val parameters = search.search.joinToString("&") { "${it.searchType.parameterName}=${it.value}" }
