@@ -6,8 +6,8 @@ import io.github.chaosdave34.benzol.files.htmlToPdf
 import kotlinx.browser.document
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.w3c.dom.HTMLAnchorElement
 import org.khronos.webgl.Int8Array
+import org.w3c.dom.HTMLAnchorElement
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.url.URL
 import org.w3c.files.File
@@ -57,7 +57,7 @@ actual fun FileChooser(
 @Composable
 actual fun FileSaver(
     coroutineScope: CoroutineScope,
-    output: () -> Pair<String,String>,
+    output: () -> Pair<String, String>,
     onClose: () -> Unit
 ) {
     coroutineScope.launch {
