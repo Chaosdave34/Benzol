@@ -14,7 +14,7 @@ import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.StringResource
 
 private const val BASE_URL = "https://gestis-api.dguv.de/api"
-private const val TOKEN = "dddiiasjhduuvnnasdkkwUUSHhjaPPKMasd" // Dont ask
+private const val TOKEN = "dddiiasjhduuvnnasdkkwUUSHhjaPPKMasd" // don't ask, just leave it (https://gestis.dguv.de/search)
 
 object Gestis {
     private val client = HttpClient {
