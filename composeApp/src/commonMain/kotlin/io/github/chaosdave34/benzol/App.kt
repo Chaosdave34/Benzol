@@ -1,4 +1,4 @@
-package io.github.chaosdave34.benzol.ui
+package io.github.chaosdave34.benzol
 
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Row
@@ -12,8 +12,11 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.*
 import com.russhwolf.settings.set
-import io.github.chaosdave34.benzol.*
 import io.github.chaosdave34.benzol.files.InputData
+import io.github.chaosdave34.benzol.ui.Content
+import io.github.chaosdave34.benzol.ui.Disclaimer
+import io.github.chaosdave34.benzol.ui.Settings
+import io.github.chaosdave34.benzol.ui.Sidebar
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.getString
