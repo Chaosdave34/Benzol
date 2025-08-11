@@ -21,6 +21,7 @@ import androidx.compose.ui.window.Dialog
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.GHSPictogram
 import io.github.chaosdave34.benzol.Substance
+import io.github.chaosdave34.benzol.ui.components.*
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource

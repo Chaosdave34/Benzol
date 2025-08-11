@@ -1,4 +1,4 @@
-package io.github.chaosdave34.benzol.ui
+package io.github.chaosdave34.benzol.ui.components
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.VerticalScrollbar

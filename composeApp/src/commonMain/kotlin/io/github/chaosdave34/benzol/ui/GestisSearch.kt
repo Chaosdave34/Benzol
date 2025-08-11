@@ -24,6 +24,8 @@ import androidx.compose.ui.window.Dialog
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.Substance
 import io.github.chaosdave34.benzol.search.Gestis
+import io.github.chaosdave34.benzol.ui.components.DefaultColumn
+import io.github.chaosdave34.benzol.ui.components.Scrollbar
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 

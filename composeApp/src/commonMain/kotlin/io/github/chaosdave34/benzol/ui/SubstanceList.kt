@@ -21,6 +21,7 @@ import benzol.composeapp.generated.resources.Res
 import benzol.composeapp.generated.resources.open_settings
 import io.github.chaosdave34.benzol.Substance
 import io.github.chaosdave34.benzol.search.Source
+import io.github.chaosdave34.benzol.ui.components.RemoveListElementButton
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
