@@ -217,7 +217,7 @@ fun ListInput(
         Text(stringResource(title))
         list.forEachIndexed { index, element ->
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Max),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
@@ -229,7 +229,8 @@ fun ListInput(
                 )
                 MoveUpAndDown(
                     list = list,
-                    index = index
+                    index = index,
+                    padding = 10.dp
                 )
                 RemoveListElementButton(
                     list = list,
