@@ -169,7 +169,7 @@ data class Substance(
 
     @Composable
     fun FormattedMolecularFormula(modifier: Modifier = Modifier, formula: String = formattedMolecularFormula, align: TextAlign? = null) {
-        var sub = formula.startsWith("<")
+        var sub = false
         val splits = formula.split("[<>]".toRegex())
         Text(
             modifier = modifier,
