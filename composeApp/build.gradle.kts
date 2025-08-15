@@ -11,11 +11,11 @@ plugins {
 }
 
 kotlin {
-    jvm("desktop")
+    jvm()
 
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        outputModuleName = "composeApp"
+        outputModuleName.set("composeApp")
         browser {
             val rootDirPath = project.rootDir.path
             val projectDirPath = project.projectDir.path
@@ -34,8 +34,6 @@ kotlin {
     }
 
     sourceSets {
-        val desktopMain by getting
-
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -56,7 +54,7 @@ kotlin {
             implementation(libs.russhwolf.multiplatform.settings)
         }
 
-        desktopMain.dependencies {
+        jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
 
@@ -75,13 +73,13 @@ compose.desktop {
             packageName = rootProject.name
             packageVersion = "1.3.0"
             linux {
-                iconFile.set(project.file("src/desktopMain/resources/logo.png"))
+                iconFile.set(project.file("src/jvmMain/resources/logo.png"))
             }
             macOS {
-                iconFile.set(project.file("src/desktopMain/resources/logo.icns"))
+                iconFile.set(project.file("src/jvmMain/resources/logo.icns"))
             }
             windows {
-                iconFile.set(project.file("src/desktopMain/resources/logo.ico"))
+                iconFile.set(project.file("src/jvmMain/resources/logo.ico"))
             }
         }
 
