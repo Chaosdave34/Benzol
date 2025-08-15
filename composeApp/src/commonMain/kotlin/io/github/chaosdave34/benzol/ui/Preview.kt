@@ -7,7 +7,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,6 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.Substance
+import io.github.chaosdave34.benzol.data.SafetySheetInputState
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -26,19 +26,14 @@ private val modifier = Modifier.fillMaxWidth().border(1.dp, Color.White).padding
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun Preview(
-    documentTitle: String,
-    organisation: String,
-    course: String,
-    name: String,
-    place: String,
-    assistant: String,
-    preparation: String,
-    substanceList: SnapshotStateList<Substance>,
-    humanAndEnvironmentDanger: SnapshotStateList<String>,
-    rulesOfConduct: SnapshotStateList<String>,
-    inCaseOfDanger: SnapshotStateList<String>,
-    disposal: SnapshotStateList<String>
+    inputState: SafetySheetInputState,
+    substances: List<Substance>,
+    humanAndEnvironmentDanger: List<String>,
+    rulesOfConduct: List<String>,
+    inCaseOfDanger: List<String>,
+    disposal: List<String>
 ) {
+
     Text(stringResource(Res.string.preview))
 
     FlowRow(
@@ -50,19 +45,19 @@ fun Preview(
         ) {
             Text(
                 modifier = modifier,
-                text = documentTitle,
+                text = inputState.documentTitle.trim(),
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold
             )
             Text(
                 modifier = modifier,
-                text = organisation,
+                text = inputState.organisation.trim(),
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold
             )
             Text(
                 modifier = modifier,
-                text = course,
+                text = inputState.course.trim(),
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold
             )
@@ -70,17 +65,17 @@ fun Preview(
                 TextBlock(
                     weight = 13f,
                     title = Res.string.name_with_plural,
-                    content = name
+                    content = inputState.name.trim()
                 )
                 TextBlock(
                     weight = 8f,
                     title = Res.string.place,
-                    content = place
+                    content = inputState.place.trim()
                 )
                 TextBlock(
                     weight = 13f,
                     title = Res.string.assistant,
-                    content = assistant
+                    content = inputState.assistant.trim()
                 )
             }
             Column(
@@ -88,7 +83,7 @@ fun Preview(
             ) {
                 Text(stringResource(Res.string.preparation))
                 Text(
-                    text = preparation,
+                    text = inputState.preparation.trim(),
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -129,7 +124,7 @@ fun Preview(
                     textAlign = TextAlign.Center
                 )
             }
-            substanceList.forEach { substance ->
+            substances.forEach { substance ->
                 ListRow {
                     SubstanceColumn(6f) {
                         CenteredText(substance.name)
@@ -187,12 +182,12 @@ fun Preview(
             ListRow {
                 PhraseList(
                     weight = 1f,
-                    list = substanceList,
+                    list = substances,
                     transform = { it.hPhrases }
                 )
                 PhraseList(
                     weight = 1f,
-                    list = substanceList,
+                    list = substances,
                     transform = { it.pPhrases }
                 )
             }
@@ -204,7 +199,7 @@ fun Preview(
                     text = "Quellen: ",
                     fontWeight = FontWeight.Bold
                 )
-                Text(Substance.formatSource(substanceList))
+                Text(Substance.formatSource(substances))
             }
         }
 
@@ -268,7 +263,11 @@ fun RowScope.SubstanceColumn(weight: Float, content: @Composable (ColumnScope.()
 }
 
 @Composable
-fun ListWithTitle(modifier: Modifier, title: StringResource, list: SnapshotStateList<String>) {
+fun ListWithTitle(
+    modifier: Modifier,
+    title: StringResource,
+    list: List<String>
+) {
     val list = list.map { it.trim(); it.replace("\n", "") }
     Column(
         modifier = modifier.padding(10.dp)
@@ -297,7 +296,11 @@ fun ListWithTitle(modifier: Modifier, title: StringResource, list: SnapshotState
 }
 
 @Composable
-fun RowScope.PhraseList(weight: Float, list: SnapshotStateList<Substance>, transform: (Substance) -> List<Pair<String, String>>) {
+fun RowScope.PhraseList(
+    weight: Float,
+    list: List<Substance>,
+    transform: (Substance) -> List<Pair<String, String>>
+) {
     Column(
         modifier = modifier.weight(weight).fillMaxHeight()
     ) {
@@ -316,7 +319,12 @@ fun ListRow(content: @Composable (RowScope.() -> Unit)) {
 }
 
 @Composable
-fun RowScope.TextBlock(weight: Float, title: StringResource, content: String? = null, textAlign: TextAlign = TextAlign.Start) {
+fun RowScope.TextBlock(
+    weight: Float,
+    title: StringResource,
+    content: String? = null,
+    textAlign: TextAlign = TextAlign.Start
+) {
     Column(
         modifier = modifier.weight(weight).fillMaxHeight(),
         verticalArrangement = Arrangement.Center
@@ -333,7 +341,10 @@ fun RowScope.TextBlock(weight: Float, title: StringResource, content: String? = 
 }
 
 @Composable
-fun RowScope.SignatureBox(weight: Float, signatureDescription: StringResource) {
+fun RowScope.SignatureBox(
+    weight: Float,
+    signatureDescription: StringResource
+) {
     Column(
         modifier = modifier.weight(weight).fillMaxHeight()
     ) {
@@ -360,7 +371,10 @@ fun RowScope.SignatureBox(weight: Float, signatureDescription: StringResource) {
     }
 }
 
-private fun valueOrDash(value: String, unit: String = ""): String {
+private fun valueOrDash(
+    value: String,
+    unit: String = ""
+): String {
     return if (value.isBlank()) "-"
     else if (unit.isBlank()) value else value + nbsp + unit
 }

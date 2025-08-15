@@ -10,26 +10,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import benzol.composeapp.generated.resources.*
-import com.russhwolf.settings.set
 import io.github.chaosdave34.benzol.SupportedLanguage
-import io.github.chaosdave34.benzol.getSettings
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Settings(
-    open: MutableState<Boolean>,
-    language: SupportedLanguage,
-    setLanguage: (SupportedLanguage) -> Unit,
-    darkTheme: MutableState<Boolean>
+    viewModel: SafetySheetViewModel,
 ) {
-    val settings = getSettings()
+    val uiState by viewModel.uiState.collectAsState()
 
     var languageDropdownExpanded by remember { mutableStateOf(false) }
 
-    if (open.value) {
+    if (uiState.settingsVisible) {
         Dialog(
-            onDismissRequest = { open.value = false }
+            onDismissRequest = viewModel::closeSettings
         ) {
             Card {
                 Column(
@@ -43,11 +38,8 @@ fun Settings(
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         Checkbox(
-                            checked = darkTheme.value,
-                            onCheckedChange = {
-                                darkTheme.value = it
-                                settings["dark_theme"] = it
-                            }
+                            checked = uiState.darkMode,
+                            onCheckedChange = viewModel::setDarkMode
                         )
 
                         Text(stringResource(Res.string.dark_theme))
@@ -62,7 +54,7 @@ fun Settings(
                         ) {
                             TextField(
                                 modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable),
-                                value = stringResource(language.resource),
+                                value = stringResource(uiState.language.resource),
                                 readOnly = true,
                                 onValueChange = {},
                                 label = { Text(stringResource(Res.string.search_option)) },
@@ -77,7 +69,7 @@ fun Settings(
                                         text = { Text(stringResource(it.resource)) },
                                         onClick = {
                                             languageDropdownExpanded = false
-                                            setLanguage(it)
+                                            viewModel.setLanguage(it)
                                         }
                                     )
                                 }
@@ -90,7 +82,7 @@ fun Settings(
                         horizontalArrangement = Arrangement.End
                     ) {
                         Button(
-                            onClick = { open.value = false }
+                            onClick = viewModel::closeSettings
                         ) {
                             Icon(Icons.Rounded.Close, stringResource(Res.string.close))
                         }

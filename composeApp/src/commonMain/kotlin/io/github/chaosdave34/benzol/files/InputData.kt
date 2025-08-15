@@ -11,7 +11,7 @@ data class InputData(
     val place: String,
     val assistant: String,
     val preparation: String,
-    val substanceList: List<Substance>,
+    val substances: List<Substance>,
     val humanAndEnvironmentDanger: List<String>,
     val rulesOfConduct: List<String>,
     val inCaseOfDanger: List<String>,

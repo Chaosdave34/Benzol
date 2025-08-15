@@ -16,10 +16,7 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun Sidebar(
-    openFileChooser: () -> Unit,
-    openFileSaver: () -> Unit,
-    openPdfExport: () -> Unit,
-    openSettings: () -> Unit,
+    viewModel: SafetySheetViewModel,
     resetInput: () -> Unit
 ) {
     val uriHandler = LocalUriHandler.current
@@ -55,7 +52,7 @@ fun Sidebar(
                         text = { Text(stringResource(Res.string.open_file)) },
                         onClick = {
                             dropdownExpanded = false
-                            openFileChooser()
+                            viewModel.openFileChooser()
                         }
                     )
                     DropdownMenuItem(
@@ -64,14 +61,14 @@ fun Sidebar(
                         },
                         onClick = {
                             dropdownExpanded = false
-                            openFileSaver()
+                            viewModel.openFileSaver()
                         }
                     )
                     DropdownMenuItem(
                         { Text(stringResource(Res.string.export_file)) },
                         onClick = {
                             dropdownExpanded = false
-                            openPdfExport()
+                            viewModel.openPdfExport()
                         }
                     )
                     HorizontalDivider()
@@ -79,7 +76,7 @@ fun Sidebar(
                         { Text(stringResource(Res.string.settings)) },
                         onClick = {
                             dropdownExpanded = false
-                            openSettings()
+                            viewModel.openSettings()
                         }
                     )
                 }

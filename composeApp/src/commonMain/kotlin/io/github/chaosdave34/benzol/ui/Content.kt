@@ -19,24 +19,17 @@ import org.jetbrains.compose.resources.stringResource
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Content(
-    fileName: MutableState<String>,
-    documentTitle: MutableState<String>,
-    organisation: MutableState<String>,
-    course: MutableState<String>,
-    name: MutableState<String>,
-    place: MutableState<String>,
-    assistant: MutableState<String>,
-    preparation: MutableState<String>,
-    substanceList: SnapshotStateList<Substance>,
-    humanAndEnvironmentDanger: SnapshotStateList<String>,
-    rulesOfConduct: SnapshotStateList<String>,
-    inCaseOfDanger: SnapshotStateList<String>,
-    disposal: SnapshotStateList<String>,
-    openFileSaver: () -> Unit,
-    openPdfExport: () -> Unit,
+    viewModel: SafetySheetViewModel,
 ) {
-    val scrollState = rememberScrollState()
+    val inputState by viewModel.inputState.collectAsState()
 
+    val substances by viewModel.substances.collectAsState()
+    val humanAndEnvironmentDanger by viewModel.humanAndEnvironmentDanger.collectAsState()
+    val rulesOfConduct by viewModel.rulesOfConduct.collectAsState()
+    val inCaseOfDanger by viewModel.inCaseOfDanger.collectAsState()
+    val disposal by viewModel.disposal.collectAsState()
+
+    val scrollState = rememberScrollState()
     var searchTypeIndex by remember { mutableStateOf(0) }
 
     Surface {
@@ -56,36 +49,44 @@ fun Content(
                 ) {
                     DefaultColumn {
                         Input(
-                            value = fileName,
+                            value = inputState.fileName,
+                            onValueChange = viewModel::setFileName,
                             label = Res.string.file_name
                         )
                         HorizontalDivider()
                         Input(
-                            value = documentTitle,
+                            value = inputState.documentTitle,
+                            onValueChange = viewModel::setDocumentTitle,
                             label = Res.string.document_title
                         )
                         Input(
-                            value = organisation,
+                            value = inputState.organisation,
+                            onValueChange = viewModel::setOrganisation,
                             label = Res.string.organisation
                         )
                         Input(
-                            value = course,
+                            value = inputState.course,
+                            onValueChange = viewModel::setCourse,
                             label = Res.string.course
                         )
                         Input(
-                            value = name,
+                            value = inputState.name,
+                            onValueChange = viewModel::setName,
                             label = Res.string.name
                         )
                         Input(
-                            value = place,
+                            value = inputState.place,
+                            onValueChange = viewModel::setPlace,
                             label = Res.string.place
                         )
                         Input(
-                            value = assistant,
+                            value = inputState.assistant,
+                            onValueChange = viewModel::setAssistant,
                             label = Res.string.assistant
                         )
                         Input(
-                            value = preparation,
+                            value = inputState.preparation,
+                            onValueChange = viewModel::setPreparation,
                             label = Res.string.preparation
                         )
                     }
@@ -111,7 +112,7 @@ fun Content(
 
                         when (searchTypeIndex) {
                             0 -> GestisSearch(
-                                onResult = { substanceList.add(it) }
+                                onResult = { substances.add(it) }
                             )
                         }
 
@@ -138,11 +139,11 @@ fun Content(
                             }
 
                             SubstanceList(
-                                substanceList = substanceList
+                                substances = substances
                             )
                         }
                         AddListElementButton(
-                            list = substanceList,
+                            list = substances,
                             element = Substance()
                         )
                     }
@@ -166,18 +167,12 @@ fun Content(
 
                     DefaultColumn {
                         Preview(
-                            documentTitle.value.trim(),
-                            organisation.value.trim(),
-                            course.value.trim(),
-                            name.value.trim(),
-                            place.value.trim(),
-                            assistant.value.trim(),
-                            preparation.value.trim(),
-                            substanceList,
-                            humanAndEnvironmentDanger,
-                            rulesOfConduct,
-                            inCaseOfDanger,
-                            disposal
+                            inputState = inputState,
+                            substances = substances,
+                            humanAndEnvironmentDanger = humanAndEnvironmentDanger,
+                            rulesOfConduct = rulesOfConduct,
+                            inCaseOfDanger = inCaseOfDanger,
+                            disposal = disposal,
                         )
                     }
                 }
@@ -190,16 +185,12 @@ fun Content(
                 horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.End)
             ) {
                 Button(
-                    onClick = {
-                        openFileSaver()
-                    }
+                    onClick = viewModel::openFileSaver
                 ) {
                     Text(stringResource(Res.string.save_file))
                 }
                 Button(
-                    onClick = {
-                        openPdfExport()
-                    }
+                    onClick = viewModel::openPdfExport
                 ) {
                     Text(stringResource(Res.string.export_file))
                 }

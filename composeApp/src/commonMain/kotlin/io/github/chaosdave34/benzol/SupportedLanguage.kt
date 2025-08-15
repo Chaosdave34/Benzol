@@ -10,6 +10,6 @@ enum class SupportedLanguage(val resource: StringResource, val locale: String) {
     ENGLISH(Res.string.english, "en");
 
     companion object {
-        fun fromLocale(locale: String) = entries.find { it.locale == locale }
+        fun fromLocale(locale: String?) = entries.find { it.locale == locale }
     }
 }

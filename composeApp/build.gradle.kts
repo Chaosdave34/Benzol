@@ -50,6 +50,7 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.bundles.ktor.common)
             implementation(compose.materialIconsExtended)
+            implementation(libs.androidx.lifecycle.viewmodel.compose)
 
             implementation(libs.ksoup)
             implementation(libs.russhwolf.multiplatform.settings)

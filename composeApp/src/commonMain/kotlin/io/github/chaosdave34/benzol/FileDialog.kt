@@ -1,14 +1,15 @@
 package io.github.chaosdave34.benzol
 
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import benzol.composeapp.generated.resources.Res
 import benzol.composeapp.generated.resources.pdf_export_success
 import benzol.composeapp.generated.resources.unnamed_file
 import io.github.chaosdave34.benzol.files.CaBr2File
 import io.github.chaosdave34.benzol.files.HtmlFile
 import io.github.chaosdave34.benzol.files.InputData
+import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
@@ -17,16 +18,16 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun FileDialogs(
     coroutineScope: CoroutineScope,
-    fileChooserVisible: MutableState<Boolean>,
-    fileSaverVisible: MutableState<Boolean>,
-    pdfExportVisible: MutableState<Boolean>,
-    snackbarHostState: SnackbarHostState,
+    viewModel: SafetySheetViewModel,
     import: (InputData) -> Unit,
     export: () -> InputData,
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+    val snackbarHostState by viewModel.snackbarHostState.collectAsState()
+
     val unnamed = stringResource(Res.string.unnamed_file)
 
-    if (fileChooserVisible.value) {
+    if (uiState.fileChooserVisible) {
         FileChooser(
             coroutineScope = coroutineScope,
             result = { json, fileName ->
@@ -44,7 +45,7 @@ fun FileDialogs(
                             place = header.place,
                             assistant = header.assistant,
                             preparation = header.preparation,
-                            substanceList = caBr2File.substanceData.map { it.import() },
+                            substances = caBr2File.substanceData.map { it.import() },
                             humanAndEnvironmentDanger = caBr2File.humanAndEnvironmentDanger,
                             rulesOfConduct = caBr2File.rulesOfConduct,
                             inCaseOfDanger = caBr2File.inCaseOfDanger,
@@ -55,13 +56,11 @@ fun FileDialogs(
                     }
                 }
             },
-            onClose = {
-                fileChooserVisible.value = false
-            }
+            onClose = viewModel::closeFileChooser
         )
     }
 
-    if (fileSaverVisible.value) { // Only trim input, linebreaks should be saved
+    if (uiState.fileSaverVisible) { // Only trim input, linebreaks should be saved
         FileSaver(
             coroutineScope = coroutineScope,
             output = {
@@ -79,7 +78,7 @@ fun FileDialogs(
 
                 val content = CaBr2File.CaBr2Data(
                     header,
-                    inputData.substanceList.map { CaBr2File.CaBr2Data.SubstanceData.export(it) },
+                    inputData.substances.map { CaBr2File.CaBr2Data.SubstanceData.export(it) },
                     inputData.humanAndEnvironmentDanger.map { it.trim() },
                     inputData.rulesOfConduct.map { it.trim() },
                     inputData.inCaseOfDanger.map { it.trim() },
@@ -90,13 +89,11 @@ fun FileDialogs(
 
                 Pair(CaBr2File.toJson(content), fileName)
             },
-            onClose = {
-                fileSaverVisible.value = false
-            }
+            onClose = viewModel::closeFileSaver
         )
     }
 
-    if (pdfExportVisible.value) { // Trim input and remove linebreaks
+    if (uiState.pdfExportVisible) { // Trim input and remove linebreaks
         PdfExport(
             coroutineScope = coroutineScope,
             output = {
@@ -110,7 +107,7 @@ fun FileDialogs(
                     inputData.place.trim(),
                     inputData.assistant.trim(),
                     inputData.preparation.trim(),
-                    inputData.substanceList,
+                    inputData.substances,
                     inputData.humanAndEnvironmentDanger.map { it.trim(); it.replace("\n", "") },
                     inputData.rulesOfConduct.map { it.trim(); it.replace("\n", "") },
                     inputData.inCaseOfDanger.map { it.trim(); it.replace("\n", "") },
@@ -122,7 +119,7 @@ fun FileDialogs(
                 Pair(htmlFile, fileName)
             },
             onClose = {
-                pdfExportVisible.value = false
+                viewModel.closePdfExport()
                 coroutineScope.launch {
                     snackbarHostState.showSnackbar(getString(Res.string.pdf_export_success))
                 }

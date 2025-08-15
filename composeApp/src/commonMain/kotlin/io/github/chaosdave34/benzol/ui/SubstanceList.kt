@@ -26,13 +26,13 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SubstanceList(
-    substanceList: SnapshotStateList<Substance>
+    substances: SnapshotStateList<Substance>
 ) {
     val uriHandler = LocalUriHandler.current
 
     var dialogOpen: Int? by remember { mutableStateOf(null) }
 
-    substanceList.forEachIndexed { index, substance ->
+    substances.forEachIndexed { index, substance ->
         HorizontalDivider(thickness = 2.dp)
         Row(
             modifier = Modifier.fillMaxWidth().clickable(onClick = { dialogOpen = index }),
@@ -74,11 +74,11 @@ fun SubstanceList(
                     Icon(Icons.Rounded.Edit, stringResource(Res.string.open_settings))
                 }
                 MoveUpAndDown(
-                    list = substanceList,
+                    list = substances,
                     index = index
                 )
                 RemoveListElementButton(
-                    list = substanceList,
+                    list = substances,
                     index = index
                 )
             }
@@ -88,8 +88,8 @@ fun SubstanceList(
     val index = dialogOpen
     if (index != null) {
         EditSubstanceDialog(
-            list = substanceList,
-            index = index,
+            substance = substances[index],
+            updateSubstance = { substances[index] = it },
             onClose = { dialogOpen = null }
         )
 

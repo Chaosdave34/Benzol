@@ -28,28 +28,26 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun EditSubstanceDialog(
-    list: SnapshotStateList<Substance>,
-    index: Int,
+    substance: Substance,
+    updateSubstance: (Substance) -> Unit,
     onClose: () -> Unit
 ) {
     val scrollState = rememberScrollState()
 
-    val substance = list[index]
+    var name by remember { mutableStateOf(substance.name) }
+    var casNumber by remember { mutableStateOf(substance.casNumber) }
+    var molecularFormula by remember { mutableStateOf(substance.molecularFormula) }
+    var formattedMolecularFormula by remember { mutableStateOf(substance.formattedMolecularFormula) }
+    var wgk by remember { mutableStateOf(substance.wgk) }
+    var signalWord by remember { mutableStateOf(substance.signalWord) }
 
-    val name = remember { mutableStateOf(substance.name) }
-    val casNumber = remember { mutableStateOf(substance.casNumber) }
-    val molecularFormula = remember { mutableStateOf(substance.molecularFormula) }
-    val formattedMolecularFormula = remember { mutableStateOf(substance.formattedMolecularFormula) }
-    val wgk = remember { mutableStateOf(substance.wgk) }
-    val signalWord = remember { mutableStateOf(substance.signalWord) }
-
-    val molarMass = remember { mutableStateOf(substance.molarMass) }
-    val lethalDose = remember { mutableStateOf(substance.lethalDose) }
-    val mak = remember { mutableStateOf(substance.mak) }
-    val meltingPoint = remember { mutableStateOf(substance.meltingPoint) }
-    val boilingPoint = remember { mutableStateOf(substance.boilingPoint) }
-    val quantity = remember { mutableStateOf(substance.quantity.value) }
-    val quantityUnit = remember { mutableStateOf(substance.quantity.unit) }
+    var molarMass by remember { mutableStateOf(substance.molarMass) }
+    var lethalDose by remember { mutableStateOf(substance.lethalDose) }
+    var mak by remember { mutableStateOf(substance.mak) }
+    var meltingPoint by remember { mutableStateOf(substance.meltingPoint) }
+    var boilingPoint by remember { mutableStateOf(substance.boilingPoint) }
+    var quantity by remember { mutableStateOf(substance.quantity.value) }
+    var quantityUnit by remember { mutableStateOf(substance.quantity.unit) }
 
     val hPhrases = remember { mutableStateListOf<Pair<String, String>>() }
     val pPhrases = remember { mutableStateListOf<Pair<String, String>>() }
@@ -58,27 +56,6 @@ fun EditSubstanceDialog(
     hPhrases.addAll(substance.hPhrases)
     pPhrases.addAll(substance.pPhrases)
     ghsPictograms.addAll(substance.ghsPictograms)
-
-    val fillSubstanceOnClose = {
-        list[index] = substance.copyAsModified(
-            name.value.trim(),
-            casNumber.value.trim(),
-            molecularFormula.value.trim(),
-            formattedMolecularFormula.value.trim(),
-            wgk.value.trim(),
-            signalWord.value.trim(),
-            molarMass.value.trim(),
-            lethalDose.value.trim(),
-            mak.value.trim(),
-            meltingPoint.value.trim(),
-            boilingPoint.value.trim(),
-            Substance.Quantity(quantity.value.trim(), quantityUnit.value.trim()),
-            hPhrases.map { Pair(it.first.trim(), it.second.trim()) },
-            pPhrases.map { Pair(it.first.trim(), it.second.trim()) },
-            ghsPictograms
-        )
-        onClose()
-    }
 
     Dialog(
         onDismissRequest = { onClose() }
@@ -102,31 +79,37 @@ fun EditSubstanceDialog(
                         DefaultColumn {
                             Input(
                                 value = name,
+                                onValueChange = { name = it },
                                 label = Res.string.name
                             )
                             Input(
                                 value = casNumber,
+                                onValueChange = { casNumber = it },
                                 label = Res.string.cas_number
                             )
                             Input(
                                 value = molecularFormula,
+                                onValueChange = { molecularFormula = it },
                                 label = Res.string.molecular_formula
                             )
                             Input(
                                 value = formattedMolecularFormula,
+                                onValueChange = { formattedMolecularFormula = it },
                                 label = Res.string.formatted_molecular_formula_with_hint,
                                 supportingText = {
-                                    if (formattedMolecularFormula.value.isNotBlank()) {
-                                        substance.FormattedMolecularFormula(formula = formattedMolecularFormula.value)
+                                    if (formattedMolecularFormula.isNotBlank()) {
+                                        substance.FormattedMolecularFormula(formula = formattedMolecularFormula)
                                     }
                                 }
                             )
                             Input(
                                 value = wgk,
+                                onValueChange = { wgk = it },
                                 label = Res.string.wgk
                             )
                             Input(
                                 value = signalWord,
+                                onValueChange = { signalWord = it },
                                 label = Res.string.signal_word
                             )
                         }
@@ -134,26 +117,31 @@ fun EditSubstanceDialog(
                         DefaultColumn {
                             InputWithUnit(
                                 value = molarMass,
+                                onValueChange = { molarMass = it },
                                 label = Res.string.molar_mass,
                                 unit = Res.string.molar_mass_unit
                             )
                             InputWithUnit(
                                 value = lethalDose,
+                                onValueChange = { lethalDose = it },
                                 label = Res.string.lethal_dose,
                                 unit = Res.string.lethal_dose_unit
                             )
                             InputWithUnit(
                                 value = mak,
+                                onValueChange = { mak = it },
                                 label = Res.string.mak,
                                 unit = Res.string.mak_unit
                             )
                             InputWithUnit(
                                 value = meltingPoint,
+                                onValueChange = { meltingPoint = it },
                                 label = Res.string.melting_point,
                                 unit = Res.string.celsius_unit
                             )
                             InputWithUnit(
                                 value = boilingPoint,
+                                onValueChange = { boilingPoint = it },
                                 label = Res.string.boiling_point,
                                 unit = Res.string.celsius_unit
                             )
@@ -163,6 +151,7 @@ fun EditSubstanceDialog(
                                 Input(
                                     modifier = Modifier.weight(0.8f),
                                     value = quantity,
+                                    onValueChange = { quantity = it },
                                     label = Res.string.quantity
                                 )
                                 Column(
@@ -170,6 +159,7 @@ fun EditSubstanceDialog(
                                 ) {
                                     Input(
                                         value = quantityUnit,
+                                        onValueChange = { quantityUnit = it },
                                         label = Res.string.unit
                                     )
                                 }
@@ -255,7 +245,7 @@ fun EditSubstanceDialog(
                 }
 
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(end=20.dp),
+                    modifier = Modifier.fillMaxWidth().padding(end = 20.dp),
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     Button(
@@ -268,20 +258,20 @@ fun EditSubstanceDialog(
 
                     Button(
                         onClick = {
-                            name.value = substance.namePair.original
-                            casNumber.value = substance.casNumberPair.original
-                            molecularFormula.value = substance.molecularFormulaPair.original
-                            formattedMolecularFormula.value = substance.formattedMolecularFormulaPair.original
-                            wgk.value = substance.wgkPair.original
-                            signalWord.value = substance.signalWordPair.original
+                            name = substance.namePair.original
+                            casNumber = substance.casNumberPair.original
+                            molecularFormula = substance.molecularFormulaPair.original
+                            formattedMolecularFormula = substance.formattedMolecularFormulaPair.original
+                            wgk = substance.wgkPair.original
+                            signalWord = substance.signalWordPair.original
 
-                            molarMass.value = substance.molarMassPair.original
-                            lethalDose.value = substance.lethalDosePair.original
-                            mak.value = substance.makPair.original
-                            meltingPoint.value = substance.meltingPointPair.original
-                            boilingPoint.value = substance.boilingPointPair.original
-                            quantity.value = Substance.Quantity().value
-                            quantityUnit.value = Substance.Quantity().unit
+                            molarMass = substance.molarMassPair.original
+                            lethalDose = substance.lethalDosePair.original
+                            mak = substance.makPair.original
+                            meltingPoint = substance.meltingPointPair.original
+                            boilingPoint = substance.boilingPointPair.original
+                            quantity = Substance.Quantity().value
+                            quantityUnit = Substance.Quantity().unit
 
                             hPhrases.clear()
                             hPhrases.addAll(substance.hPhrasesPair.original)
@@ -294,7 +284,28 @@ fun EditSubstanceDialog(
                         Icon(Icons.Rounded.Refresh, stringResource(Res.string.reset))
                     }
                     Button(
-                        onClick = fillSubstanceOnClose
+                        onClick = {
+                            updateSubstance(
+                                substance.copyAsModified(
+                                    name.trim(),
+                                    casNumber.trim(),
+                                    molecularFormula.trim(),
+                                    formattedMolecularFormula.trim(),
+                                    wgk.trim(),
+                                    signalWord.trim(),
+                                    molarMass.trim(),
+                                    lethalDose.trim(),
+                                    mak.trim(),
+                                    meltingPoint.trim(),
+                                    boilingPoint.trim(),
+                                    Substance.Quantity(quantity.trim(), quantityUnit.trim()),
+                                    hPhrases.map { Pair(it.first.trim(), it.second.trim()) },
+                                    pPhrases.map { Pair(it.first.trim(), it.second.trim()) },
+                                    ghsPictograms
+                                )
+                            )
+                            onClose()
+                        }
                     ) {
                         Icon(Icons.Rounded.Check, stringResource(Res.string.accept))
                     }
@@ -306,8 +317,8 @@ fun EditSubstanceDialog(
 
 @Composable
 fun InputWithUnit(
-    value: MutableState<String>,
-    onChange: (String) -> Unit = { value.value = it },
+    value: String,
+    onValueChange: (String) -> Unit,
     label: StringResource,
     unit: StringResource
 ) {
@@ -317,7 +328,7 @@ fun InputWithUnit(
         Input(
             modifier = Modifier.weight(0.8f),
             value = value,
-            onChange = onChange,
+            onValueChange = onValueChange,
             label = label
         )
         Text(
