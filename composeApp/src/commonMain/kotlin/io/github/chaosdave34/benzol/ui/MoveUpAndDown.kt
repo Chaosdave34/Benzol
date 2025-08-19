@@ -22,7 +22,7 @@ import org.jetbrains.compose.resources.stringResource
 fun <T> MoveUpAndDown(
     list: SnapshotStateList<T>,
     index: Int,
-    padding: Dp = Dp.Unspecified
+    padding: Dp = 0.dp
 ) {
     Column(
         modifier = Modifier.fillMaxHeight().padding(vertical = padding),
