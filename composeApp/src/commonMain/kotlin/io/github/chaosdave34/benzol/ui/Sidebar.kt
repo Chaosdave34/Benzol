@@ -95,7 +95,7 @@ fun Sidebar(
                     contentDescription = stringResource(Res.string.github)
                 )
             }
-            Text("1.3.0")
+            Text("1.4.0")
         }
     }
 }
