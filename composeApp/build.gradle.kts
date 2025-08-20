@@ -52,6 +52,8 @@ kotlin {
 
             implementation(libs.ksoup)
             implementation(libs.russhwolf.multiplatform.settings)
+
+            implementation("org.jetbrains.compose.material3:material3:1.9.0-alpha04")
         }
 
         jvmMain.dependencies {
