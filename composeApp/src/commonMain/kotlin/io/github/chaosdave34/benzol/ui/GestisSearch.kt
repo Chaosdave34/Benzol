@@ -105,7 +105,7 @@ fun GestisSearch(
                     onExpandedChange = { searchDropDownExpanded = it }
                 ) {
                     TextField(
-                        modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable),
+                        modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
                         value = stringResource(argument.searchType.stringResource),
                         readOnly = true,
                         onValueChange = {},
@@ -141,7 +141,7 @@ fun GestisSearch(
                     TextField(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .menuAnchor(MenuAnchorType.PrimaryEditable)
+                            .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
                             .onFocusChanged { focused = it.hasFocus }
                             .onKeyEvent { event ->
                                 if (event.key == Key.Enter) {

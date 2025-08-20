@@ -53,7 +53,7 @@ fun Settings(
                             onExpandedChange = { languageDropdownExpanded = it }
                         ) {
                             TextField(
-                                modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable),
+                                modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
                                 value = stringResource(uiState.language.resource),
                                 readOnly = true,
                                 onValueChange = {},
