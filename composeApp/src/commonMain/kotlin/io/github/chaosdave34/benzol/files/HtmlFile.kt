@@ -6,7 +6,6 @@ import com.fleeksoft.ksoup.nodes.Document
 import io.github.chaosdave34.benzol.Substance
 import kotlinx.html.*
 import kotlinx.html.stream.appendHTML
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.getString
 import kotlin.text.Typography.nbsp
 
@@ -24,7 +23,6 @@ class HtmlFile(
     val inCaseOfDanger: List<String>,
     val disposal: List<String>
 ) {
-    @OptIn(ExperimentalResourceApi::class)
     suspend fun create(): String {
         val assistantTitle = getString(Res.string.assistant)
         val preparationTitle = getString(Res.string.preparation)
