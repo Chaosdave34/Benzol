@@ -159,7 +159,7 @@ data class Substance(
             makPair = makPair.copy(modified = mak),
             meltingPointPair = meltingPointPair.copy(modified = meltingPoint),
             boilingPointPair = boilingPointPair.copy(modified = boilingPoint),
-            quantity = quantity.copy(quantity.value, quantity.unit),
+            quantity = quantity.copy(value = quantity.value, unit = quantity.unit),
             hPhrasesPair = hPhrasesPair.copy(modified = hPhrases),
             pPhrasesPair = pPhrasesPair.copy(modified = pPhrases),
             ghsPictogramsPair = ghsPictogramsPair.copy(modified = ghsPictograms)
