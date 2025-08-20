@@ -28,7 +28,7 @@ fun App() {
         LocalAppLocale.provides(uiState.language.locale)
 
         LaunchedEffect(Unit) {
-            GHSPictogram.Companion.setBase64()
+            GHSPictogram.setBase64()
             viewModel.setDefaultInputValues()
         }
 
