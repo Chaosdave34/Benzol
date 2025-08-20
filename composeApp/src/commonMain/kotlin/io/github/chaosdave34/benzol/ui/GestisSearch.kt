@@ -147,7 +147,7 @@ fun GestisSearch(
                                 if (event.key == Key.Enter) {
                                     search()
                                     focusManager.clearFocus()
-                                    true
+                                    return@onKeyEvent true
                                 }
                                 false
                             },
