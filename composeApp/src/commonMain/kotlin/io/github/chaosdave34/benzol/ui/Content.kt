@@ -91,7 +91,7 @@ fun Content(
                     }
 
                     DefaultColumn {
-                        TabRow(
+                        PrimaryTabRow(
                             selectedTabIndex = searchTypeIndex,
                             containerColor = MaterialTheme.colorScheme.surfaceContainer
                         ) {
