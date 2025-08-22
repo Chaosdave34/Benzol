@@ -1,6 +1,6 @@
 package io.github.chaosdave34.benzol.files
 
-@JsName("html2pdf")
+@JsName("html3pdf")
 external class Html2pdf {
     fun setMargin(src: Int): Html2pdf
     fun set(options: JsAny): Html2pdf
@@ -10,7 +10,7 @@ external class Html2pdf {
 }
 
 private val options: JsAny = js(
-    """{html2canvas: {scale: 5, letterRendering: false}}"""
+    """{html2canvas: {scale: 5, letterRendering: true}}"""
 )
 
 actual fun htmlToPdf(html: String, directory: String, fileName: String) {
