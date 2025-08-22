@@ -29,7 +29,7 @@ import io.github.chaosdave34.benzol.ui.components.Scrollbar
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GestisSearch(
     onResult: (Substance) -> Unit
@@ -82,7 +82,7 @@ fun GestisSearch(
             getSubstanceInformation = null
         }
         Dialog(onDismissRequest = {}) {
-            LoadingIndicator()
+            CircularProgressIndicator()
         }
     }
 
@@ -220,7 +220,7 @@ fun GestisSearch(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3ExpressiveApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SearchResultDialog(
     exactSearch: Boolean,
@@ -248,7 +248,7 @@ fun SearchResultDialog(
                         if (failed) {
                             Text(stringResource(Res.string.failed_search))
                         } else {
-                            LoadingIndicator()
+                            CircularProgressIndicator()
                         }
                     }
                 } else {
