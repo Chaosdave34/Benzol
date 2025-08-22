@@ -23,6 +23,7 @@ import kotlin.text.Typography.nbsp
 
 private val modifier = Modifier.fillMaxWidth().border(1.dp, Color.White).padding(10.dp)
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun Preview(
     inputState: SafetySheetInputState,

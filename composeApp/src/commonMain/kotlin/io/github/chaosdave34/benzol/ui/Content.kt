@@ -16,6 +16,7 @@ import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Content(
     viewModel: SafetySheetViewModel,
