@@ -9,8 +9,10 @@ external class Html2pdf {
     fun save(filename: String)
 }
 
-external fun createOpt(scale: Int): JsAny
+private val options: JsAny = js(
+    """{html2canvas: {scale: 5, letterRendering: false}}"""
+)
 
 actual fun htmlToPdf(html: String, directory: String, fileName: String) {
-    Html2pdf().set(createOpt(5)).setMargin(16).from(html, "string").toPdf().save(fileName)
+    Html2pdf().set(options).setMargin(16).from(html, "string").toPdf().save(fileName)
 }
