@@ -2,7 +2,7 @@ package io.github.chaosdave34.benzol
 
 import androidx.compose.runtime.Composable
 import io.github.chaosdave34.benzol.files.HtmlFile
-import io.github.chaosdave34.benzol.files.htmlToPdf
+import io.github.chaosdave34.benzol.files.saveAsPdf
 import kotlinx.browser.document
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -85,7 +85,7 @@ actual fun PdfExport(
 ) {
     coroutineScope.launch {
         val output = output()
-        htmlToPdf(output.first.create(), "", output.second)
+        saveAsPdf(output.first.create(), "", output.second)
         onClose()
     }
 }

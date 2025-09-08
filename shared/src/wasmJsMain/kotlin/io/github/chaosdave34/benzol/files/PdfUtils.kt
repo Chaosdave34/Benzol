@@ -13,6 +13,6 @@ private val options: JsAny = js(
     """{html2canvas: {scale: 5, letterRendering: true}}"""
 )
 
-actual fun htmlToPdf(html: String, directory: String, fileName: String) {
+actual fun saveAsPdf(html: String, directory: String, fileName: String) {
     Html2pdf().set(options).setMargin(16).from(html, "string").toPdf().save(fileName)
 }
