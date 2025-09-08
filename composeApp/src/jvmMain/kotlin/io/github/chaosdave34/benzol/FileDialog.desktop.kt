@@ -7,7 +7,7 @@ import benzol.composeapp.generated.resources.export_file
 import benzol.composeapp.generated.resources.open_file
 import benzol.composeapp.generated.resources.save_file
 import io.github.chaosdave34.benzol.files.HtmlFile
-import io.github.chaosdave34.benzol.files.saveAsPdf
+import io.github.chaosdave34.benzol.files.htmlToPdf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -117,7 +117,8 @@ actual fun PdfExport(
                         if (directory != null && file != null) {
                             coroutineScope.launch(Dispatchers.IO) {
                                 val html = output.first
-                                saveAsPdf(html.create(), directory, file)
+                                val byteArray = htmlToPdf(html.create())
+                                File(directory, file).writeBytes(byteArray)
                                 onClose()
                             }
                             preferences.put(LAST_USED_FOLDER_EXPORT, directory)

@@ -2,7 +2,10 @@ package io.github.chaosdave34.benzol
 
 import androidx.compose.runtime.Composable
 import io.github.chaosdave34.benzol.files.HtmlFile
-import io.github.chaosdave34.benzol.files.saveAsPdf
+import io.ktor.client.*
+import io.ktor.client.plugins.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import kotlinx.browser.document
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -12,6 +15,12 @@ import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.url.URL
 import org.w3c.files.File
 import org.w3c.files.FileReader
+
+private val client = HttpClient {
+    install(DefaultRequest) {
+        url("http://localhost:8080/")
+    }
+}
 
 @Composable
 actual fun FileChooser(
@@ -35,7 +44,7 @@ actual fun FileChooser(
 
         if (file != null) {
             val reader = FileReader()
-            reader.onload = { event ->
+            reader.onload = { _ ->
                 result(reader.result?.unsafeCast<JsString>()?.toString(), file.name)
             }
 
@@ -85,7 +94,20 @@ actual fun PdfExport(
 ) {
     coroutineScope.launch {
         val output = output()
-        saveAsPdf(output.first.create(), "", output.second)
+        val pdf = client.post("export") {
+            setBody(output.first)
+        }.bodyAsBytes()
+
+        val jsArray = JsArray<JsAny?>()
+        val byteArray = pdf.map { it.toInt().toJsNumber() }.toJsArray()
+        jsArray[0] = Int8Array(byteArray)
+
+        val file = File(jsArray, output.second)
+        val a = document.createElement("a") as HTMLAnchorElement
+        a.href = URL.createObjectURL(file)
+        a.download = output.second
+        a.click()
+
         onClose()
     }
 }
