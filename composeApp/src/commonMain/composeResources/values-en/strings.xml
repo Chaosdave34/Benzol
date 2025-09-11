@@ -3,7 +3,7 @@
 
     <string name="new_file">New safety datasheet</string>
     <string name="open_file">Open safety datasheet</string>
-    <string name="save_file">Save</string>
+    <string name="save">Save</string>
     <string name="export_file">Export as PDF</string>
 
     <string name="settings">Settings</string>
@@ -26,8 +26,10 @@
     <string name="edit_substance">Click on substance to edit.</string>
     <string name="molecular_formula">Molecular formula</string>
     <string name="cas_number">CAS number</string>
+    <string name="edit_substance_dialog">Edit substance</string>
 
-    <string name="formatted_molecular_formula_with_hint">Formatted molecular formula (use &lt;*&gt; for subscript)</string>
+    <string name="formatted_molecular_formula">Formatted molecular formula</string>
+    <string name="formatted_molecular_formula-hint">use &lt;*&gt; for subscript</string>
     <string name="wgk">Water hazard class</string>
     <string name="signal_word">Signal word</string>
 
@@ -63,12 +65,13 @@
     <string name="search">Search</string>
     <string name="do_search">Search</string>
     <string name="exact_search">Exact search</string>
-    <string name="failed_search">No results</string>
+    <string name="no_search_results">No results</string>
+    <string name="failed_search">An error occurred in the search.</string>
 
     <string name="dark_theme">Dark theme</string>
     <string name="language">Language</string>
 
-    <string name="preview">Preview:</string>
+    <string name="preview">Preview</string>
     <string name="name_with_plural">Name(s)</string>
 
     <string name="used_substances">Substances\nand products used</string>
@@ -79,6 +82,7 @@
     <string name="quantity_required">Required for preparation</string>
 
     <string name="sources">Sources:</string>
+    <string name="source">Source</string>
 
     <string name="title_h_and_p_phrases">Wording of the main H and P phrases mentioned above:</string>
 
@@ -111,5 +115,12 @@
 
     <string name="pdf_export_success">PDF was created successfully</string>
     <string name="unnamed_file">Untitled</string>
+
+    <string name="sheet">Safety Sheet</string>
+
+    <string name="search_results">Search results</string>
+
+    <string name="collapse_rail">Collapse Rail</string>
+    <string name="expand_rail">Expand Rail</string>
 </resources>
 

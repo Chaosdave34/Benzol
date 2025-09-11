@@ -3,7 +3,7 @@
 
     <string name="new_file">Neue Betriebsanweisung</string>
     <string name="open_file">Betriebsanweisung öffnen</string>
-    <string name="save_file">Speichern</string>
+    <string name="save">Speichern</string>
     <string name="export_file">Als PDF exportieren</string>
 
     <string name="settings">Einstellungen</string>
@@ -26,8 +26,10 @@
     <string name="edit_substance">Zum Bearbeiten auf Substanz klicken.</string>
     <string name="molecular_formula">Summenformel</string>
     <string name="cas_number">CAS Nummer</string>
+    <string name="edit_substance_dialog">Substanz bearbeiten</string>
 
-    <string name="formatted_molecular_formula_with_hint">Formatierte Summenformel (mit &lt;*&gt; tieferstellen)</string>
+    <string name="formatted_molecular_formula">Formatierte Summenformel</string>
+    <string name="formatted_molecular_formula-hint">verwende &lt;*&gt; für Indizes</string>
     <string name="wgk">Wassergefährdungsklasse</string>
     <string name="signal_word">Signalwort</string>
 
@@ -61,12 +63,14 @@
     <string name="search">Suche</string>
     <string name="do_search">Suchen</string>
     <string name="exact_search">Exakte Suche</string>
-    <string name="failed_search">Keine Ergebnisse</string>
+    <string name="failed_search">Es ist ein Fehler bei der Suche aufgetreten.</string>
+    <string name="no_search_results">Keine Ergebnisse</string>
+
 
     <string name="dark_theme">Dunkles Thema</string>
     <string name="language">Sprache</string>
 
-    <string name="preview">Vorschau:</string>
+    <string name="preview">Vorschau</string>
     <string name="name_with_plural">Name(n)</string>
 
     <string name="used_substances">eingesetze Stoffe\nund Produkte</string>
@@ -77,6 +81,7 @@
     <string name="quantity_required">Für Ansatz benötigt</string>
 
     <string name="sources">Quellen:</string>
+    <string name="source">Quelle</string>
 
     <string name="title_h_and_p_phrases">Wortlaut der wesentlichen oben genannten H- und P-Sätze:</string>
 
@@ -92,7 +97,7 @@
     <string name="edit">Bearbeiten</string>
     <string name="add">Hinzufügen</string>
     <string name="delete">Entfernen</string>
-    <string name="github">Github</string>
+    <string name="github">Github Repository</string>
 
     <string name="disclaimer">Bei Benzol handelt es sich um ein Open-Source-Projekt und daher basiert die Verwendung der generierten Betriebsanweisungen auf Eigenverantwortung.\nWeder das Programm, noch die Entwickler sind für den Inhalt verantwortlich und können für unkorrekte oder unvollständige Informationen zur Rechenschaft gezogen werden.
     </string>
@@ -111,4 +116,11 @@
 
     <string name="pdf_export_success">PDF wurde erfolgreich erstellt</string>
     <string name="unnamed_file">Unbenannt</string>
+
+    <string name="sheet">Datenblatt</string>
+
+    <string name="search_results">Suchergebnisse</string>
+
+    <string name="collapse_rail">Menu einklappen</string>
+    <string name="expand_rail">Menu ausklappen</string>
 </resources>

@@ -7,6 +7,7 @@ data class SafetySheetUiState(
     val fileSaverVisible: Boolean = false,
     val pdfExportVisible: Boolean = false,
     val settingsVisible: Boolean = false,
+    val disclaimerConfirmed: Boolean = false,
     val darkMode: Boolean,
-    val language: SupportedLanguage
+    val language: SupportedLanguage,
 )

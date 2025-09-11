@@ -1,11 +1,11 @@
 package io.github.chaosdave34.benzol
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.window.AwtWindow
+import androidx.compose.ui.awt.AwtWindow
 import benzol.composeapp.generated.resources.Res
 import benzol.composeapp.generated.resources.export_file
 import benzol.composeapp.generated.resources.open_file
-import benzol.composeapp.generated.resources.save_file
+import benzol.composeapp.generated.resources.save
 import io.github.chaosdave34.benzol.files.HtmlFile
 import io.github.chaosdave34.benzol.files.htmlToPdf
 import kotlinx.coroutines.CoroutineScope
@@ -65,7 +65,7 @@ actual fun FileSaver(
 ) {
     val output = output()
 
-    val title = stringResource(Res.string.save_file)
+    val title = stringResource(Res.string.save)
     AwtWindow(
         create = {
             object : FileDialog(null as Frame?, title, SAVE) {

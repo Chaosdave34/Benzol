@@ -1,0 +1,106 @@
+package io.github.chaosdave34.benzol.ui
+
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import io.github.chaosdave34.benzol.ui.about.AboutPage
+import io.github.chaosdave34.benzol.ui.preview.PreviewPage
+import io.github.chaosdave34.benzol.ui.safetysheet.SafetySheetPage
+import io.github.chaosdave34.benzol.ui.settings.SettingsPage
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+fun Layout(
+    viewModel: SafetySheetViewModel
+) {
+    val focusManager = LocalFocusManager.current
+    val uiState by viewModel.uiState.collectAsState()
+
+    val navController = rememberNavController()
+    val startDestination = Destination.SHEET
+
+    var toolbarVisible by rememberSaveable { mutableStateOf(true) }
+
+    navController.addOnDestinationChangedListener { _, destination, _ ->
+        toolbarVisible = destination.route in listOf(Destination.SHEET, Destination.PREVIEW).map { it.route }
+    }
+
+    MaterialExpressiveTheme(
+        colorScheme = if (uiState.darkMode) darkColorScheme() else lightColorScheme()
+    ) {
+        DisclaimerDialog(
+            !uiState.disclaimerConfirmed,
+            viewModel::confirmDisclaimer
+        )
+
+        Scaffold(
+            snackbarHost = {
+                SnackbarHost(
+                    hostState = viewModel.snackbarHostState.value,
+                    modifier = Modifier
+                        .padding(bottom = 60.dp)
+                        .fillMaxWidth(0.7f)
+                )
+            },
+            modifier = Modifier.pointerInput(Unit) {
+                detectTapGestures {
+                    focusManager.clearFocus()
+                }
+            }
+        ) { contentPadding ->
+            Box(Modifier.fillMaxSize().padding(contentPadding)) {
+                Row {
+                    NavigationRail(
+                        navController = navController,
+                        startDestination = startDestination,
+                        padding = contentPadding
+                    )
+
+                    AppNavHost(
+                        navController = navController,
+                        startDestination = startDestination,
+                        viewModel = viewModel
+                    )
+                }
+
+                Toolbar(
+                    visible = toolbarVisible,
+                    viewModel = viewModel
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun AppNavHost(
+    navController: NavHostController,
+    startDestination: Destination,
+    viewModel: SafetySheetViewModel
+) {
+    NavHost(
+        navController,
+        startDestination = startDestination.route
+    ) {
+        Destination.entries.forEach { destination ->
+            composable(destination.route) {
+                when (destination) {
+                    Destination.SHEET -> SafetySheetPage(viewModel)
+                    Destination.PREVIEW -> PreviewPage(viewModel)
+                    Destination.Settings -> SettingsPage(viewModel)
+                    Destination.ABOUT -> AboutPage()
+                }
+            }
+        }
+    }
+}

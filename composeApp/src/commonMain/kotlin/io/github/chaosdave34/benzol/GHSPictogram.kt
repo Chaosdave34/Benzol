@@ -1,19 +1,8 @@
 package io.github.chaosdave34.benzol
 
-import benzol.composeapp.generated.resources.Res
-import benzol.composeapp.generated.resources.acid
-import benzol.composeapp.generated.resources.exclamation
-import benzol.composeapp.generated.resources.explosion
-import benzol.composeapp.generated.resources.flame
-import benzol.composeapp.generated.resources.flame_over_circle
-import benzol.composeapp.generated.resources.gas_bottle
-import benzol.composeapp.generated.resources.nature
-import benzol.composeapp.generated.resources.silhouette
-import benzol.composeapp.generated.resources.skull
+import benzol.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import kotlin.io.encoding.Base64
-import kotlin.io.encoding.ExperimentalEncodingApi
 
 
 enum class GHSPictogram(val drawableResource: DrawableResource, private val fileName: String, val alt: String) {
@@ -30,8 +19,6 @@ enum class GHSPictogram(val drawableResource: DrawableResource, private val file
     var base64String: String = ""
 
     companion object {
-        @OptIn(ExperimentalEncodingApi::class)
-        @ExperimentalResourceApi
         suspend fun setBase64() {
             entries.forEach {
                 val byteArray = Res.readBytes("drawable/${it.fileName}.png")

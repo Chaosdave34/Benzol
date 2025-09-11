@@ -21,6 +21,7 @@ import org.jetbrains.compose.resources.getStringArray
 
 private const val DARK_THEME_KEY = "dark_theme"
 private const val LOCALE_KEY = "language"
+private const val DISCLAIMER_CONFIRMED = "disclaimer_confirmed"
 
 
 class SafetySheetViewModel : ViewModel() {
@@ -54,11 +55,13 @@ class SafetySheetViewModel : ViewModel() {
     init {
         val darkMode = settings.getBoolean(DARK_THEME_KEY, false)
         val language = SupportedLanguage.fromLocale(settings.getStringOrNull(LOCALE_KEY)) ?: SupportedLanguage.GERMAN
+        val disclaimerConfirmed = settings.getBoolean(DISCLAIMER_CONFIRMED, false)
 
         _uiState = MutableStateFlow(
             SafetySheetUiState(
                 darkMode = darkMode,
-                language = language
+                language = language,
+                disclaimerConfirmed = disclaimerConfirmed
             )
         )
 
@@ -112,6 +115,16 @@ class SafetySheetViewModel : ViewModel() {
     fun openSettings() = setSettings(true)
 
     fun closeSettings() = setSettings(false)
+
+    fun confirmDisclaimer() {
+        _uiState.update { currentState ->
+            currentState.copy(
+                disclaimerConfirmed = true
+            )
+        }
+
+        settings[DISCLAIMER_CONFIRMED] = true
+    }
 
     fun setDarkMode(value: Boolean) {
         _uiState.update { currentState ->

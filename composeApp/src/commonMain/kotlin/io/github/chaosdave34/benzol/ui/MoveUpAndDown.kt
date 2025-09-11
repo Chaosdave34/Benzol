@@ -1,16 +1,17 @@
 package io.github.chaosdave34.benzol.ui
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.Res
@@ -18,6 +19,7 @@ import benzol.composeapp.generated.resources.down
 import benzol.composeapp.generated.resources.up
 import org.jetbrains.compose.resources.stringResource
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun <T> MoveUpAndDown(
     list: SnapshotStateList<T>,
@@ -29,21 +31,21 @@ fun <T> MoveUpAndDown(
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         if (index != 0) {
-            Icon(
-                modifier = Modifier.clip(CircleShape).clickable {
-                    if (index > 0) {
-                        list[index] = list.set(index - 1, list[index])
+            Button(
+                onClick = {
+                    if (index < list.lastIndex) {
+                        list[index] = list.set(index + 1, list[index])
                     }
                 },
                 imageVector = Icons.Rounded.KeyboardArrowUp,
-                contentDescription = stringResource(Res.string.up)
+                contentDescription = stringResource(Res.string.up),
             )
         } else {
-            Spacer(Modifier.height(20.dp))
+            Spacer(Modifier.size(IconButtonDefaults.extraSmallContainerSize()))
         }
         if (index != list.lastIndex) {
-            Icon(
-                modifier = Modifier.clip(CircleShape).clickable {
+            Button(
+                onClick = {
                     if (index < list.lastIndex) {
                         list[index] = list.set(index + 1, list[index])
                     }
@@ -52,7 +54,29 @@ fun <T> MoveUpAndDown(
                 contentDescription = stringResource(Res.string.down)
             )
         } else {
-            Spacer(Modifier.height(20.dp))
+            Spacer(Modifier.size(IconButtonDefaults.extraSmallContainerSize()))
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+private fun Button(
+    onClick: () -> Unit,
+    imageVector: ImageVector,
+    contentDescription: String
+) {
+    IconButton(
+        modifier = Modifier.size(
+            IconButtonDefaults.extraSmallContainerSize()
+        ),
+        onClick = onClick,
+        shape = IconButtonDefaults.extraSmallRoundShape,
+    ) {
+        Icon(
+            modifier = Modifier.size(IconButtonDefaults.extraSmallIconSize),
+            imageVector = imageVector,
+            contentDescription = contentDescription,
+        )
     }
 }

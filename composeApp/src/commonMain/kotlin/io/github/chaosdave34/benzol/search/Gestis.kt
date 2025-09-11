@@ -23,7 +23,7 @@ object Gestis {
         }
     }
 
-    suspend fun search(search: Search): List<SearchResult> {
+    suspend fun search(search: Search): List<SearchResult>? {
         val parameters = search.search.joinToString("&") { "${it.searchType.parameterName}=${it.value}" }
         val url = "$BASE_URL/search/de?$parameters&exact=${search.exact}"
 
@@ -33,7 +33,7 @@ object Gestis {
             val searchResults: List<SearchResult> = response.body()
 
             searchResults.sortedBy { it.rank }
-        } else emptyList()
+        } else null
     }
 
     suspend fun getSearchSuggestions(search: SearchArgument): List<String> {
@@ -47,8 +47,8 @@ object Gestis {
 
     }
 
-    suspend fun getSubstanceInformation(zvgNumber: String): SubstanceInformation? {
-        val url = "$BASE_URL/article/de/$zvgNumber"
+    suspend fun getSubstanceInformation(search: SearchResult): SubstanceInformation? {
+        val url = "$BASE_URL/article/de/${search.zgvNumber}"
 
         val response = client.get(url) {
             header("Authorization", "Bearer $TOKEN")

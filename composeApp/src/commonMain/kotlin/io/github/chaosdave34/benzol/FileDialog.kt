@@ -3,6 +3,7 @@ package io.github.chaosdave34.benzol
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import benzol.composeapp.generated.resources.Res
 import benzol.composeapp.generated.resources.pdf_export_success
 import benzol.composeapp.generated.resources.unnamed_file
@@ -17,11 +18,12 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun FileDialogs(
-    coroutineScope: CoroutineScope,
     viewModel: SafetySheetViewModel,
     import: (InputData) -> Unit,
     export: () -> InputData,
 ) {
+    val scope = rememberCoroutineScope()
+
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState by viewModel.snackbarHostState.collectAsState()
 
@@ -29,7 +31,7 @@ fun FileDialogs(
 
     if (uiState.fileChooserVisible) {
         FileChooser(
-            coroutineScope = coroutineScope,
+            coroutineScope = scope,
             result = { json, fileName ->
                 if (json != null) {
                     val caBr2File = CaBr2File.fromJson(json)
@@ -62,7 +64,7 @@ fun FileDialogs(
 
     if (uiState.fileSaverVisible) { // Only trim input, linebreaks should be saved
         FileSaver(
-            coroutineScope = coroutineScope,
+            coroutineScope = scope,
             output = {
                 val inputData = export()
 
@@ -95,7 +97,7 @@ fun FileDialogs(
 
     if (uiState.pdfExportVisible) { // Trim input and remove linebreaks
         PdfExport(
-            coroutineScope = coroutineScope,
+            coroutineScope = scope,
             output = {
                 val inputData = export()
 
@@ -120,7 +122,7 @@ fun FileDialogs(
             },
             onClose = {
                 viewModel.closePdfExport()
-                coroutineScope.launch {
+                scope.launch {
                     snackbarHostState.showSnackbar(getString(Res.string.pdf_export_success))
                 }
             }
