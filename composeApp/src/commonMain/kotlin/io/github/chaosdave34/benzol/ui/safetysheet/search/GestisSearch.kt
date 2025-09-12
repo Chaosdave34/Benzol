@@ -2,6 +2,9 @@ package io.github.chaosdave34.benzol.ui.safetysheet.search
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Delete
@@ -296,14 +299,15 @@ private fun SearchDialog(
                             onSelectResult = onSelectResult,
                             scrollState = scrollState
                         )
-
                         SearchState.ERROR -> Error(scrollState)
                     }
 
-                    CustomScrollbar(
-                        scrollState = scrollState,
-                        offset = 12.dp
-                    )
+                    if (!(searchState == SearchState.SEARCH && searchResults.isNotEmpty())) {
+                        CustomScrollbar(
+                            scrollState = scrollState,
+                            offset = 12.dp
+                        )
+                    }
                 }
             }
         }
@@ -340,7 +344,7 @@ private fun Error(
 }
 
 @Composable
-private fun SearchResults(
+private fun BoxScope.SearchResults(
     searchResult: List<Gestis.SearchResult>,
     onSelectResult: (Gestis.SearchResult) -> Unit,
     scrollState: ScrollState
@@ -355,13 +359,13 @@ private fun SearchResults(
             Text(stringResource(Res.string.no_search_results))
         }
     } else {
-        Column(
-            Modifier
-                .fillMaxHeight()
-                .verticalScroll(scrollState),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
+        val lazyListState = rememberLazyListState()
+        LazyColumn(
+            Modifier.fillMaxHeight(),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
+            state = lazyListState
         ) {
-            searchResult.sortedBy { it.rank }.forEach {
+            items(items = searchResult.sortedBy { it.rank }, key = { it.rank }) {
                 ListItem(
                     modifier = Modifier.clickable(
                         onClick = { onSelectResult(it) }
@@ -372,6 +376,11 @@ private fun SearchResults(
                 )
             }
         }
+
+        CustomScrollbar(
+            lazyListState = lazyListState,
+            offset = 12.dp
+        )
     }
 }
 
