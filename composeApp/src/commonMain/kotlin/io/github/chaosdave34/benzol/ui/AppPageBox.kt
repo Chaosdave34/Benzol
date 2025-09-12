@@ -34,7 +34,7 @@ fun AppPageBox(
     ) { contentPadding ->
         Box(
             modifier
-                .padding(12.dp)
+                .padding(24.dp)
                 .padding(contentPadding),
             contentAlignment = contentAlignment,
         ) {

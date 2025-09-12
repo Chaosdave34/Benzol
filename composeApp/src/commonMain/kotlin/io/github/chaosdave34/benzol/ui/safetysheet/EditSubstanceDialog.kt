@@ -374,7 +374,10 @@ fun EditSubstanceDialog(
                             }
                         }
 
-                        CustomScrollbar(scrollState)
+                        CustomScrollbar(
+                            scrollState = scrollState,
+                            offset = 12.dp
+                        )
                     }
                 }
             }

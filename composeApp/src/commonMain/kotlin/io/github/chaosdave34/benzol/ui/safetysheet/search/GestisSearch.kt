@@ -300,7 +300,10 @@ private fun SearchDialog(
                         SearchState.ERROR -> Error(scrollState)
                     }
 
-                    CustomScrollbar(scrollState)
+                    CustomScrollbar(
+                        scrollState = scrollState,
+                        offset = 12.dp
+                    )
                 }
             }
         }

@@ -11,17 +11,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun BoxScope.CustomScrollbar(
-    scrollState: ScrollState
+    scrollState: ScrollState,
+    offset: Dp = 24.dp
 ) {
     VerticalScrollbar(
         modifier = Modifier
             .fillMaxHeight()
             .align(Alignment.TopEnd)
-            .offset(x = 12.dp),
+            .offset(x = offset),
         adapter = rememberScrollbarAdapter(scrollState),
         style = defaultScrollbarStyle().copy(
             unhoverColor = MaterialTheme.colorScheme.surfaceContainerHighest,
