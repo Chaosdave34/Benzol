@@ -1,13 +1,11 @@
 package io.github.chaosdave34.benzol.ui.safetysheet
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.*
@@ -41,13 +39,15 @@ fun SafetySheetPage(
         }
     )
 
-
     AppPageBox(
-        title = stringResource(Res.string.sheet)
+        Modifier.fillMaxWidth(),
+        title = stringResource(Res.string.sheet),
+        contentAlignment = Alignment.TopCenter
     ) { scrollState ->
         Column(
             Modifier
-                .fillMaxWidth()
+                .widthIn(min = 600.dp, max = 1200.dp)
+                .fillMaxWidth(0.8f)
                 .verticalScroll(scrollState),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
@@ -55,7 +55,7 @@ fun SafetySheetPage(
                 CustomTextField(
                     value = inputState.fileName,
                     onValueChange = viewModel::setFileName,
-                    label = Res.string.file_name,
+                    label = Res.string.file_name
                 )
                 HorizontalDivider(thickness = 2.dp)
                 CustomTextField(
