@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.Res
+import benzol.composeapp.generated.resources.about
 import benzol.composeapp.generated.resources.disclaimer
 import benzol.composeapp.generated.resources.github
 import io.github.chaosdave34.benzol.ui.AppPageBox
@@ -25,7 +26,7 @@ fun AboutPage() {
 
     AppPageBox(
         Modifier.fillMaxWidth(),
-        title = "Information",
+        title = stringResource(Res.string.about),
         contentAlignment = Alignment.TopCenter,
     ) { scrollState ->
         Column(

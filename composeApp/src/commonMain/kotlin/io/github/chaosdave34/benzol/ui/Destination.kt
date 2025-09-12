@@ -10,10 +10,12 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Preview
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
+import benzol.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.StringResource
 
-enum class Destination(val route: String, val label: String, val selectedIcon: ImageVector, val unselectedIcon: ImageVector) {
-    SHEET("sheet", "Datenblatt", Icons.AutoMirrored.Filled.Assignment, Icons.AutoMirrored.Outlined.Assignment),
-    PREVIEW("preview", "Vorschau", Icons.Filled.Preview, Icons.Outlined.Preview),
-    Settings("settings", "Einstellungen", Icons.Filled.Settings, Icons.Outlined.Settings),
-    ABOUT("about", "Information", Icons.Filled.Info, Icons.Outlined.Info)
+enum class Destination(val route: String, val label: StringResource, val selectedIcon: ImageVector, val unselectedIcon: ImageVector) {
+    SHEET("sheet", Res.string.sheet, Icons.AutoMirrored.Filled.Assignment, Icons.AutoMirrored.Outlined.Assignment),
+    PREVIEW("preview", Res.string.preview, Icons.Filled.Preview, Icons.Outlined.Preview),
+    Settings("settings", Res.string.settings, Icons.Filled.Settings, Icons.Outlined.Settings),
+    ABOUT("about", Res.string.about, Icons.Filled.Info, Icons.Outlined.Info)
 }

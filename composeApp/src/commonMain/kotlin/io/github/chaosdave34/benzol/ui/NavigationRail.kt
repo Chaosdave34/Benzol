@@ -71,10 +71,10 @@ fun NavigationRail(
                 icon = {
                     Icon(
                         imageVector = if (selected) destination.selectedIcon else destination.unselectedIcon,
-                        contentDescription = destination.label
+                        contentDescription = stringResource(destination.label)
                     )
                 },
-                label = { Text(destination.label) },
+                label = { Text(stringResource(destination.label)) },
                 railExpanded = !isCollapsed
             )
         }

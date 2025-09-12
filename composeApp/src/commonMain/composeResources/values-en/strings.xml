@@ -124,5 +124,6 @@
     <string name="expand_rail">Expand Rail</string>
 
     <string name="failed_to_load_file">An error occurred trying to load the file!</string>
+    <string name="about">About</string>
 </resources>
 

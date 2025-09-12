@@ -125,4 +125,6 @@
     <string name="expand_rail">Menu ausklappen</string>
 
     <string name="failed_to_load_file">Fehler beim Laden Datei!</string>
+
+    <string name="about">Information</string>
 </resources>
