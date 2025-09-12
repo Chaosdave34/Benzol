@@ -107,7 +107,8 @@ private fun LanguageSetting(
                         onClick = {
                             dropdownExpanded = false
                             onLanguageChange(it)
-                        }
+                        },
+                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
                     )
                 }
             }

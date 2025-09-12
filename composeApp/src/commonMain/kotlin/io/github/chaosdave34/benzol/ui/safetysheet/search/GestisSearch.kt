@@ -146,7 +146,8 @@ fun GestisSearch(
 
                                         searchArguments[index] = argument.copy(searchType = it)
                                         dropdownExpanded = false
-                                    }
+                                    },
+                                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
                                 )
                             }
                         }
@@ -199,7 +200,8 @@ fun GestisSearch(
                                     onClick = {
                                         searchArguments[index] = argument.copy(value = it)
                                         suggestionsExpanded = false
-                                    }
+                                    },
+                                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
                                 )
                             }
                         }
