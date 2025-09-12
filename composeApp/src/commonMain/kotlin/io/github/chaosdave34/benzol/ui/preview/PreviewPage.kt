@@ -30,7 +30,6 @@ import kotlin.text.Typography.nbsp
 
 // TODO needs further improvements
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun PreviewPage(
     viewModel: SafetySheetViewModel
