@@ -3,7 +3,7 @@ package io.github.chaosdave34.benzol.files
 import io.github.chaosdave34.benzol.Substance
 
 data class InputData(
-    val fileName: String,
+    val filename: String,
     val documentTitle: String,
     val organisation: String,
     val course: String,

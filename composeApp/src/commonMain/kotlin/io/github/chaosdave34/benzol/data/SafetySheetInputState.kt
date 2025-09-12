@@ -2,7 +2,7 @@ package io.github.chaosdave34.benzol.data
 
 
 data class SafetySheetInputState(
-    val fileName: String = "",
+    val filename: String = "",
     val documentTitle: String = "",
     val organisation: String = "",
     val course: String = "",

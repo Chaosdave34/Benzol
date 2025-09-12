@@ -8,7 +8,7 @@
 
     <string name="settings">Einstellungen</string>
 
-    <string name="file_name">Dateiname</string>
+    <string name="filename">Dateiname</string>
     <string name="document_title">Dokument Titel</string>
     <string name="organisation">Organisation</string>
     <string name="course">Kurs/Lab</string>

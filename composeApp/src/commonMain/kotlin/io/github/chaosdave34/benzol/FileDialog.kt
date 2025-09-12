@@ -39,7 +39,7 @@ fun FileDialogs(
                         val header = caBr2File.header
 
                         val inputDate = InputData(
-                            fileName = fileName.replace("\\.[^.]*$".toRegex(), ""),
+                            filename = fileName.replace("\\.[^.]*$".toRegex(), ""),
                             documentTitle = header.documentTitle,
                             organisation = header.organisation,
                             course = header.labCourse,
@@ -87,7 +87,7 @@ fun FileDialogs(
                     inputData.disposal.map { it.trim() }
                 )
 
-                val fileName = if (inputData.fileName.isEmpty()) "$unnamed.cb2" else "${inputData.fileName}.cb2"
+                val fileName = if (inputData.filename.isEmpty()) "$unnamed.cb2" else "${inputData.filename}.cb2"
 
                 Pair(CaBr2File.toJson(content), fileName)
             },
@@ -116,7 +116,7 @@ fun FileDialogs(
                     inputData.disposal.map { it.trim(); it.replace("\n", "") }
                 )
 
-                val fileName = if (inputData.fileName.isEmpty()) "$unnamed.pdf" else "${inputData.fileName}.pdf"
+                val fileName = if (inputData.filename.isEmpty()) "$unnamed.pdf" else "${inputData.filename}.pdf"
 
                 Pair(htmlFile, fileName)
             },

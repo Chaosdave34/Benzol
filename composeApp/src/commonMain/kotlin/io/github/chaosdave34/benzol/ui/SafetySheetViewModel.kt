@@ -144,10 +144,10 @@ class SafetySheetViewModel : ViewModel() {
         settings[LOCALE_KEY] = language.locale
     }
 
-    fun setFileName(value: String) {
+    fun setFilename(value: String) {
         _inputState.update { currentState ->
             currentState.copy(
-                fileName = value
+                filename = value
             )
         }
     }
@@ -239,7 +239,7 @@ class SafetySheetViewModel : ViewModel() {
     }
 
     fun resetInput() {
-        setFileName("")
+        setFilename("")
         setDocumentTitle("")
         setOrganisation("")
         setCourse("")
@@ -264,7 +264,7 @@ class SafetySheetViewModel : ViewModel() {
     }
 
     fun importInput(data: InputData) {
-        setFileName(data.fileName)
+        setFilename(data.filename)
         setDocumentTitle(data.documentTitle)
         setOrganisation(data.organisation)
         setCourse(data.course)
@@ -281,7 +281,7 @@ class SafetySheetViewModel : ViewModel() {
     }
 
     fun exportInput() = InputData(
-        fileName = _inputState.value.fileName,
+        filename = _inputState.value.filename,
         documentTitle = _inputState.value.documentTitle,
         organisation = _inputState.value.organisation,
         course = _inputState.value.course,
