@@ -122,5 +122,7 @@
 
     <string name="collapse_rail">Collapse Rail</string>
     <string name="expand_rail">Expand Rail</string>
+
+    <string name="failed_to_load_file">An error occurred trying to load the file!</string>
 </resources>
 

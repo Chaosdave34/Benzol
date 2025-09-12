@@ -5,6 +5,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import benzol.composeapp.generated.resources.Res
+import benzol.composeapp.generated.resources.failed_to_load_file
 import benzol.composeapp.generated.resources.pdf_export_success
 import benzol.composeapp.generated.resources.unnamed_file
 import io.github.chaosdave34.benzol.files.CaBr2File
@@ -55,7 +56,11 @@ fun FileDialogs(
                         )
 
                         import(inputDate)
+                        return@FileChooser
                     }
+                }
+                scope.launch {
+                    viewModel.snackbarHostState.value.showSnackbar(getString(Res.string.failed_to_load_file))
                 }
             },
             onClose = viewModel::closeFileChooser
