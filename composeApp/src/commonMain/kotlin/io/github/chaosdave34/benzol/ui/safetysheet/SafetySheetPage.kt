@@ -57,7 +57,10 @@ fun SafetySheetPage(
                     onValueChange = viewModel::setFileName,
                     label = Res.string.file_name
                 )
-                HorizontalDivider(thickness = 2.dp)
+                HorizontalDivider(
+                    modifier = Modifier.padding(vertical = 10.dp),
+                    thickness = 2.dp
+                )
                 CustomTextField(
                     value = inputState.documentTitle,
                     onValueChange = viewModel::setDocumentTitle,
