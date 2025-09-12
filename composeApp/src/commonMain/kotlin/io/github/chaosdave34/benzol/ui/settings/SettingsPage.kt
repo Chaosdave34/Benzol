@@ -65,7 +65,7 @@ private fun DarkModeSetting(
         horizontalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         Text(stringResource(Res.string.dark_theme))
-
+        Spacer(Modifier.width(16.dp))
         Switch(
             checked = darkMode,
             onCheckedChange = onDarkModeChange
