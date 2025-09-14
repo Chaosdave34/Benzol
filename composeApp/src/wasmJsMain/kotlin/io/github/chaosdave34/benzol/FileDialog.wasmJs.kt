@@ -22,6 +22,7 @@ private val client = HttpClient {
     }
 }
 
+@OptIn(ExperimentalWasmJsInterop::class)
 @Composable
 actual fun FileChooser(
     coroutineScope: CoroutineScope,
@@ -63,6 +64,7 @@ actual fun FileChooser(
     input.click()
 }
 
+@OptIn(ExperimentalWasmJsInterop::class)
 @Composable
 actual fun FileSaver(
     coroutineScope: CoroutineScope,
@@ -86,6 +88,7 @@ actual fun FileSaver(
     }
 }
 
+@OptIn(ExperimentalWasmJsInterop::class)
 @Composable
 actual fun PdfExport(
     coroutineScope: CoroutineScope,
