@@ -208,31 +208,31 @@ class SafetySheetViewModel : ViewModel() {
     }
 
     private fun setSubstances(value: List<Substance>) {
-        _substances.update { currentList ->
+        _substances.update { _ ->
             value.toMutableStateList()
         }
     }
 
     private fun setHumanAndEnvironmentDanger(value: List<String>) {
-        _humanAndEnvironmentDanger.update { currentList ->
+        _humanAndEnvironmentDanger.update { _ ->
             value.toMutableStateList()
         }
     }
 
     private fun setRulesOfConduct(value: List<String>) {
-        _rulesOfConduct.update { currentList ->
+        _rulesOfConduct.update { _ ->
             value.toMutableStateList()
         }
     }
 
     private fun setInCaseOfDanger(value: List<String>) {
-        _inCaseOfDanger.update { currentList ->
+        _inCaseOfDanger.update { _ ->
             value.toMutableStateList()
         }
     }
 
     private fun setDisposal(value: List<String>) {
-        _disposal.update { currentList ->
+        _disposal.update { _ ->
             value.toMutableStateList()
         }
     }
