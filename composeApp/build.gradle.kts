@@ -63,7 +63,7 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Exe, TargetFormat.Rpm)
             packageName = rootProject.name
             packageVersion = "2.0.0"
-            linux.packageVersion = "2.0.0~beta01"
+            linux.packageVersion = "2.0.0~beta02"
             linux {
                 iconFile.set(project.file("src/jvmMain/resources/logo.png"))
             }

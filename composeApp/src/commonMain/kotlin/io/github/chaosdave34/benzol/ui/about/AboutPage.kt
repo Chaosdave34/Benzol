@@ -63,7 +63,7 @@ fun AboutPage() {
             Section(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("Version 2.0.0-beta01")
+                Text("Version 2.0.0-beta02")
             }
         }
     }
