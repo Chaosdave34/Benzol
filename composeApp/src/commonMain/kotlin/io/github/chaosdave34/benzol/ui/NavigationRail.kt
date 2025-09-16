@@ -40,7 +40,7 @@ fun NavigationRail(
         state = state,
         header = {
             TooltipBox(
-                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(),
+                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
                 tooltip = { PlainTooltip { Text(stringResource(headerDescription)) } },
                 state = rememberTooltipState()
             ) {

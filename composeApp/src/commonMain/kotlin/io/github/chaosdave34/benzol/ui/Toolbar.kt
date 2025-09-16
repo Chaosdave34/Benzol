@@ -85,7 +85,7 @@ private fun ToolbarButton(
     contentDescription: String
 ) {
     TooltipBox(
-        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(),
+        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
         tooltip = {
             PlainTooltip {
                 Text(tooltip)
