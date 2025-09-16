@@ -61,7 +61,6 @@ actual fun FileChooser(
     input.click()
 }
 
-@OptIn(ExperimentalWasmJsInterop::class)
 @Composable
 actual fun FileSaver(
     coroutineScope: CoroutineScope,
@@ -71,21 +70,11 @@ actual fun FileSaver(
     coroutineScope.launch {
         val output = output()
 
-        val jsArray = JsArray<JsAny?>()
-        val byteArray = output.first.encodeToByteArray().map { it.toInt().toJsNumber() }.toJsArray()
-        jsArray[0] = Int8Array(byteArray)
-
-        val file = File(jsArray, output.second)
-        val a = document.createElement("a") as HTMLAnchorElement
-        a.href = URL.createObjectURL(file)
-        a.download = output.second
-        a.click()
-
+        downloadFile(output.first.encodeToByteArray(), output.second)
         onClose()
     }
 }
 
-@OptIn(ExperimentalWasmJsInterop::class)
 @Composable
 actual fun PdfExport(
     coroutineScope: CoroutineScope,
@@ -105,22 +94,25 @@ actual fun PdfExport(
         }
 
         if (response.status == HttpStatusCode.OK) {
-            val pdf = response.bodyAsBytes()
-
-            val jsArray = JsArray<JsAny?>()
-            val byteArray = pdf.map { it.toInt().toJsNumber() }.toJsArray()
-            jsArray[0] = Int8Array(byteArray)
-
-            val file = File(jsArray, output.second)
-
-            val a = document.createElement("a") as HTMLAnchorElement
-            a.href = URL.createObjectURL(file)
-            a.download = output.second
-            a.click()
+            downloadFile(response.bodyAsBytes(), output.second)
 
             onClose(true)
         } else {
             onClose(false)
         }
     }
+}
+
+@OptIn(ExperimentalWasmJsInterop::class)
+private fun downloadFile(file: ByteArray, fileName: String) {
+    val jsArray = JsArray<JsAny?>()
+    val byteArray = file.map { it.toInt().toJsNumber() }.toJsArray()
+    jsArray[0] = Int8Array(byteArray)
+
+    val file = File(jsArray, fileName)
+
+    val a = document.createElement("a") as HTMLAnchorElement
+    a.href = URL.createObjectURL(file)
+    a.download = fileName
+    a.click()
 }
