@@ -34,7 +34,7 @@ kotlin {
 
             implementation(libs.kotlinx.html)
             implementation(libs.kotlinx.serialization.json)
-            implementation(libs.bundles.ktor.common)
+            implementation(libs.bundles.ktor.clientCommon)
             implementation(compose.materialIconsExtended)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.navigation)

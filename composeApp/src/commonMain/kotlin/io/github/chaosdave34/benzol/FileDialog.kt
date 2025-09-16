@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import benzol.composeapp.generated.resources.Res
 import benzol.composeapp.generated.resources.failed_to_load_file
+import benzol.composeapp.generated.resources.pdf_export_failed
 import benzol.composeapp.generated.resources.pdf_export_success
 import benzol.composeapp.generated.resources.unnamed_file
 import io.github.chaosdave34.benzol.files.CaBr2File
@@ -125,10 +126,12 @@ fun FileDialogs(
 
                 Pair(htmlFile, fileName)
             },
-            onClose = {
+            onClose = { success ->
                 viewModel.closePdfExport()
                 scope.launch {
-                    snackbarHostState.showSnackbar(getString(Res.string.pdf_export_success))
+                    val status = if (success) Res.string.pdf_export_success else Res.string.pdf_export_failed
+
+                    snackbarHostState.showSnackbar(getString(status))
                 }
             }
         )
@@ -154,5 +157,5 @@ expect fun FileSaver(
 expect fun PdfExport(
     coroutineScope: CoroutineScope,
     output: () -> Pair<HtmlFile, String>,
-    onClose: () -> Unit
+    onClose: (Boolean) -> Unit
 )

@@ -9,4 +9,7 @@
     </root>
     <logger name="org.eclipse.jetty" level="INFO"/>
     <logger name="io.netty" level="INFO"/>
+    <logger name="org.apache.fontbox" level="WARN"/>
+    <logger name="org.apache.pdfbox" level="WARN"/>
+    <logger name="com.openhtmltopdf" level="WARN"/>
 </configuration>

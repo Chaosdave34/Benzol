@@ -113,7 +113,8 @@
     <string name="number">Nummer</string>
     <string name="full_text">Volltext</string>
 
-    <string name="pdf_export_success">PDF wurde erfolgreich erstellt</string>
+    <string name="pdf_export_success">PDF-Datei wurde erfolgreich erstellt</string>
+    <string name="pdf_export_failed">Es trat ein Fehler beim Erstellen der PDF-Datei auf</string>
     <string name="unnamed_file">Unbenannt</string>
 
     <string name="sheet">Datenblatt</string>

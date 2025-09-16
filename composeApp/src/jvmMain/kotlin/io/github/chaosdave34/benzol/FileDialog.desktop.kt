@@ -98,7 +98,7 @@ actual fun FileSaver(
 actual fun PdfExport(
     coroutineScope: CoroutineScope,
     output: () -> Pair<HtmlFile, String>,
-    onClose: () -> Unit
+    onClose: (Boolean) -> Unit
 ) {
     val output = output()
 
@@ -119,11 +119,11 @@ actual fun PdfExport(
                                 val html = output.first
                                 val byteArray = htmlToPdf(html.create())
                                 File(directory, file).writeBytes(byteArray)
-                                onClose()
+                                onClose(true)
                             }
                             preferences.put(LAST_USED_FOLDER_EXPORT, directory)
                         } else {
-                            onClose()
+                            onClose(false)
                         }
                     }
                 }

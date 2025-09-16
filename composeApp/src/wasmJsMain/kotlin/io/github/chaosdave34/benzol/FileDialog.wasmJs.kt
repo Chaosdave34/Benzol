@@ -6,6 +6,7 @@ import io.ktor.client.*
 import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
+import io.ktor.http.*
 import kotlinx.browser.document
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -18,7 +19,7 @@ import org.w3c.files.FileReader
 
 private val client = HttpClient {
     install(DefaultRequest) {
-        url("http://localhost:8080/")
+        url("https://vmd74965.contaboserver.net:30010/")
     }
 }
 
@@ -93,24 +94,30 @@ actual fun FileSaver(
 actual fun PdfExport(
     coroutineScope: CoroutineScope,
     output: () -> Pair<HtmlFile, String>,
-    onClose: () -> Unit
+    onClose: (Boolean) -> Unit
 ) {
     coroutineScope.launch {
         val output = output()
-        val pdf = client.post("export") {
-            setBody(output.first)
-        }.bodyAsBytes()
+        val response = client.post("export") {
+            setBody(output.first.create())
+        }
 
-        val jsArray = JsArray<JsAny?>()
-        val byteArray = pdf.map { it.toInt().toJsNumber() }.toJsArray()
-        jsArray[0] = Int8Array(byteArray)
+        if (response.status == HttpStatusCode.OK) {
+            val pdf = response.bodyAsBytes()
 
-        val file = File(jsArray, output.second)
-        val a = document.createElement("a") as HTMLAnchorElement
-        a.href = URL.createObjectURL(file)
-        a.download = output.second
-        a.click()
+            val jsArray = JsArray<JsAny?>()
+            val byteArray = pdf.map { it.toInt().toJsNumber() }.toJsArray()
+            jsArray[0] = Int8Array(byteArray)
 
-        onClose()
+            val file = File(jsArray, output.second)
+
+            val a = document.createElement("a") as HTMLAnchorElement
+            a.href = URL.createObjectURL(file)
+            a.download = output.second
+            a.click()
+
+            onClose(true)
+        }
+        onClose(false)
     }
 }
