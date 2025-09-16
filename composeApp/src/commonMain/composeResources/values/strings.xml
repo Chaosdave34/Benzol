@@ -124,7 +124,8 @@
     <string name="collapse_rail">Menu einklappen</string>
     <string name="expand_rail">Menu ausklappen</string>
 
-    <string name="failed_to_load_file">Fehler beim Laden Datei!</string>
-
+    <string name="failed_to_load_file">Fehler beim Laden der Datei!</string>
     <string name="about">Information</string>
+
+    <string name="export_url">Export URL</string>
 </resources>

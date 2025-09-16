@@ -10,4 +10,5 @@ data class SafetySheetUiState(
     val disclaimerConfirmed: Boolean = false,
     val darkMode: Boolean,
     val language: SupportedLanguage,
+    val exportUrl: String
 )

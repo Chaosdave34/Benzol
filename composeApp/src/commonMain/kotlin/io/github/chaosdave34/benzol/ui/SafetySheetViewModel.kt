@@ -21,8 +21,8 @@ import org.jetbrains.compose.resources.getStringArray
 
 private const val DARK_THEME_KEY = "dark_theme"
 private const val LOCALE_KEY = "language"
-private const val DISCLAIMER_CONFIRMED = "disclaimer_confirmed"
-
+private const val DISCLAIMER_CONFIRMED_KEY = "disclaimer_confirmed"
+private const val EXPORT_URL_KEY = "export_url"
 
 class SafetySheetViewModel : ViewModel() {
     private val settings = getSettings()
@@ -55,13 +55,15 @@ class SafetySheetViewModel : ViewModel() {
     init {
         val darkMode = settings.getBoolean(DARK_THEME_KEY, false)
         val language = SupportedLanguage.fromLocale(settings.getStringOrNull(LOCALE_KEY)) ?: SupportedLanguage.GERMAN
-        val disclaimerConfirmed = settings.getBoolean(DISCLAIMER_CONFIRMED, false)
+        val disclaimerConfirmed = settings.getBoolean(DISCLAIMER_CONFIRMED_KEY, false)
+        val exportUrl = settings.getString(EXPORT_URL_KEY, "")
 
         _uiState = MutableStateFlow(
             SafetySheetUiState(
                 darkMode = darkMode,
                 language = language,
-                disclaimerConfirmed = disclaimerConfirmed
+                disclaimerConfirmed = disclaimerConfirmed,
+                exportUrl = exportUrl
             )
         )
 
@@ -123,7 +125,7 @@ class SafetySheetViewModel : ViewModel() {
             )
         }
 
-        settings[DISCLAIMER_CONFIRMED] = true
+        settings[DISCLAIMER_CONFIRMED_KEY] = true
     }
 
     fun setDarkMode(value: Boolean) {
@@ -142,6 +144,15 @@ class SafetySheetViewModel : ViewModel() {
             )
         }
         settings[LOCALE_KEY] = language.locale
+    }
+
+    fun setExportUrl(exportUrl: String) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                exportUrl = exportUrl
+            )
+        }
+        settings[EXPORT_URL_KEY] = exportUrl
     }
 
     fun setFilename(value: String) {

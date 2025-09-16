@@ -1,9 +1,9 @@
 package io.github.chaosdave34.benzol
 
 import androidx.compose.runtime.Composable
+import io.github.chaosdave34.benzol.data.SafetySheetUiState
 import io.github.chaosdave34.benzol.files.HtmlFile
 import io.ktor.client.*
-import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -17,11 +17,7 @@ import org.w3c.dom.url.URL
 import org.w3c.files.File
 import org.w3c.files.FileReader
 
-private val client = HttpClient {
-    install(DefaultRequest) {
-        url("https://vmd74965.contaboserver.net:30010/")
-    }
-}
+private val client = HttpClient()
 
 @OptIn(ExperimentalWasmJsInterop::class)
 @Composable
@@ -93,13 +89,19 @@ actual fun FileSaver(
 @Composable
 actual fun PdfExport(
     coroutineScope: CoroutineScope,
+    safetySheetUiState: SafetySheetUiState,
     output: () -> Pair<HtmlFile, String>,
     onClose: (Boolean) -> Unit
 ) {
     coroutineScope.launch {
         val output = output()
-        val response = client.post("export") {
-            setBody(output.first.create())
+        val response = try {
+            client.post(safetySheetUiState.exportUrl) {
+                setBody(output.first.create())
+            }
+        } catch (_: Exception) {
+            onClose(false)
+            return@launch
         }
 
         if (response.status == HttpStatusCode.OK) {
@@ -117,7 +119,8 @@ actual fun PdfExport(
             a.click()
 
             onClose(true)
+        } else {
+            onClose(false)
         }
-        onClose(false)
     }
 }

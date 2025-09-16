@@ -4,11 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-import benzol.composeapp.generated.resources.Res
-import benzol.composeapp.generated.resources.failed_to_load_file
-import benzol.composeapp.generated.resources.pdf_export_failed
-import benzol.composeapp.generated.resources.pdf_export_success
-import benzol.composeapp.generated.resources.unnamed_file
+import benzol.composeapp.generated.resources.*
+import io.github.chaosdave34.benzol.data.SafetySheetUiState
 import io.github.chaosdave34.benzol.files.CaBr2File
 import io.github.chaosdave34.benzol.files.HtmlFile
 import io.github.chaosdave34.benzol.files.InputData
@@ -104,6 +101,7 @@ fun FileDialogs(
     if (uiState.pdfExportVisible) { // Trim input and remove linebreaks
         PdfExport(
             coroutineScope = scope,
+            safetySheetUiState = uiState,
             output = {
                 val inputData = export()
 
@@ -156,6 +154,7 @@ expect fun FileSaver(
 @Composable
 expect fun PdfExport(
     coroutineScope: CoroutineScope,
+    safetySheetUiState: SafetySheetUiState,
     output: () -> Pair<HtmlFile, String>,
     onClose: (Boolean) -> Unit
 )

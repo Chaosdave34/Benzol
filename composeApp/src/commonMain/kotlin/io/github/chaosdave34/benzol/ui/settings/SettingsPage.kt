@@ -7,14 +7,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import benzol.composeapp.generated.resources.Res
-import benzol.composeapp.generated.resources.dark_theme
-import benzol.composeapp.generated.resources.language
-import benzol.composeapp.generated.resources.settings
+import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.SupportedLanguage
 import io.github.chaosdave34.benzol.ui.AppPageBox
 import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 import io.github.chaosdave34.benzol.ui.Section
+import io.ktor.util.*
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -50,6 +48,15 @@ fun SettingsPage(
                     language = uiState.language,
                     onLanguageChange = viewModel::setLanguage
                 )
+            }
+
+            if (PlatformUtils.IS_BROWSER) {
+                Section {
+                    ExportUrlSetting(
+                        exportUrl = uiState.exportUrl,
+                        onExportUrlChange = viewModel::setExportUrl
+                    )
+                }
             }
         }
     }
@@ -114,4 +121,19 @@ private fun LanguageSetting(
             }
         }
     }
+}
+
+@Composable
+private fun ExportUrlSetting(
+    exportUrl: String,
+    onExportUrlChange: (String) -> Unit
+) {
+    OutlinedTextField(
+        value = exportUrl,
+        onValueChange = onExportUrlChange,
+        singleLine = true,
+        label = {
+            Text(stringResource(Res.string.export_url))
+        },
+    )
 }

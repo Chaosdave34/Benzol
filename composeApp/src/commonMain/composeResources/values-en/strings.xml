@@ -126,5 +126,7 @@
 
     <string name="failed_to_load_file">An error occurred trying to load the file!</string>
     <string name="about">About</string>
+
+    <string name="export_url">Export URL</string>
 </resources>
 

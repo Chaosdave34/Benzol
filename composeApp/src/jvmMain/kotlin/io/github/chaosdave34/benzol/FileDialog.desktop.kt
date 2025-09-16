@@ -6,6 +6,7 @@ import benzol.composeapp.generated.resources.Res
 import benzol.composeapp.generated.resources.export_file
 import benzol.composeapp.generated.resources.open_file
 import benzol.composeapp.generated.resources.save
+import io.github.chaosdave34.benzol.data.SafetySheetUiState
 import io.github.chaosdave34.benzol.files.HtmlFile
 import io.github.chaosdave34.benzol.files.htmlToPdf
 import kotlinx.coroutines.CoroutineScope
@@ -97,6 +98,7 @@ actual fun FileSaver(
 @Composable
 actual fun PdfExport(
     coroutineScope: CoroutineScope,
+    safetySheetUiState: SafetySheetUiState,
     output: () -> Pair<HtmlFile, String>,
     onClose: (Boolean) -> Unit
 ) {
