@@ -106,18 +106,6 @@ class SafetySheetViewModel : ViewModel() {
 
     fun closePdfExport() = setPdExport(false)
 
-    private fun setSettings(visible: Boolean) {
-        _uiState.update { currentState ->
-            currentState.copy(
-                settingsVisible = visible
-            )
-        }
-    }
-
-    fun openSettings() = setSettings(true)
-
-    fun closeSettings() = setSettings(false)
-
     fun confirmDisclaimer() {
         _uiState.update { currentState ->
             currentState.copy(
