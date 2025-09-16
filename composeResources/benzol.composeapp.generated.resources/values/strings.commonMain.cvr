@@ -27,8 +27,9 @@ string|english|RW5nbGlzaA==
 string|exact_search|RXhha3RlIFN1Y2hl
 string|expand_rail|TWVudSBhdXNrbGFwcGVu
 string|export_file|QWxzIFBERiBleHBvcnRpZXJlbg==
+string|export_url|RXhwb3J0IFVSTA==
 string|failed_search|RXMgaXN0IGVpbiBGZWhsZXIgYmVpIGRlciBTdWNoZSBhdWZnZXRyZXRlbi4=
-string|failed_to_load_file|RmVobGVyIGJlaW0gTGFkZW4gRGF0ZWkh
+string|failed_to_load_file|RmVobGVyIGJlaW0gTGFkZW4gZGVyIERhdGVpIQ==
 string|filename|RGF0ZWluYW1l
 string|formatted_molecular_formula-hint|dmVyd2VuZGUgPCo+IGbDvHIgSW5kaXplcw==
 string|formatted_molecular_formula|Rm9ybWF0aWVydGUgU3VtbWVuZm9ybWVs
