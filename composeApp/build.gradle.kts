@@ -60,9 +60,10 @@ compose.desktop {
         mainClass = "io.github.chaosdave34.benzol.MainKt"
 
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Exe, TargetFormat.AppImage, TargetFormat.Rpm)
+            targetFormats(TargetFormat.Dmg, TargetFormat.Exe, TargetFormat.Rpm)
             packageName = rootProject.name
-            packageVersion = "1.4.1"
+            packageVersion = "2.0.0"
+            linux.packageVersion = "2.0.0~beta01"
             linux {
                 iconFile.set(project.file("src/jvmMain/resources/logo.png"))
             }
