@@ -1,7 +1,7 @@
 [versions]
-androidx-lifecycle = "2.9.4-rc01"
+androidx-lifecycle = "2.9.4"
 compose-hot-reload = "1.0.0-beta07"
-compose-multiplatform = "1.9.0-rc02"
+compose-multiplatform = "1.9.0"
 junit = "4.13.2"
 kotlin = "2.2.20"
 kotlinx-coroutines = "1.10.2"
@@ -10,7 +10,7 @@ logback = "1.5.18"
 
 kotlinx-html = "0.12.0"
 kotlinx-serialization = "1.9.0"
-androidx-navigation = "2.9.0-rc02"
+androidx-navigation = "2.9.0"
 
 openhtmltopdf = "1.1.30"
 ksoup = "0.2.5"
