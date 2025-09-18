@@ -88,7 +88,7 @@ actual fun PdfExport(
             client.post(safetySheetUiState.exportUrl) {
                 setBody(output.first.create())
             }
-        } catch (_: Exception) {
+        } catch (_: Throwable) {
             onClose(false)
             return@launch
         }
