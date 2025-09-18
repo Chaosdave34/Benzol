@@ -12,7 +12,6 @@ import io.github.chaosdave34.benzol.files.InputData
 import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -27,6 +26,9 @@ fun FileDialogs(
     val snackbarHostState by viewModel.snackbarHostState.collectAsState()
 
     val unnamed = stringResource(Res.string.unnamed_file)
+    val failedToLoadFile = stringResource(Res.string.failed_to_load_file)
+    val pdfExportSuccess = stringResource(Res.string.pdf_export_success)
+    val pdfExportFailed = stringResource(Res.string.pdf_export_failed)
 
     if (uiState.fileChooserVisible) {
         FileChooser(
@@ -58,7 +60,7 @@ fun FileDialogs(
                     }
                 }
                 scope.launch {
-                    viewModel.snackbarHostState.value.showSnackbar(getString(Res.string.failed_to_load_file))
+                    viewModel.snackbarHostState.value.showSnackbar(failedToLoadFile)
                 }
             },
             onClose = viewModel::closeFileChooser
@@ -117,7 +119,8 @@ fun FileDialogs(
                     inputData.humanAndEnvironmentDanger.map { it.trim(); it.replace("\n", "") },
                     inputData.rulesOfConduct.map { it.trim(); it.replace("\n", "") },
                     inputData.inCaseOfDanger.map { it.trim(); it.replace("\n", "") },
-                    inputData.disposal.map { it.trim(); it.replace("\n", "") }
+                    inputData.disposal.map { it.trim(); it.replace("\n", "") },
+                    viewModel.resourceEnvironment
                 )
 
                 val fileName = if (inputData.filename.isEmpty()) "$unnamed.pdf" else "${inputData.filename}.pdf"
@@ -127,9 +130,7 @@ fun FileDialogs(
             onClose = { success ->
                 viewModel.closePdfExport()
                 scope.launch {
-                    val status = if (success) Res.string.pdf_export_success else Res.string.pdf_export_failed
-
-                    snackbarHostState.showSnackbar(getString(status))
+                    snackbarHostState.showSnackbar(if (success) pdfExportSuccess else pdfExportFailed)
                 }
             }
         )

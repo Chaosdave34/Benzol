@@ -7,6 +7,7 @@ import io.github.chaosdave34.benzol.Substance
 import kotlinx.html.*
 import kotlinx.html.stream.appendHTML
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.ResourceEnvironment
 import org.jetbrains.compose.resources.getString
 import kotlin.text.Typography.nbsp
 
@@ -22,38 +23,39 @@ class HtmlFile(
     val humanAndEnvironmentDanger: List<String>,
     val rulesOfConduct: List<String>,
     val inCaseOfDanger: List<String>,
-    val disposal: List<String>
+    val disposal: List<String>,
+    val resourceEnvironment: ResourceEnvironment
 ) {
     @OptIn(ExperimentalResourceApi::class)
     suspend fun create(): String {
-        val assistantTitle = getString(Res.string.assistant)
-        val preparationTitle = getString(Res.string.preparation)
-        val nameTitle = getString(Res.string.name_with_plural)
-        val placeTitle = getString(Res.string.place)
+        val assistantTitle = getString(resourceEnvironment, Res.string.assistant)
+        val preparationTitle = getString(resourceEnvironment, Res.string.preparation)
+        val nameTitle = getString(resourceEnvironment, Res.string.name_with_plural)
+        val placeTitle = getString(resourceEnvironment, Res.string.place)
 
-        val usedSubstancesTitle = getString(Res.string.used_substances)
-        val molarMassTitle = getString(Res.string.molar_mass_with_unit)
-        val temperaturesTitle = getString(Res.string.temperatures)
-        val ghsSymbolsTitle = getString(Res.string.ghs_pictograms)
-        val hAndPPhrasesNumberTitle = getString(Res.string.h_and_p_phrases_number)
-        val makLd50WgkTitle = getString(Res.string.mak_ld50_wgk)
+        val usedSubstancesTitle = getString(resourceEnvironment, Res.string.used_substances)
+        val molarMassTitle = getString(resourceEnvironment, Res.string.molar_mass_with_unit)
+        val temperaturesTitle = getString(resourceEnvironment, Res.string.temperatures)
+        val ghsSymbolsTitle = getString(resourceEnvironment, Res.string.ghs_pictograms)
+        val hAndPPhrasesNumberTitle = getString(resourceEnvironment, Res.string.h_and_p_phrases_number)
+        val makLd50WgkTitle = getString(resourceEnvironment, Res.string.mak_ld50_wgk)
 
-        val quantityTitle = getString(Res.string.quantity_required)
-        val makUnit = getString(Res.string.mak_unit)
-        val lethalDoseUnit = getString(Res.string.lethal_dose_unit)
-        val celsiusUnit = getString(Res.string.celsius_unit)
+        val quantityTitle = getString(resourceEnvironment, Res.string.quantity_required)
+        val makUnit = getString(resourceEnvironment, Res.string.mak_unit)
+        val lethalDoseUnit = getString(resourceEnvironment, Res.string.lethal_dose_unit)
+        val celsiusUnit = getString(resourceEnvironment, Res.string.celsius_unit)
 
-        val hAndPPhrasesTitle = getString(Res.string.title_h_and_p_phrases)
-        val sourcesTitle = getString(Res.string.sources)
-        val humanAndEnvironmentDangerTitle = getString(Res.string.human_and_environment_danger)
-        val rulesOfConductTitle = getString(Res.string.rules_of_conduct)
-        val inCaseOfDangerTitle = getString(Res.string.in_case_of_danger)
-        val disposalTitle = getString(Res.string.disposal)
+        val hAndPPhrasesTitle = getString(resourceEnvironment, Res.string.title_h_and_p_phrases)
+        val sourcesTitle = getString(resourceEnvironment, Res.string.sources)
+        val humanAndEnvironmentDangerTitle = getString(resourceEnvironment, Res.string.human_and_environment_danger)
+        val rulesOfConductTitle = getString(resourceEnvironment, Res.string.rules_of_conduct)
+        val inCaseOfDangerTitle = getString(resourceEnvironment, Res.string.in_case_of_danger)
+        val disposalTitle = getString(resourceEnvironment, Res.string.disposal)
 
-        val signature = getString(Res.string.signature)
-        val locationAndDate = getString(Res.string.location_and_date)
-        val signature1 = getString(Res.string.signature_1)
-        val signature2 = getString(Res.string.signature_2)
+        val signature = getString(resourceEnvironment, Res.string.signature)
+        val locationAndDate = getString(resourceEnvironment, Res.string.location_and_date)
+        val signature1 = getString(resourceEnvironment, Res.string.signature_1)
+        val signature2 = getString(resourceEnvironment, Res.string.signature_2)
 
         val css = Res.readBytes("files/export.css").decodeToString()
 
