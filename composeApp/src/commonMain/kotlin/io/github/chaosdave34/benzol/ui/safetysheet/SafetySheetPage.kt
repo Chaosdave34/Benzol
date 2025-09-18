@@ -18,7 +18,9 @@ import org.jetbrains.compose.resources.stringResource
 fun SafetySheetPage(
     viewModel: SafetySheetViewModel,
 ) {
+    val scope = rememberCoroutineScope()
     val inputState by viewModel.inputState.collectAsState()
+    val snackbarHostState by viewModel.snackbarHostState.collectAsState()
 
     val substances by viewModel.substances.collectAsState()
     val humanAndEnvironmentDanger by viewModel.humanAndEnvironmentDanger.collectAsState()
@@ -107,9 +109,9 @@ fun SafetySheetPage(
 
             Section {
                 SubstanceSearch(
-                    onSearch = {
-                        substances.add(it)
-                    }
+                    viewModel = viewModel,
+                    onSearch = substances::add,
+                    currentCasNumbers = substances.map { it.casNumber }
                 )
             }
 

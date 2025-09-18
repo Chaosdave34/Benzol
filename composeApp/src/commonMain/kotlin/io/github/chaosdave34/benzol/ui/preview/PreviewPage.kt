@@ -28,8 +28,6 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import kotlin.text.Typography.nbsp
 
-// TODO needs further improvements
-
 @Composable
 fun PreviewPage(
     viewModel: SafetySheetViewModel

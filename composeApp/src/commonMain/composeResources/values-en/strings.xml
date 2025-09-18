@@ -128,5 +128,7 @@
     <string name="about">About</string>
 
     <string name="export_url">Export URL</string>
+
+    <string name="substance_exists">A substance with the same CAS number already exists.</string>
 </resources>
 

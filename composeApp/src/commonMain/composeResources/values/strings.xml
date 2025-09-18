@@ -128,4 +128,6 @@
     <string name="about">Information</string>
 
     <string name="export_url">Export URL</string>
+
+    <string name="substance_exists">Eine Substanz mit dieser CAS-Nummer existiert bereits.</string>
 </resources>

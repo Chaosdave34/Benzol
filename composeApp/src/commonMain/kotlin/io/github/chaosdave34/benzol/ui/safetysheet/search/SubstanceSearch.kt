@@ -8,11 +8,14 @@ import androidx.compose.runtime.*
 import benzol.composeapp.generated.resources.Res
 import benzol.composeapp.generated.resources.gestis
 import io.github.chaosdave34.benzol.Substance
+import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SubstanceSearch(
-    onSearch: (Substance) -> Unit
+    viewModel: SafetySheetViewModel,
+    onSearch: (Substance) -> Unit,
+    currentCasNumbers: List<String>
 ) {
     var selectedSearchIndex by remember { mutableIntStateOf(0) }
 
@@ -28,6 +31,10 @@ fun SubstanceSearch(
     }
 
     when (selectedSearchIndex) {
-        0 -> GestisSearch(onResult = onSearch)
+        0 -> GestisSearch(
+            viewModel = viewModel,
+            onResult = onSearch,
+            currentCasNumbers = currentCasNumbers
+        )
     }
 }

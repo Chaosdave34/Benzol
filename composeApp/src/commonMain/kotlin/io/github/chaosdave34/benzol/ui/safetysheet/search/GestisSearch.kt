@@ -23,16 +23,20 @@ import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.Substance
 import io.github.chaosdave34.benzol.search.Gestis
 import io.github.chaosdave34.benzol.ui.CustomScrollbar
+import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class) // Todo not add same cas number again
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun GestisSearch(
-    onResult: (Substance) -> Unit
+    viewModel: SafetySheetViewModel,
+    onResult: (Substance) -> Unit,
+    currentCasNumbers: List<String>
 ) {
     val scope = rememberCoroutineScope()
+    val snackbarHostState by viewModel.snackbarHostState.collectAsState()
 
     val allowedSearchTypes = rememberSaveable { Gestis.SearchType.entries.toMutableStateList() }
     val searchArguments = rememberSaveable { mutableStateListOf(Gestis.SearchArgument(allowedSearchTypes.removeFirst(), "")) }
@@ -69,12 +73,20 @@ fun GestisSearch(
     }
 
     if (searchState != SearchState.INPUT) {
+        val alreadyExists = stringResource(Res.string.substance_exists)
+
         SearchDialog(
             searchState = searchState,
             searchResults = searchResults,
             onDismissRequest = { searchState = SearchState.INPUT },
             onSelectResult = { result ->
-                selectedResult = result
+                if (result.casNumber in currentCasNumbers) {
+                    scope.launch {
+                        snackbarHostState.showSnackbar(alreadyExists)
+                    }
+                } else {
+                    selectedResult = result
+                }
 
                 searchState = SearchState.INPUT
 
@@ -299,6 +311,7 @@ private fun SearchDialog(
                             onSelectResult = onSelectResult,
                             scrollState = scrollState
                         )
+
                         SearchState.ERROR -> Error(scrollState)
                     }
 
