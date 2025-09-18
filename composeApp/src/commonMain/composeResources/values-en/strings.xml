@@ -22,6 +22,7 @@
     <!--    <string name="course_default">Inorganic chemistry lab course</string>-->
 
     <string name="gestis">Gestis</string>
+    <string name="custom_source">Custom</string>
 
     <string name="edit_substance">Click on substance to edit.</string>
     <string name="molecular_formula">Molecular formula</string>

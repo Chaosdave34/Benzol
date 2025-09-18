@@ -110,7 +110,7 @@ object Gestis {
                 getHPhrases(),
                 getPPhrases(),
                 getGHSPictograms(),
-                Pair(Source.GESTIS, "https://gestis.dguv.de/data?name=$zvgNumberWithZeros")
+                Pair(Source.Gestis, "https://gestis.dguv.de/data?name=$zvgNumberWithZeros")
             )
         }
 

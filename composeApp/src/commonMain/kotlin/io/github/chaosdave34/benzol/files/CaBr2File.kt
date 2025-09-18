@@ -134,8 +134,8 @@ object CaBr2File {
             companion object {
                 fun io.github.chaosdave34.benzol.search.Source.toProvider(): String {
                     return when (this) {
-                        io.github.chaosdave34.benzol.search.Source.GESTIS -> "gestis"
-                        io.github.chaosdave34.benzol.search.Source.CUSTOM -> "custom"
+                        io.github.chaosdave34.benzol.search.Source.Gestis -> "gestis"
+                        io.github.chaosdave34.benzol.search.Source.Custom -> "custom"
                     }
                 }
             }
@@ -143,8 +143,8 @@ object CaBr2File {
 
             fun getSource(): io.github.chaosdave34.benzol.search.Source {
                 return when (provider) {
-                    "gestis" -> io.github.chaosdave34.benzol.search.Source.GESTIS
-                    else -> io.github.chaosdave34.benzol.search.Source.CUSTOM
+                    "gestis" -> io.github.chaosdave34.benzol.search.Source.Gestis
+                    else -> io.github.chaosdave34.benzol.search.Source.Custom
                 }
             }
 

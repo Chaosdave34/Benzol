@@ -98,7 +98,7 @@ fun SubstanceList(
                         onClick = {
                             uriHandler.openUri(substance.source.second)
                         },
-                        enabled = substance.source.first != Source.CUSTOM,
+                        enabled = substance.source.first != Source.Custom,
                     ) {
                         Icon(
                             Icons.Filled.Source,
@@ -107,7 +107,7 @@ fun SubstanceList(
                         )
                         Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                         Text(
-                            substance.source.first.displayName,
+                            stringResource(substance.source.first.label),
                             maxLines = 1
                         )
                     }

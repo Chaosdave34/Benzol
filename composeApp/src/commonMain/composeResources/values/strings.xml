@@ -22,6 +22,7 @@
     <string name="course_default">Praktikum anorganische Chemie</string>>
 
     <string name="gestis">Gestis</string>
+    <string name="custom_source">Selbst erstellt</string>
 
     <string name="edit_substance">Zum Bearbeiten auf Substanz klicken.</string>
     <string name="molecular_formula">Summenformel</string>

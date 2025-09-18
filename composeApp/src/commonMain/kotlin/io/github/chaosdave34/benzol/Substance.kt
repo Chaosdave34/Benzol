@@ -33,7 +33,7 @@ data class Substance(
     var pPhrasesPair: ListPair<Pair<String, String>> = ListPair(),
     var ghsPictogramsPair: ListPair<GHSPictogram> = ListPair(),
 
-    var source: Pair<Source, String> = Pair(Source.CUSTOM, "")
+    var source: Pair<Source, String> = Pair(Source.Custom, "")
 ) {
 
     companion object {
@@ -77,10 +77,9 @@ data class Substance(
             return list.map(transform).flatten().distinctBy { it.first }.sortedBy { it.first }
         }
 
-        fun formatSource(list: List<Substance>): String {
-            return list.map { it.source.first }.filter { it != Source.CUSTOM }.distinct().joinToString(", ") { it.displayName }
+        fun sources(list: List<Substance>): List<Source> {
+            return list.map { it.source.first }.filter { it != Source.Custom }.distinct()
         }
-
     }
 
     var name by StringPairDelegate(namePair)

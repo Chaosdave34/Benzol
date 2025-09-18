@@ -17,7 +17,7 @@ class HtmlFile(
     val place: String,
     val assistant: String,
     val preparation: String,
-    val substanceList: List<Substance>,
+    val substances: List<Substance>,
     val humanAndEnvironmentDanger: List<String>,
     val rulesOfConduct: List<String>,
     val inCaseOfDanger: List<String>,
@@ -56,6 +56,8 @@ class HtmlFile(
         val signature2 = getString(resourceEnvironment, Res.string.signature_2)
 
         val css = Res.readBytes("files/export.css").decodeToString()
+
+        val sources = Substance.sources(substances).map { getString(it.label) }.joinToString(", ")
 
         return buildString {
             appendLine("<!DOCTYPE html>")
@@ -102,7 +104,7 @@ class HtmlFile(
                             ingredientTitle(4, makLd50WgkTitle)
                             ingredientTitle(4, quantityTitle)
                         }
-                        substanceList.forEach { substance ->
+                        substances.forEach { substance ->
                             tr {
                                 td("min-width-5cm center") {
                                     colSpan = "6"
@@ -195,7 +197,7 @@ class HtmlFile(
                                     +sourcesTitle
                                 }
                                 nbsp()
-                                +Substance.formatSource(substanceList)
+                                +sources
                             }
                         }
                     }
@@ -262,7 +264,7 @@ class HtmlFile(
     fun TR.phrasesList(transform: (Substance) -> List<Pair<String, String>>) {
         td("top phrases") {
             colSpan = "17"
-            val iterator = Substance.formatPhrases(substanceList, transform).iterator()
+            val iterator = Substance.formatPhrases(substances, transform).iterator()
             while (iterator.hasNext()) {
                 val (number, content) = iterator.next()
                 +number
