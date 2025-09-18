@@ -11,7 +11,8 @@ string|chemical_name|Q2hlbWljYWwgTmFtZQ==
 string|close|Q2xvc2U=
 string|collapse_rail|Q29sbGFwc2UgUmFpbA==
 string|course|Q291cnNlL0xhYg==
-string|dark_theme|RGFyayB0aGVtZQ==
+string|custom_source|Q3VzdG9t
+string|dark_theme|RGFyaw==
 string|delete|RGVsZXRl
 string|disclaimer|QmVuem9sIGlzIGFuIG9wZW4tc291cmNlIHByb2plY3QgYW5kIHRoZXJlZm9yZSB0aGUgdXNlIG9mIHRoZSBnZW5lcmF0ZWQgb3BlcmF0aW5nIGluc3RydWN0aW9ucyBpcyBhdCB5b3VyIG93biByaXNrLiBOZWl0aGVyIHRoZSBwcm9ncmFtIG5vciB0aGUgZGV2ZWxvcGVycyBhcmUgcmVzcG9uc2libGUKICAgICAgICBmb3IgdGhlIGNvbnRlbnQgYW5kIGNhbm5vdCBiZSBoZWxkIGxpYWJsZSBmb3IgaW5jb3JyZWN0IG9yIGluY29tcGxldGUgaW5mb3JtYXRpb24uCiAgICA=
 string|disposal|RGlzcG9zYWw6
@@ -28,6 +29,7 @@ string|export_url|RXhwb3J0IFVSTA==
 string|failed_search|QW4gZXJyb3Igb2NjdXJyZWQgaW4gdGhlIHNlYXJjaC4=
 string|failed_to_load_file|QW4gZXJyb3Igb2NjdXJyZWQgdHJ5aW5nIHRvIGxvYWQgdGhlIGZpbGUh
 string|filename|RmlsZW5hbWU=
+string|follow_system|U3lzdGVt
 string|formatted_molecular_formula-hint|dXNlIDwqPiBmb3Igc3Vic2NyaXB0
 string|formatted_molecular_formula|Rm9ybWF0dGVkIG1vbGVjdWxhciBmb3JtdWxh
 string|full_text|RnVsbCBUZXh0
@@ -44,6 +46,7 @@ string|in_case_of_danger|QmVoYXZpb3IgaW4gY2FzZSBvZiBkYW5nZXIsIGZpcnN0IGFpZCBtZWF
 string|language|TGFuZ3VhZ2U=
 string|lethal_dose_unit|bWcva2c=
 string|lethal_dose|TGV0aGFsIGRvc2U=
+string|light_theme|TGlnaHQ=
 string|location_and_date|KFBsYWNlLCBkYXRlKQ==
 string|mak_ld50_wgk|TUFLCkxENTAKV0hD
 string|mak_unit|cHBt
@@ -83,7 +86,9 @@ string|signature_2|UHJlcGFyYXRpb24gZm9yIHN5bnRoZXNpcyBhcHByb3ZlZCB3aXRoIHRoZSBxd
 string|signature|U2lnbmF0dXJl
 string|sources|U291cmNlczo=
 string|source|U291cmNl
+string|substance_exists|QSBzdWJzdGFuY2Ugd2l0aCB0aGUgc2FtZSBDQVMgbnVtYmVyIGFscmVhZHkgZXhpc3RzLg==
 string|temperatures|QnAuCk1wLg==
+string|theme|VGhlbWU=
 string|title_h_and_p_phrases|V29yZGluZyBvZiB0aGUgbWFpbiBIIGFuZCBQIHBocmFzZXMgbWVudGlvbmVkIGFib3ZlOg==
 string|title|QmVuem9s
 string|unit|VW5pdA==

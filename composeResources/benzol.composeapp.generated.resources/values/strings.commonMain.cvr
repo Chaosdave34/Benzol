@@ -12,7 +12,8 @@ string|close|U2NobGllw59lbg==
 string|collapse_rail|TWVudSBlaW5rbGFwcGVu
 string|course_default|UHJha3Rpa3VtIGFub3JnYW5pc2NoZSBDaGVtaWU=
 string|course|S3Vycy9MYWI=
-string|dark_theme|RHVua2xlcyBUaGVtYQ==
+string|custom_source|U2VsYnN0IGVyc3RlbGx0
+string|dark_theme|RHVua2Vs
 string|delete|RW50ZmVybmVu
 string|disclaimer|QmVpIEJlbnpvbCBoYW5kZWx0IGVzIHNpY2ggdW0gZWluIE9wZW4tU291cmNlLVByb2pla3QgdW5kIGRhaGVyIGJhc2llcnQgZGllIFZlcndlbmR1bmcgZGVyIGdlbmVyaWVydGVuIEJldHJpZWJzYW53ZWlzdW5nZW4gYXVmIEVpZ2VudmVyYW50d29ydHVuZy4KV2VkZXIgZGFzIFByb2dyYW1tLCBub2NoIGRpZSBFbnR3aWNrbGVyIHNpbmQgZsO8ciBkZW4gSW5oYWx0IHZlcmFudHdvcnRsaWNoIHVuZCBrw7ZubmVuIGbDvHIgdW5rb3JyZWt0ZSBvZGVyIHVudm9sbHN0w6RuZGlnZSBJbmZvcm1hdGlvbmVuIHp1ciBSZWNoZW5zY2hhZnQgZ2V6b2dlbiB3ZXJkZW4u
 string|disposal|RW50c29yZ3VuZzo=
@@ -31,6 +32,7 @@ string|export_url|RXhwb3J0IFVSTA==
 string|failed_search|RXMgaXN0IGVpbiBGZWhsZXIgYmVpIGRlciBTdWNoZSBhdWZnZXRyZXRlbi4=
 string|failed_to_load_file|RmVobGVyIGJlaW0gTGFkZW4gZGVyIERhdGVpIQ==
 string|filename|RGF0ZWluYW1l
+string|follow_system|U3lzdGVt
 string|formatted_molecular_formula-hint|dmVyd2VuZGUgPCo+IGbDvHIgSW5kaXplcw==
 string|formatted_molecular_formula|Rm9ybWF0aWVydGUgU3VtbWVuZm9ybWVs
 string|full_text|Vm9sbHRleHQ=
@@ -48,6 +50,7 @@ string|in_case_of_danger|VmVyaGFsdGVuIGltIEdlZmFocmVuZmFsbCwgRXJzdGUtSGlsZmUtTWH
 string|language|U3ByYWNoZQ==
 string|lethal_dose_unit|bWcva2c=
 string|lethal_dose|TGV0YWxlIERvc2lz
+string|light_theme|SGVsbA==
 string|location_and_date|KE9ydCwgRGF0dW0p
 string|mak_ld50_wgk|TWFrCkxENTAKV0dL
 string|mak_unit|cHBt
@@ -88,7 +91,9 @@ string|signature_2|UHLDpHBhcmF0IHp1ciBTeW50aGVzZSBtaXQgZGVuIGF1ZiBkZXIgVm9yZGVyc
 string|signature|VW50ZXJzY2hyaWZ0
 string|sources|UXVlbGxlbjo=
 string|source|UXVlbGxl
+string|substance_exists|RWluZSBTdWJzdGFueiBtaXQgZGllc2VyIENBUy1OdW1tZXIgZXhpc3RpZXJ0IGJlcmVpdHMu
 string|temperatures|U2RwLgpTbXAu
+string|theme|RmFyYnNjaGVtYQ==
 string|title_h_and_p_phrases|V29ydGxhdXQgZGVyIHdlc2VudGxpY2hlbiBvYmVuIGdlbmFubnRlbiBILSB1bmQgUC1Tw6R0emU6
 string|title|QmVuem9s
 string|unit|RWluaGVpdA==
