@@ -23,6 +23,7 @@ kotlin {
         }
         jvmMain.dependencies {
             implementation(libs.bundles.openhtmltopdf.common)
+            implementation(libs.ksoup)
         }
     }
 }

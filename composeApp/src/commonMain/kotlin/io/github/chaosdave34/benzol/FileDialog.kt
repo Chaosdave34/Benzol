@@ -12,18 +12,19 @@ import io.github.chaosdave34.benzol.files.InputData
 import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.rememberResourceEnvironment
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun FileDialogs(
     viewModel: SafetySheetViewModel,
-    import: (InputData) -> Unit,
-    export: () -> InputData,
 ) {
     val scope = rememberCoroutineScope()
 
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState by viewModel.snackbarHostState.collectAsState()
+
+    val resourceEnvironment = rememberResourceEnvironment()
 
     val unnamed = stringResource(Res.string.unnamed_file)
     val failedToLoadFile = stringResource(Res.string.failed_to_load_file)
@@ -55,7 +56,7 @@ fun FileDialogs(
                             disposal = caBr2File.disposal
                         )
 
-                        import(inputDate)
+                        viewModel.importInput(inputDate)
                         return@FileChooser
                     }
                 }
@@ -71,7 +72,7 @@ fun FileDialogs(
         FileSaver(
             coroutineScope = scope,
             output = {
-                val inputData = export()
+                val inputData = viewModel.exportInput()
 
                 val header = CaBr2File.CaBr2Data.Header(
                     inputData.documentTitle.trim(),
@@ -105,7 +106,7 @@ fun FileDialogs(
             coroutineScope = scope,
             safetySheetUiState = uiState,
             output = {
-                val inputData = export()
+                val inputData = viewModel.exportInput()
 
                 val htmlFile = HtmlFile(
                     inputData.documentTitle.trim(),
@@ -120,7 +121,7 @@ fun FileDialogs(
                     inputData.rulesOfConduct.map { it.trim(); it.replace("\n", "") },
                     inputData.inCaseOfDanger.map { it.trim(); it.replace("\n", "") },
                     inputData.disposal.map { it.trim(); it.replace("\n", "") },
-                    viewModel.resourceEnvironment
+                    resourceEnvironment
                 )
 
                 val fileName = if (inputData.filename.isEmpty()) "$unnamed.pdf" else "${inputData.filename}.pdf"

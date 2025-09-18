@@ -10,7 +10,7 @@ class Settings() {
     private val exportUrlKey = "export_url"
 
     var darkTheme by BooleanDelegate(darkThemeKey, false)
-    var language by enumDelegate(languageKey, SupportedLanguage.GERMAN)
+    var language by enumDelegate(languageKey, SupportedLanguage.German)
     var disclaimerConfirmed by BooleanDelegate(disclaimerConfirmedKey, false)
     var exportUrl by StringDelegate(exportUrlKey, "")
 

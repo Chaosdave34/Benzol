@@ -15,14 +15,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import org.jetbrains.compose.resources.ResourceEnvironment
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.getStringArray
 
-class SafetySheetViewModel(
-    val settings: Settings,
-    val resourceEnvironment: ResourceEnvironment
-) : ViewModel() {
+class SafetySheetViewModel : ViewModel() {
+    private val settings = Settings()
+
     private val _uiState: MutableStateFlow<SafetySheetUiState> = MutableStateFlow(SafetySheetUiState(settings))
     val uiState: StateFlow<SafetySheetUiState> = _uiState.asStateFlow()
 
@@ -231,11 +229,11 @@ class SafetySheetViewModel(
     }
 
     suspend fun setDefaultInputValues() {
-        setDocumentTitle(getString(resourceEnvironment, Res.string.document_title_default))
-        setOrganisation(getString(resourceEnvironment, Res.string.organisation_default))
-        setCourse(getString(resourceEnvironment, Res.string.course_default))
-        setInCaseOfDanger(getStringArray(resourceEnvironment, Res.array.in_case_of_danger_defaults))
-        setRulesOfConduct(getStringArray(resourceEnvironment, Res.array.rules_of_conduct_defaults))
+        setDocumentTitle(getString(Res.string.document_title_default))
+        setOrganisation(getString(Res.string.organisation_default))
+        setCourse(getString(Res.string.course_default))
+        setInCaseOfDanger(getStringArray(Res.array.in_case_of_danger_defaults))
+        setRulesOfConduct(getStringArray(Res.array.rules_of_conduct_defaults))
     }
 
     fun importInput(data: InputData) {

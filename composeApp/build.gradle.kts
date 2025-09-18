@@ -38,8 +38,6 @@ kotlin {
             implementation(compose.materialIconsExtended)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.navigation)
-
-            implementation(libs.ksoup)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

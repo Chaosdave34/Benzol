@@ -1,8 +1,6 @@
 package io.github.chaosdave34.benzol.files
 
 import benzol.composeapp.generated.resources.*
-import com.fleeksoft.ksoup.Ksoup
-import com.fleeksoft.ksoup.nodes.Document
 import io.github.chaosdave34.benzol.Substance
 import kotlinx.html.*
 import kotlinx.html.stream.appendHTML
@@ -59,7 +57,7 @@ class HtmlFile(
 
         val css = Res.readBytes("files/export.css").decodeToString()
 
-        val html = buildString {
+        return buildString {
             appendLine("<!DOCTYPE html>")
             appendHTML().html {
                 head {
@@ -223,11 +221,6 @@ class HtmlFile(
             }
             appendLine()
         }
-
-
-        val document = Ksoup.parse(html)
-        document.outputSettings().syntax(Document.OutputSettings.Syntax.xml)
-        return document.html()
     }
 
     private fun valueOrDash(value: String, unit: String = ""): String {
