@@ -1,15 +1,16 @@
-package io.github.chaosdave34.benzol
+package io.github.chaosdave34.benzol.settings
 
+import io.github.chaosdave34.benzol.SupportedLanguage
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
 class Settings() {
-    private val darkThemeKey = "dark_theme"
+    private val themeKey = "theme"
     private val languageKey = "language"
     private val disclaimerConfirmedKey = "disclaimer_confirmed"
     private val exportUrlKey = "export_url"
 
-    var darkTheme by BooleanDelegate(darkThemeKey, false)
+    var theme by enumDelegate(themeKey, Theme.System)
     var language by enumDelegate(languageKey, SupportedLanguage.German)
     var disclaimerConfirmed by BooleanDelegate(disclaimerConfirmedKey, false)
     var exportUrl by StringDelegate(exportUrlKey, "")
@@ -43,7 +44,3 @@ class Settings() {
         override fun setValue(thisRef: Settings, property: KProperty<*>, value: T) = setSetting(key, value.name)
     }
 }
-
-expect fun getSetting(key: String): String?
-
-expect fun setSetting(key: String, value: String)

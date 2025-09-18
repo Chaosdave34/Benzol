@@ -67,8 +67,11 @@
     <string name="failed_search">Es ist ein Fehler bei der Suche aufgetreten.</string>
     <string name="no_search_results">Keine Ergebnisse</string>
 
+    <string name="theme">Farbschema</string>
+    <string name="follow_system">System</string>
+    <string name="dark_theme">Dunkel</string>
+    <string name="light_theme">Hell</string>
 
-    <string name="dark_theme">Dunkles Thema</string>
     <string name="language">Sprache</string>
 
     <string name="preview">Vorschau</string>

@@ -1,6 +1,7 @@
 package io.github.chaosdave34.benzol.ui
 
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -13,6 +14,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import io.github.chaosdave34.benzol.settings.Theme
 import io.github.chaosdave34.benzol.ui.about.AboutPage
 import io.github.chaosdave34.benzol.ui.preview.PreviewPage
 import io.github.chaosdave34.benzol.ui.safetysheet.SafetySheetPage
@@ -35,8 +37,14 @@ fun Layout(
         toolbarVisible = destination.route in listOf(Destination.Sheet, Destination.Preview).map { it.route }
     }
 
+    val darkTheme = when (uiState.theme) {
+        Theme.System -> isSystemInDarkTheme()
+        Theme.Light -> false
+        Theme.Dark -> true
+    }
+
     MaterialExpressiveTheme(
-        colorScheme = if (uiState.darkMode) darkColorScheme() else lightColorScheme()
+        colorScheme = if (darkTheme) darkColorScheme() else lightColorScheme()
     ) {
         DisclaimerDialog(
             !uiState.disclaimerConfirmed,

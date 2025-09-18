@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.SupportedLanguage
+import io.github.chaosdave34.benzol.settings.Theme
 import io.github.chaosdave34.benzol.ui.AppPageBox
 import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 import io.github.chaosdave34.benzol.ui.Section
@@ -35,9 +36,9 @@ fun SettingsPage(
             Section(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                DarkModeSetting(
-                    darkMode = uiState.darkMode,
-                    onDarkModeChange = viewModel::setDarkMode
+                ThemeSetting(
+                    theme = uiState.theme,
+                    onThemeChange = viewModel::setTheme
                 )
             }
 
@@ -62,21 +63,42 @@ fun SettingsPage(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun DarkModeSetting(
-    darkMode: Boolean,
-    onDarkModeChange: (Boolean) -> Unit
+private fun ThemeSetting(
+    theme: Theme,
+    onThemeChange: (Theme) -> Unit
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
+    var dropdownExpanded by remember { mutableStateOf(false) }
+
+    ExposedDropdownMenuBox(
+        expanded = dropdownExpanded,
+        onExpandedChange = { dropdownExpanded = it }
     ) {
-        Text(stringResource(Res.string.dark_theme))
-        Spacer(Modifier.width(16.dp))
-        Switch(
-            checked = darkMode,
-            onCheckedChange = onDarkModeChange
+        OutlinedTextField(
+            modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+            value = stringResource(theme.label),
+            readOnly = true,
+            onValueChange = {},
+            label = { Text(stringResource(Res.string.theme)) },
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(dropdownExpanded) }
         )
+
+        ExposedDropdownMenu(
+            expanded = dropdownExpanded,
+            onDismissRequest = { dropdownExpanded = false }
+        ) {
+            Theme.entries.forEach {
+                DropdownMenuItem(
+                    text = { Text(stringResource(it.label)) },
+                    onClick = {
+                        dropdownExpanded = false
+                        onThemeChange(it)
+                    },
+                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                )
+            }
+        }
     }
 }
 
@@ -88,36 +110,32 @@ private fun LanguageSetting(
 ) {
     var dropdownExpanded by remember { mutableStateOf(false) }
 
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
+    ExposedDropdownMenuBox(
+        expanded = dropdownExpanded,
+        onExpandedChange = { dropdownExpanded = it }
     ) {
-        ExposedDropdownMenuBox(
-            expanded = dropdownExpanded,
-            onExpandedChange = { dropdownExpanded = it }
-        ) {
-            OutlinedTextField(
-                modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
-                value = stringResource(language.resource),
-                readOnly = true,
-                onValueChange = {},
-                label = { Text(stringResource(Res.string.language)) },
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(dropdownExpanded) }
-            )
+        OutlinedTextField(
+            modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+            value = stringResource(language.label),
+            readOnly = true,
+            onValueChange = {},
+            label = { Text(stringResource(Res.string.language)) },
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(dropdownExpanded) }
+        )
 
-            ExposedDropdownMenu(
-                expanded = dropdownExpanded,
-                onDismissRequest = { dropdownExpanded = false }
-            ) {
-                SupportedLanguage.entries.forEach {
-                    DropdownMenuItem(
-                        text = { Text(stringResource(it.resource)) },
-                        onClick = {
-                            dropdownExpanded = false
-                            onLanguageChange(it)
-                        },
-                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
-                    )
-                }
+        ExposedDropdownMenu(
+            expanded = dropdownExpanded,
+            onDismissRequest = { dropdownExpanded = false }
+        ) {
+            SupportedLanguage.entries.forEach {
+                DropdownMenuItem(
+                    text = { Text(stringResource(it.label)) },
+                    onClick = {
+                        dropdownExpanded = false
+                        onLanguageChange(it)
+                    },
+                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                )
             }
         }
     }

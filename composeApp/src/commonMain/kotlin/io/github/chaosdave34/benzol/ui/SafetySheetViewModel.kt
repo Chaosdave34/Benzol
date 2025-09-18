@@ -5,12 +5,13 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import benzol.composeapp.generated.resources.*
-import io.github.chaosdave34.benzol.Settings
 import io.github.chaosdave34.benzol.Substance
 import io.github.chaosdave34.benzol.SupportedLanguage
 import io.github.chaosdave34.benzol.data.SafetySheetInputState
 import io.github.chaosdave34.benzol.data.SafetySheetUiState
 import io.github.chaosdave34.benzol.files.InputData
+import io.github.chaosdave34.benzol.settings.Settings
+import io.github.chaosdave34.benzol.settings.Theme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -90,13 +91,13 @@ class SafetySheetViewModel : ViewModel() {
         settings.disclaimerConfirmed = true
     }
 
-    fun setDarkMode(value: Boolean) {
+    fun setTheme(value: Theme) {
         _uiState.update { currentState ->
             currentState.copy(
-                darkMode = value
+                theme = value
             )
         }
-        settings.darkTheme = value
+        settings.theme = value
     }
 
     fun setLanguage(language: SupportedLanguage) {

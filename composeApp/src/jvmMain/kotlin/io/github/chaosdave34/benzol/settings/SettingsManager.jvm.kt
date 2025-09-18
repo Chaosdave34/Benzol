@@ -1,4 +1,4 @@
-package io.github.chaosdave34.benzol
+package io.github.chaosdave34.benzol.settings
 
 import java.util.prefs.Preferences
 
