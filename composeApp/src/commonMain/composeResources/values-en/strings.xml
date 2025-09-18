@@ -70,9 +70,9 @@
     <string name="failed_search">An error occurred in the search.</string>
 
     <string name="theme">Theme</string>
-    <string name="follow_system">system</string>
-    <string name="dark_theme">dark</string>
-    <string name="light_theme">light</string>
+    <string name="follow_system">System</string>
+    <string name="dark_theme">Dark</string>
+    <string name="light_theme">Light</string>
 
     <string name="language">Language</string>
 
