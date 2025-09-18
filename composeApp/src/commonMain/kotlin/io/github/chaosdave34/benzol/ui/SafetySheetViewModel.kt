@@ -5,13 +5,12 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import benzol.composeapp.generated.resources.*
-import com.russhwolf.settings.set
+import io.github.chaosdave34.benzol.Settings
 import io.github.chaosdave34.benzol.Substance
 import io.github.chaosdave34.benzol.SupportedLanguage
 import io.github.chaosdave34.benzol.data.SafetySheetInputState
 import io.github.chaosdave34.benzol.data.SafetySheetUiState
 import io.github.chaosdave34.benzol.files.InputData
-import io.github.chaosdave34.benzol.getSettings
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,18 +19,12 @@ import org.jetbrains.compose.resources.ResourceEnvironment
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.getStringArray
 
-private const val DARK_THEME_KEY = "dark_theme"
-private const val LOCALE_KEY = "language"
-private const val DISCLAIMER_CONFIRMED_KEY = "disclaimer_confirmed"
-private const val EXPORT_URL_KEY = "export_url"
-
 class SafetySheetViewModel(
+    val settings: Settings,
     val resourceEnvironment: ResourceEnvironment
 ) : ViewModel() {
-    private val settings = getSettings()
-
-    private val _uiState: MutableStateFlow<SafetySheetUiState>
-    val uiState: StateFlow<SafetySheetUiState>
+    private val _uiState: MutableStateFlow<SafetySheetUiState> = MutableStateFlow(SafetySheetUiState(settings))
+    val uiState: StateFlow<SafetySheetUiState> = _uiState.asStateFlow()
 
     private val _snackBarHostState = MutableStateFlow(SnackbarHostState())
     val snackbarHostState = _snackBarHostState.asStateFlow()
@@ -53,25 +46,6 @@ class SafetySheetViewModel(
 
     private val _disposal = MutableStateFlow(mutableStateListOf<String>())
     val disposal = _disposal.asStateFlow()
-
-
-    init {
-        val darkMode = settings.getBoolean(DARK_THEME_KEY, false)
-        val language = SupportedLanguage.fromLocale(settings.getStringOrNull(LOCALE_KEY)) ?: SupportedLanguage.GERMAN
-        val disclaimerConfirmed = settings.getBoolean(DISCLAIMER_CONFIRMED_KEY, false)
-        val exportUrl = settings.getString(EXPORT_URL_KEY, "")
-
-        _uiState = MutableStateFlow(
-            SafetySheetUiState(
-                darkMode = darkMode,
-                language = language,
-                disclaimerConfirmed = disclaimerConfirmed,
-                exportUrl = exportUrl
-            )
-        )
-
-        uiState = _uiState.asStateFlow()
-    }
 
     private fun setFileChooser(value: Boolean) {
         _uiState.update { currentState ->
@@ -115,8 +89,7 @@ class SafetySheetViewModel(
                 disclaimerConfirmed = true
             )
         }
-
-        settings[DISCLAIMER_CONFIRMED_KEY] = true
+        settings.disclaimerConfirmed = true
     }
 
     fun setDarkMode(value: Boolean) {
@@ -125,7 +98,7 @@ class SafetySheetViewModel(
                 darkMode = value
             )
         }
-        settings[DARK_THEME_KEY] = value
+        settings.darkTheme = value
     }
 
     fun setLanguage(language: SupportedLanguage) {
@@ -134,7 +107,7 @@ class SafetySheetViewModel(
                 language = language
             )
         }
-        settings[LOCALE_KEY] = language.locale
+        settings.language = language
     }
 
     fun setExportUrl(exportUrl: String) {
@@ -143,7 +116,7 @@ class SafetySheetViewModel(
                 exportUrl = exportUrl
             )
         }
-        settings[EXPORT_URL_KEY] = exportUrl
+        settings.exportUrl = exportUrl
     }
 
     fun setFilename(value: String) {

@@ -1,7 +1,13 @@
 package io.github.chaosdave34.benzol
 
-import com.russhwolf.settings.PreferencesSettings
-import com.russhwolf.settings.Settings
 import java.util.prefs.Preferences
 
-actual fun getSettings(): Settings = PreferencesSettings(Preferences.userRoot().node("io.github.chaosdave34.benzol"))
+private val preferences: Preferences = Preferences.userRoot().node("io.github.chaosdave34.benzol")
+
+actual fun getSetting(key: String): String? {
+    return if (preferences.keys().contains(key)) preferences.get(key, "") else null
+}
+
+actual fun setSetting(key: String, value: String) {
+    preferences.put(key, value)
+}

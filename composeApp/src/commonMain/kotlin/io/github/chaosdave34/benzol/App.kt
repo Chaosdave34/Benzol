@@ -9,13 +9,18 @@ import org.jetbrains.compose.resources.rememberResourceEnvironment
 
 @Composable
 fun App() {
-    val language = SupportedLanguage.fromLocale(getSettings().getStringOrNull("language")) ?: SupportedLanguage.GERMAN
+    val settings = Settings()
 
     AppEnvironment {
-        LocalAppLocale.provides(language.locale)
+        LocalAppLocale.provides(settings.language.locale)
 
         val resourceEnvironment = rememberResourceEnvironment()
-        val viewModel: SafetySheetViewModel = viewModel { SafetySheetViewModel(resourceEnvironment) }
+        val viewModel: SafetySheetViewModel = viewModel {
+            SafetySheetViewModel(
+                settings = settings,
+                resourceEnvironment = resourceEnvironment
+            )
+        }
 
         LaunchedEffect(Unit) {
             viewModel.setDefaultInputValues()

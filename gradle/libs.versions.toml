@@ -14,7 +14,6 @@ androidx-navigation = "2.9.0"
 
 openhtmltopdf = "1.1.30"
 ksoup = "0.2.5"
-russhwolf-multiplatform-settings = "1.3.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -40,7 +39,6 @@ ktor-serverCors = { module = "io.ktor:ktor-server-cors", version.ref = "ktor" }
 openhtmltopdf-core = { module = "io.github.openhtmltopdf:openhtmltopdf-core", version.ref = "openhtmltopdf" }
 openhtmltopdf-pdfbox = { module = "io.github.openhtmltopdf:openhtmltopdf-pdfbox", version.ref = "openhtmltopdf" }
 ksoup = { module = "com.fleeksoft.ksoup:ksoup", version.ref = "ksoup" }
-russhwolf-multiplatformSettings = { module = "com.russhwolf:multiplatform-settings", version.ref = "russhwolf-multiplatform-settings" }
 
 [plugins]
 composeHotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "compose-hot-reload" }

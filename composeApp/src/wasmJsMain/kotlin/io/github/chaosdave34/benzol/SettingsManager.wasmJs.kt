@@ -1,6 +1,7 @@
 package io.github.chaosdave34.benzol
 
-import com.russhwolf.settings.Settings
-import com.russhwolf.settings.StorageSettings
+import kotlinx.browser.window
 
-actual fun getSettings(): Settings = StorageSettings()
+actual fun getSetting(key: String) = window.localStorage.getItem(key)
+
+actual fun setSetting(key: String, value: String) = window.localStorage.setItem(key, value)

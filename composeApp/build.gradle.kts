@@ -40,7 +40,6 @@ kotlin {
             implementation(libs.androidx.navigation)
 
             implementation(libs.ksoup)
-            implementation(libs.russhwolf.multiplatformSettings)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
