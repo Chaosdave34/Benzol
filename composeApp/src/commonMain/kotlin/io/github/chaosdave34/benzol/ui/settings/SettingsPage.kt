@@ -36,18 +36,18 @@ fun SettingsPage(
             Section(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                ThemeSetting(
-                    theme = uiState.theme,
-                    onThemeChange = viewModel::setTheme
+                LanguageSetting(
+                    language = uiState.language,
+                    onLanguageChange = viewModel::setLanguage
                 )
             }
 
             Section(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                LanguageSetting(
-                    language = uiState.language,
-                    onLanguageChange = viewModel::setLanguage
+                ThemeSetting(
+                    theme = uiState.theme,
+                    onThemeChange = viewModel::setTheme
                 )
             }
 
