@@ -6,15 +6,15 @@ import kotlin.io.encoding.Base64
 
 
 enum class GHSPictogram(val drawableResource: DrawableResource, private val fileName: String, val alt: String) {
-    EXPLOSION(Res.drawable.explosion, "explosion", "ghs01"),
-    FLAME(Res.drawable.flame, "flame", "ghs02"),
-    FLAME_OVER_CIRCLE(Res.drawable.flame_over_circle, "flame_over_circle", "ghs03"),
-    GAS_BOTTLE(Res.drawable.gas_bottle, "gas_bottle", "ghs04"),
-    ACID(Res.drawable.acid, "acid", "ghs05"),
-    SKULL(Res.drawable.skull, "skull", "ghs06"),
-    EXCLAMATION(Res.drawable.exclamation, "exclamation", "ghs07"),
-    SILHOUETTE(Res.drawable.silhouette, "silhouette", "ghs08"),
-    NATURE(Res.drawable.nature, "nature", "ghs09");
+    Explosion(Res.drawable.explosion, "explosion", "ghs01"),
+    Flame(Res.drawable.flame, "flame", "ghs02"),
+    FlameOverCircle(Res.drawable.flame_over_circle, "flame_over_circle", "ghs03"),
+    GasBottle(Res.drawable.gas_bottle, "gas_bottle", "ghs04"),
+    Acid(Res.drawable.acid, "acid", "ghs05"),
+    Skull(Res.drawable.skull, "skull", "ghs06"),
+    Exclamation(Res.drawable.exclamation, "exclamation", "ghs07"),
+    Silhouette(Res.drawable.silhouette, "silhouette", "ghs08"),
+    Nature(Res.drawable.nature, "nature", "ghs09");
 
     var base64String: String = ""
 
@@ -28,15 +28,15 @@ enum class GHSPictogram(val drawableResource: DrawableResource, private val file
 
         fun fromId(id: String): GHSPictogram? {
             return when (id) {
-                "ghs01" -> EXPLOSION
-                "ghs02" -> FLAME
-                "ghs03" -> FLAME_OVER_CIRCLE
-                "ghs04" -> GAS_BOTTLE
-                "ghs05" -> ACID
-                "ghs06" -> SKULL
-                "ghs07" -> EXCLAMATION
-                "ghs08" -> SILHOUETTE
-                "ghs09" -> NATURE
+                "ghs01" -> Explosion
+                "ghs02" -> Flame
+                "ghs03" -> FlameOverCircle
+                "ghs04" -> GasBottle
+                "ghs05" -> Acid
+                "ghs06" -> Skull
+                "ghs07" -> Exclamation
+                "ghs08" -> Silhouette
+                "ghs09" -> Nature
                 else -> null
             }
         }

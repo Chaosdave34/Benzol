@@ -14,8 +14,8 @@ import benzol.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.StringResource
 
 enum class Destination(val route: String, val label: StringResource, val selectedIcon: ImageVector, val unselectedIcon: ImageVector) {
-    SHEET("sheet", Res.string.sheet, Icons.AutoMirrored.Filled.Assignment, Icons.AutoMirrored.Outlined.Assignment),
-    PREVIEW("preview", Res.string.preview, Icons.Filled.Preview, Icons.Outlined.Preview),
+    Sheet("sheet", Res.string.sheet, Icons.AutoMirrored.Filled.Assignment, Icons.AutoMirrored.Outlined.Assignment),
+    Preview("preview", Res.string.preview, Icons.Filled.Preview, Icons.Outlined.Preview),
     Settings("settings", Res.string.settings, Icons.Filled.Settings, Icons.Outlined.Settings),
-    ABOUT("about", Res.string.about, Icons.Filled.Info, Icons.Outlined.Info)
+    About("about", Res.string.about, Icons.Filled.Info, Icons.Outlined.Info)
 }

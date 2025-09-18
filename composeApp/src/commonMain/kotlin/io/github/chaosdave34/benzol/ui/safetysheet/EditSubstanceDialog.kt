@@ -317,37 +317,17 @@ fun EditSubstanceDialog(
                                 ) {
                                     GHSPictogram(
                                         modifier = Modifier.weight(0.3f),
-                                        pictogram = GHSPictogram.EXPLOSION,
+                                        pictogram = GHSPictogram.Explosion,
                                         selected = ghsPictograms
                                     )
                                     GHSPictogram(
                                         modifier = Modifier.weight(0.3f),
-                                        pictogram = GHSPictogram.FLAME,
+                                        pictogram = GHSPictogram.Flame,
                                         selected = ghsPictograms
                                     )
                                     GHSPictogram(
                                         modifier = Modifier.weight(0.3f),
-                                        pictogram = GHSPictogram.FLAME_OVER_CIRCLE,
-                                        selected = ghsPictograms
-                                    )
-                                }
-
-                                Row(
-                                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                                ) {
-                                    GHSPictogram(
-                                        modifier = Modifier.weight(0.3f),
-                                        pictogram = GHSPictogram.GAS_BOTTLE,
-                                        selected = ghsPictograms
-                                    )
-                                    GHSPictogram(
-                                        modifier = Modifier.weight(0.3f),
-                                        pictogram = GHSPictogram.ACID,
-                                        selected = ghsPictograms
-                                    )
-                                    GHSPictogram(
-                                        modifier = Modifier.weight(0.3f),
-                                        pictogram = GHSPictogram.SKULL,
+                                        pictogram = GHSPictogram.FlameOverCircle,
                                         selected = ghsPictograms
                                     )
                                 }
@@ -357,17 +337,37 @@ fun EditSubstanceDialog(
                                 ) {
                                     GHSPictogram(
                                         modifier = Modifier.weight(0.3f),
-                                        pictogram = GHSPictogram.EXCLAMATION,
+                                        pictogram = GHSPictogram.GasBottle,
                                         selected = ghsPictograms
                                     )
                                     GHSPictogram(
                                         modifier = Modifier.weight(0.3f),
-                                        pictogram = GHSPictogram.SILHOUETTE,
+                                        pictogram = GHSPictogram.Acid,
                                         selected = ghsPictograms
                                     )
                                     GHSPictogram(
                                         modifier = Modifier.weight(0.3f),
-                                        pictogram = GHSPictogram.NATURE,
+                                        pictogram = GHSPictogram.Skull,
+                                        selected = ghsPictograms
+                                    )
+                                }
+
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                                ) {
+                                    GHSPictogram(
+                                        modifier = Modifier.weight(0.3f),
+                                        pictogram = GHSPictogram.Exclamation,
+                                        selected = ghsPictograms
+                                    )
+                                    GHSPictogram(
+                                        modifier = Modifier.weight(0.3f),
+                                        pictogram = GHSPictogram.Silhouette,
+                                        selected = ghsPictograms
+                                    )
+                                    GHSPictogram(
+                                        modifier = Modifier.weight(0.3f),
+                                        pictogram = GHSPictogram.Nature,
                                         selected = ghsPictograms
                                     )
                                 }

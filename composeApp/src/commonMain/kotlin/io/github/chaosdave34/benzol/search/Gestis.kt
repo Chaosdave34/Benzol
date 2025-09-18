@@ -70,10 +70,10 @@ object Gestis {
     )
 
     enum class SearchType(val stringResource: StringResource, val parameterName: String) {
-        CHEMICAL_NAME(Res.string.chemical_name, "stoffname"),
-        MOLECULAR_FORMULA(Res.string.molecular_formula, "summenformel"),
-        CAS_NUMBER(Res.string.number, "nummern"),
-        FULL_TEXT(Res.string.full_text, "volltextsuche")
+        ChemicalName(Res.string.chemical_name, "stoffname"),
+        MolecularFormula(Res.string.molecular_formula, "summenformel"),
+        CasNumber(Res.string.number, "nummern"),
+        FullText(Res.string.full_text, "volltextsuche")
     }
 
     @Serializable

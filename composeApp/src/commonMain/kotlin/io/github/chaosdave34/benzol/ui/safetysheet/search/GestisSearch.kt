@@ -41,7 +41,7 @@ fun GestisSearch(
     val allowedSearchTypes = rememberSaveable { Gestis.SearchType.entries.toMutableStateList() }
     val searchArguments = rememberSaveable { mutableStateListOf(Gestis.SearchArgument(allowedSearchTypes.removeFirst(), "")) }
 
-    var searchState by rememberSaveable { mutableStateOf(SearchState.INPUT) }
+    var searchState by rememberSaveable { mutableStateOf(SearchState.Input) }
 
     var exactSearch by rememberSaveable { mutableStateOf(false) }
     var searchResults by rememberSaveable { mutableStateOf(listOf<Gestis.SearchResult>()) }
@@ -60,25 +60,25 @@ fun GestisSearch(
     }
 
     LaunchedEffect(searchState, exactSearch) {
-        if (searchState == SearchState.SEARCH) {
+        if (searchState == SearchState.Search) {
             val search = Gestis.search(Gestis.Search(searchArguments, exactSearch))
 
             if (search == null) {
-                searchState = SearchState.ERROR
+                searchState = SearchState.Error
             } else {
                 searchResults = search
-                searchState = SearchState.SUCCESS
+                searchState = SearchState.Success
             }
         }
     }
 
-    if (searchState != SearchState.INPUT) {
+    if (searchState != SearchState.Input) {
         val alreadyExists = stringResource(Res.string.substance_exists)
 
         SearchDialog(
             searchState = searchState,
             searchResults = searchResults,
-            onDismissRequest = { searchState = SearchState.INPUT },
+            onDismissRequest = { searchState = SearchState.Input },
             onSelectResult = { result ->
                 if (result.casNumber in currentCasNumbers) {
                     scope.launch {
@@ -88,7 +88,7 @@ fun GestisSearch(
                     selectedResult = result
                 }
 
-                searchState = SearchState.INPUT
+                searchState = SearchState.Input
 
                 searchArguments.forEach {
                     it.value = ""
@@ -99,7 +99,7 @@ fun GestisSearch(
             exactSearch = exactSearch,
             onExactSearchChange = {
                 exactSearch = it
-                searchState = SearchState.SEARCH
+                searchState = SearchState.Search
             }
         )
     }
@@ -120,7 +120,7 @@ fun GestisSearch(
                 var suggestions by rememberSaveable { mutableStateOf(emptyList<String>()) }
 
                 LaunchedEffect(argument, searchState) {
-                    if (argument.value.length >= 3 && searchState == SearchState.INPUT) {
+                    if (argument.value.length >= 3 && searchState == SearchState.Input) {
                         suggestions = Gestis.getSearchSuggestions(argument)
                         if (suggestions.isNotEmpty()) suggestionsExpanded = true
                     } else {
@@ -180,7 +180,7 @@ fun GestisSearch(
                                 .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
                                 .onKeyEvent { event ->
                                     if (event.key == Key.Enter) {
-                                        searchState = SearchState.SEARCH
+                                        searchState = SearchState.Search
                                         suggestionsExpanded = false
                                         return@onKeyEvent true
                                     }
@@ -236,7 +236,7 @@ fun GestisSearch(
             }
 
             Button(
-                onClick = { searchState = SearchState.SEARCH },
+                onClick = { searchState = SearchState.Search },
             ) { Text(stringResource(Res.string.do_search)) }
 
             Spacer(Modifier.width(ButtonDefaults.MinWidth))
@@ -304,18 +304,18 @@ private fun SearchDialog(
                     val scrollState = rememberScrollState()
 
                     when (searchState) {
-                        SearchState.INPUT -> {}
-                        SearchState.SEARCH -> Loading(scrollState)
-                        SearchState.SUCCESS -> SearchResults(
+                        SearchState.Input -> {}
+                        SearchState.Search -> Loading(scrollState)
+                        SearchState.Success -> SearchResults(
                             searchResult = searchResults,
                             onSelectResult = onSelectResult,
                             scrollState = scrollState
                         )
 
-                        SearchState.ERROR -> Error(scrollState)
+                        SearchState.Error -> Error(scrollState)
                     }
 
-                    if (!(searchState == SearchState.SEARCH && searchResults.isNotEmpty())) {
+                    if (!(searchState == SearchState.Search && searchResults.isNotEmpty())) {
                         CustomScrollbar(
                             scrollState = scrollState,
                             offset = 12.dp
@@ -398,8 +398,8 @@ private fun BoxScope.SearchResults(
 }
 
 private enum class SearchState {
-    INPUT,
-    SEARCH,
-    SUCCESS,
-    ERROR,
+    Input,
+    Search,
+    Success,
+    Error,
 }

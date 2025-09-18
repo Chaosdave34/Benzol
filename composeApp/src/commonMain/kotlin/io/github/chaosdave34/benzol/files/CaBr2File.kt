@@ -90,15 +90,15 @@ object CaBr2File {
 
                 fun ghsPictogramToSymbols(ghsPictogram: GHSPictogram): String {
                     return when (ghsPictogram) {
-                        GHSPictogram.EXPLOSION -> "ghs01"
-                        GHSPictogram.FLAME -> "ghs02"
-                        GHSPictogram.FLAME_OVER_CIRCLE -> "ghs03"
-                        GHSPictogram.GAS_BOTTLE -> "ghs04"
-                        GHSPictogram.ACID -> "ghs05"
-                        GHSPictogram.SKULL -> "ghs06"
-                        GHSPictogram.EXCLAMATION -> "ghs07"
-                        GHSPictogram.SILHOUETTE -> "ghs08"
-                        GHSPictogram.NATURE -> "ghs09"
+                        GHSPictogram.Explosion -> "ghs01"
+                        GHSPictogram.Flame -> "ghs02"
+                        GHSPictogram.FlameOverCircle -> "ghs03"
+                        GHSPictogram.GasBottle -> "ghs04"
+                        GHSPictogram.Acid -> "ghs05"
+                        GHSPictogram.Skull -> "ghs06"
+                        GHSPictogram.Exclamation -> "ghs07"
+                        GHSPictogram.Silhouette -> "ghs08"
+                        GHSPictogram.Nature -> "ghs09"
                     }
                 }
             }

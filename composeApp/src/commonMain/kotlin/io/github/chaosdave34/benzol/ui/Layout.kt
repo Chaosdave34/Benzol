@@ -27,12 +27,12 @@ fun Layout(
     val uiState by viewModel.uiState.collectAsState()
 
     val navController = rememberNavController()
-    val startDestination = Destination.SHEET
+    val startDestination = Destination.Sheet
 
     var toolbarVisible by rememberSaveable { mutableStateOf(true) }
 
     navController.addOnDestinationChangedListener { _, destination, _ ->
-        toolbarVisible = destination.route in listOf(Destination.SHEET, Destination.PREVIEW).map { it.route }
+        toolbarVisible = destination.route in listOf(Destination.Sheet, Destination.Preview).map { it.route }
     }
 
     MaterialExpressiveTheme(
@@ -95,10 +95,10 @@ private fun AppNavHost(
         Destination.entries.forEach { destination ->
             composable(destination.route) {
                 when (destination) {
-                    Destination.SHEET -> SafetySheetPage(viewModel)
-                    Destination.PREVIEW -> PreviewPage(viewModel)
+                    Destination.Sheet -> SafetySheetPage(viewModel)
+                    Destination.Preview -> PreviewPage(viewModel)
                     Destination.Settings -> SettingsPage(viewModel)
-                    Destination.ABOUT -> AboutPage()
+                    Destination.About -> AboutPage()
                 }
             }
         }
