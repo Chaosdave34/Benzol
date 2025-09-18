@@ -115,4 +115,6 @@ private fun downloadFile(file: ByteArray, fileName: String) {
     a.href = URL.createObjectURL(file)
     a.download = fileName
     a.click()
+
+    URL.revokeObjectURL(a.href)
 }
