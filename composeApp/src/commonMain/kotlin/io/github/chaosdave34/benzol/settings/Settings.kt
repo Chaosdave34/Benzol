@@ -10,12 +10,20 @@ class Settings() {
     private val disclaimerConfirmedKey = "disclaimer_confirmed"
     private val exportUrlKey = "export_url"
 
+    private val lastUsedFolderOpenKey = "last_used_folder_open"
+    private val lastUsedFolderSaveKey = "last_used_folder_save"
+    private val lastUsedFolderExportKey = "last_used_folder_export"
+
     var theme by enumDelegate(themeKey, Theme.System)
     var language by enumDelegate(languageKey, SupportedLanguage.German)
     var disclaimerConfirmed by BooleanDelegate(disclaimerConfirmedKey, false)
     var exportUrl by StringDelegate(exportUrlKey, "")
 
-    class StringDelegate(val key: String, val default: String) : ReadWriteProperty<Settings, String> {
+    var lastUsedFolderOpen by StringDelegateNullable(lastUsedFolderOpenKey)
+    var lastUsedFolderSave by StringDelegateNullable(lastUsedFolderSaveKey)
+    var lastUsedFolderExport by StringDelegateNullable(lastUsedFolderExportKey)
+
+    private class StringDelegate(val key: String, val default: String) : ReadWriteProperty<Settings, String> {
         override fun getValue(thisRef: Settings, property: KProperty<*>): String {
             return getSetting(key) ?: default
         }
@@ -23,7 +31,17 @@ class Settings() {
         override fun setValue(thisRef: Settings, property: KProperty<*>, value: String) = setSetting(key, value)
     }
 
-    class BooleanDelegate(val key: String, val default: Boolean) : ReadWriteProperty<Settings, Boolean> {
+    private class StringDelegateNullable(val key: String) : ReadWriteProperty<Settings, String?> {
+        override fun getValue(thisRef: Settings, property: KProperty<*>): String? {
+            return getSetting(key)
+        }
+
+        override fun setValue(thisRef: Settings, property: KProperty<*>, value: String?) {
+            value?.let { setSetting(key, it) }
+        }
+    }
+
+    private class BooleanDelegate(val key: String, val default: Boolean) : ReadWriteProperty<Settings, Boolean> {
         override operator fun getValue(thisRef: Settings, property: KProperty<*>): Boolean {
             return getSetting(key)?.toBoolean() ?: default
         }
@@ -31,7 +49,7 @@ class Settings() {
         override operator fun setValue(thisRef: Settings, property: KProperty<*>, value: Boolean) = setSetting(key, value.toString())
     }
 
-    inline fun <reified T : Enum<T>> enumDelegate(key: String, default: T) = object : ReadWriteProperty<Settings, T> {
+    private inline fun <reified T : Enum<T>> enumDelegate(key: String, default: T) = object : ReadWriteProperty<Settings, T> {
         override fun getValue(thisRef: Settings, property: KProperty<*>): T {
             val value = getSetting(key) ?: return default
             return try {

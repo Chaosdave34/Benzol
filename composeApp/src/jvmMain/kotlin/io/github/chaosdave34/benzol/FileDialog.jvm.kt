@@ -6,9 +6,9 @@ import benzol.composeapp.generated.resources.Res
 import benzol.composeapp.generated.resources.export_file
 import benzol.composeapp.generated.resources.open_file
 import benzol.composeapp.generated.resources.save
-import io.github.chaosdave34.benzol.data.SafetySheetUiState
 import io.github.chaosdave34.benzol.files.HtmlFile
 import io.github.chaosdave34.benzol.files.htmlToPdf
+import io.github.chaosdave34.benzol.settings.Settings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,17 +16,11 @@ import org.jetbrains.compose.resources.stringResource
 import java.awt.FileDialog
 import java.awt.Frame
 import java.io.File
-import java.util.prefs.Preferences
-
-const val LAST_USED_FOLDER_OPEN = "last_used_folder_open"
-const val LAST_USED_FOLDER_SAVE = "last_used_folder_save"
-const val LAST_USED_FOLDER_EXPORT = "last_used_folder_export"
-
-private val preferences: Preferences = Preferences.userRoot().node("io.github.chaosdave34.benzol")
 
 @Composable
 actual fun FileChooser(
     coroutineScope: CoroutineScope,
+    settings: Settings,
     result: (String?, String) -> Unit,
     onClose: () -> Unit
 ) {
@@ -35,7 +29,7 @@ actual fun FileChooser(
         create = {
             object : FileDialog(null as Frame?, title, LOAD) {
                 init {
-                    directory = preferences.get(LAST_USED_FOLDER_OPEN, File(System.getProperty("user.home")).absolutePath)
+                    directory = settings.lastUsedFolderOpen ?: System.getProperty("user.home")
                 }
 
                 override fun setVisible(visible: Boolean) {
@@ -46,7 +40,7 @@ actual fun FileChooser(
                                 result(File(directory + file).readText(), file)
                                 onClose()
                             }
-                            preferences.put(LAST_USED_FOLDER_OPEN, directory)
+                            settings.lastUsedFolderOpen = directory
                         } else {
                             onClose()
                         }
@@ -61,6 +55,7 @@ actual fun FileChooser(
 @Composable
 actual fun FileSaver(
     coroutineScope: CoroutineScope,
+    settings: Settings,
     output: () -> Pair<String, String>,
     onClose: () -> Unit
 ) {
@@ -71,7 +66,7 @@ actual fun FileSaver(
         create = {
             object : FileDialog(null as Frame?, title, SAVE) {
                 init {
-                    directory = preferences.get(LAST_USED_FOLDER_SAVE, File(System.getProperty("user.home")).absolutePath)
+                    directory = settings.lastUsedFolderSave ?: System.getProperty("user.home")
                     file = output.second
                 }
 
@@ -83,7 +78,7 @@ actual fun FileSaver(
                                 File(directory, file).writeText(output.first)
                                 onClose()
                             }
-                            preferences.put(LAST_USED_FOLDER_SAVE, directory)
+                            settings.lastUsedFolderSave = directory
                         } else {
                             onClose()
                         }
@@ -98,7 +93,7 @@ actual fun FileSaver(
 @Composable
 actual fun PdfExport(
     coroutineScope: CoroutineScope,
-    safetySheetUiState: SafetySheetUiState,
+    settings: Settings,
     output: () -> Pair<HtmlFile, String>,
     onClose: (Boolean) -> Unit
 ) {
@@ -109,7 +104,7 @@ actual fun PdfExport(
         create = {
             object : FileDialog(null as Frame?, title, SAVE) {
                 init {
-                    directory = preferences.get(LAST_USED_FOLDER_EXPORT, File(System.getProperty("user.home")).absolutePath)
+                    directory = settings.lastUsedFolderExport ?: System.getProperty("user.home")
                     file = output.second
                 }
 
@@ -123,7 +118,7 @@ actual fun PdfExport(
                                 File(directory, file).writeBytes(byteArray)
                                 onClose(true)
                             }
-                            preferences.put(LAST_USED_FOLDER_EXPORT, directory)
+                            settings.lastUsedFolderExport = directory
                         } else {
                             onClose(false)
                         }

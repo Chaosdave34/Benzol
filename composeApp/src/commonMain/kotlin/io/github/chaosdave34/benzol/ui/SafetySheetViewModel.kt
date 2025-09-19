@@ -20,7 +20,7 @@ import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.getStringArray
 
 class SafetySheetViewModel : ViewModel() {
-    private val settings = Settings()
+    val settings = Settings()
 
     private val _uiState: MutableStateFlow<SafetySheetUiState> = MutableStateFlow(SafetySheetUiState(settings))
     val uiState: StateFlow<SafetySheetUiState> = _uiState.asStateFlow()

@@ -5,10 +5,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import benzol.composeapp.generated.resources.*
-import io.github.chaosdave34.benzol.data.SafetySheetUiState
 import io.github.chaosdave34.benzol.files.CaBr2File
 import io.github.chaosdave34.benzol.files.HtmlFile
 import io.github.chaosdave34.benzol.files.InputData
+import io.github.chaosdave34.benzol.settings.Settings
 import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -34,6 +34,7 @@ fun FileDialogs(
     if (uiState.fileChooserVisible) {
         FileChooser(
             coroutineScope = scope,
+            settings = viewModel.settings,
             result = { json, fileName ->
                 if (json != null) {
                     val caBr2File = CaBr2File.fromJson(json)
@@ -71,6 +72,7 @@ fun FileDialogs(
     if (uiState.fileSaverVisible) { // Only trim input, linebreaks should be saved
         FileSaver(
             coroutineScope = scope,
+            settings = viewModel.settings,
             output = {
                 val inputData = viewModel.exportInput()
 
@@ -104,7 +106,7 @@ fun FileDialogs(
     if (uiState.pdfExportVisible) { // Trim input and remove linebreaks
         PdfExport(
             coroutineScope = scope,
-            safetySheetUiState = uiState,
+            settings = viewModel.settings,
             output = {
                 val inputData = viewModel.exportInput()
 
@@ -142,6 +144,7 @@ fun FileDialogs(
 @Composable
 expect fun FileChooser(
     coroutineScope: CoroutineScope,
+    settings: Settings,
     result: (String?, String) -> Unit,
     onClose: () -> Unit
 )
@@ -149,6 +152,7 @@ expect fun FileChooser(
 @Composable
 expect fun FileSaver(
     coroutineScope: CoroutineScope,
+    settings: Settings,
     output: () -> Pair<String, String>,
     onClose: () -> Unit,
 )
@@ -156,7 +160,7 @@ expect fun FileSaver(
 @Composable
 expect fun PdfExport(
     coroutineScope: CoroutineScope,
-    safetySheetUiState: SafetySheetUiState,
+    settings: Settings,
     output: () -> Pair<HtmlFile, String>,
     onClose: (Boolean) -> Unit
 )

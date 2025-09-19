@@ -3,6 +3,7 @@ package io.github.chaosdave34.benzol
 import androidx.compose.runtime.Composable
 import io.github.chaosdave34.benzol.data.SafetySheetUiState
 import io.github.chaosdave34.benzol.files.HtmlFile
+import io.github.chaosdave34.benzol.settings.Settings
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
@@ -23,6 +24,7 @@ private val client = HttpClient()
 @Composable
 actual fun FileChooser(
     coroutineScope: CoroutineScope,
+    settings: Settings,
     result: (String?, String) -> Unit,
     onClose: () -> Unit
 ) {
@@ -64,6 +66,7 @@ actual fun FileChooser(
 @Composable
 actual fun FileSaver(
     coroutineScope: CoroutineScope,
+    settings: Settings,
     output: () -> Pair<String, String>,
     onClose: () -> Unit
 ) {
@@ -78,14 +81,14 @@ actual fun FileSaver(
 @Composable
 actual fun PdfExport(
     coroutineScope: CoroutineScope,
-    safetySheetUiState: SafetySheetUiState,
+    settings: Settings,
     output: () -> Pair<HtmlFile, String>,
     onClose: (Boolean) -> Unit
 ) {
     coroutineScope.launch {
         val output = output()
         val response = try {
-            client.post(safetySheetUiState.exportUrl) {
+            client.post(settings.exportUrl) {
                 setBody(output.first.create())
             }
         } catch (_: Throwable) {
