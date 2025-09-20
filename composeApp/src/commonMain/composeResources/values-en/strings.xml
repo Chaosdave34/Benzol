@@ -2,9 +2,13 @@
     <string name="title">Benzol</string>
 
     <string name="new_file">New safety datasheet</string>
-    <string name="open_file">Open safety datasheet</string>
-    <string name="save">Save</string>
+    <string name="open_file">Open file</string>
+    <string name="save_file">Save file</string>
     <string name="export_file">Export as PDF</string>
+
+    <string name="save">Save</string>
+    <string name="general">General</string>
+    <string name="properties">Properties</string>
 
     <string name="settings">Settings</string>
 

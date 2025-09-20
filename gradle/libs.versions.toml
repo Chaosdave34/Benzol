@@ -11,6 +11,7 @@ logback = "1.5.18"
 kotlinx-html = "0.12.0"
 kotlinx-serialization = "1.9.0"
 androidx-navigation = "2.9.0"
+material3-adaptive = "1.2.0-alpha06"
 
 openhtmltopdf = "1.1.31"
 ksoup = "0.2.5"
@@ -35,6 +36,7 @@ kotlinx-html = { module = "org.jetbrains.kotlinx:kotlinx-html", version.ref = "k
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 androidx-navigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
 ktor-serverCors = { module = "io.ktor:ktor-server-cors", version.ref = "ktor" }
+compose-material3Adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version.ref = "material3-adaptive" }
 
 openhtmltopdf-core = { module = "io.github.openhtmltopdf:openhtmltopdf-core", version.ref = "openhtmltopdf" }
 openhtmltopdf-pdfbox = { module = "io.github.openhtmltopdf:openhtmltopdf-pdfbox", version.ref = "openhtmltopdf" }

@@ -1,6 +1,5 @@
 package io.github.chaosdave34.benzol.ui.safetysheet.search
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
@@ -21,7 +20,6 @@ fun SubstanceSearch(
 
     PrimaryTabRow(
         selectedTabIndex = selectedSearchIndex,
-        containerColor = MaterialTheme.colorScheme.surfaceContainer
     ) {
         Tab(
             selected = selectedSearchIndex == 0,

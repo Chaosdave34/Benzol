@@ -18,9 +18,7 @@ import org.jetbrains.compose.resources.stringResource
 fun SafetySheetPage(
     viewModel: SafetySheetViewModel,
 ) {
-    val scope = rememberCoroutineScope()
     val inputState by viewModel.inputState.collectAsState()
-    val snackbarHostState by viewModel.snackbarHostState.collectAsState()
 
     val substances by viewModel.substances.collectAsState()
     val humanAndEnvironmentDanger by viewModel.humanAndEnvironmentDanger.collectAsState()
@@ -34,7 +32,7 @@ fun SafetySheetPage(
     EditSubstanceDialog(
         visible = editSubstanceDialogVisible,
         substance = substances.getOrNull(selectedSubstance),
-        onDissmissRequest = { editSubstanceDialogVisible = false },
+        onDismissRequest = { editSubstanceDialogVisible = false },
         onEdit = {
             substances[selectedSubstance] = it
             editSubstanceDialogVisible = false
@@ -43,12 +41,11 @@ fun SafetySheetPage(
 
     AppPageBox(
         Modifier.fillMaxWidth(),
-        title = stringResource(Res.string.sheet),
         contentAlignment = Alignment.TopCenter
     ) { scrollState ->
         Column(
             Modifier
-                .widthIn(min = 600.dp, max = 1200.dp)
+                .widthIn(min = 600.dp, max = 1300.dp) // Todo use adaptive
                 .fillMaxWidth(0.8f)
                 .verticalScroll(scrollState),
             verticalArrangement = Arrangement.spacedBy(24.dp)

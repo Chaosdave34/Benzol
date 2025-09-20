@@ -1,7 +1,9 @@
 package io.github.chaosdave34.benzol.ui.about
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -10,13 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.Res
-import benzol.composeapp.generated.resources.about
 import benzol.composeapp.generated.resources.disclaimer
 import benzol.composeapp.generated.resources.github
 import io.github.chaosdave34.benzol.ui.AppPageBox
 import io.github.chaosdave34.benzol.ui.Section
+import io.github.chaosdave34.benzol.ui.adaptive.AdaptivePageColumn
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -26,14 +27,10 @@ fun AboutPage() {
 
     AppPageBox(
         Modifier.fillMaxWidth(),
-        title = stringResource(Res.string.about),
         contentAlignment = Alignment.TopCenter,
     ) { scrollState ->
-        Column(
-            Modifier
-                .verticalScroll(scrollState)
-                .fillMaxWidth(0.5f),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+        AdaptivePageColumn(
+            scrollState = scrollState
         ) {
             Section(
                 horizontalAlignment = Alignment.CenterHorizontally

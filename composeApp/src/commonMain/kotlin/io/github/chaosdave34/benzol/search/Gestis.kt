@@ -114,7 +114,6 @@ object Gestis {
             )
         }
 
-
         private fun getCas(): String {
             val chapter = getChapter("0100", "0100").getContent()
 

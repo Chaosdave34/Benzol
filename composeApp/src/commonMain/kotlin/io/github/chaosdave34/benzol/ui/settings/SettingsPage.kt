@@ -1,18 +1,22 @@
 package io.github.chaosdave34.benzol.ui.settings
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import benzol.composeapp.generated.resources.*
+import androidx.window.core.layout.WindowSizeClass
+import benzol.composeapp.generated.resources.Res
+import benzol.composeapp.generated.resources.export_url
+import benzol.composeapp.generated.resources.language
+import benzol.composeapp.generated.resources.theme
 import io.github.chaosdave34.benzol.SupportedLanguage
 import io.github.chaosdave34.benzol.settings.Theme
 import io.github.chaosdave34.benzol.ui.AppPageBox
 import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 import io.github.chaosdave34.benzol.ui.Section
+import io.github.chaosdave34.benzol.ui.adaptive.AdaptivePageColumn
 import io.ktor.util.*
 import org.jetbrains.compose.resources.stringResource
 
@@ -25,13 +29,10 @@ fun SettingsPage(
     AppPageBox(
         Modifier.fillMaxWidth(),
         contentAlignment = Alignment.TopCenter,
-        title = stringResource(Res.string.settings)
     ) { scrollState ->
-        Column(
-            Modifier
-                .verticalScroll(scrollState)
-                .width(IntrinsicSize.Min),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+        AdaptivePageColumn(
+            scrollState = scrollState,
+            maxWidth = WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND.dp
         ) {
             Section(
                 horizontalAlignment = Alignment.CenterHorizontally

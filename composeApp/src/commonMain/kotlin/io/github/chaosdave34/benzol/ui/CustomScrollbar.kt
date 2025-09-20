@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun BoxScope.CustomScrollbar(
     scrollState: ScrollState,
-    offset: Dp = 24.dp
+    offset: Dp = 12.dp
 ) {
     VerticalScrollbar(
         modifier = Modifier
@@ -37,7 +37,7 @@ fun BoxScope.CustomScrollbar(
 @Composable
 fun BoxScope.CustomScrollbar(
     lazyListState: LazyListState,
-    offset: Dp = 24.dp
+    offset: Dp = 12.dp
 ) {
     VerticalScrollbar(
         modifier = Modifier

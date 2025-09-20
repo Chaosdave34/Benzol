@@ -1,74 +1,84 @@
 package io.github.chaosdave34.benzol.ui
 
 import androidx.compose.animation.*
-import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.offset
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ClearAll
-import androidx.compose.material.icons.filled.FileOpen
-import androidx.compose.material.icons.filled.PictureAsPdf
-import androidx.compose.material.icons.filled.Save
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.material3.FloatingToolbarDefaults.ScreenOffset
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
+import androidx.compose.material3.ToggleFloatingActionButtonDefaults.animateIcon
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import benzol.composeapp.generated.resources.*
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun BoxScope.Toolbar(
+fun FloatingActionButtonMenu(
     visible: Boolean,
     viewModel: SafetySheetViewModel
 ) {
     val scope = rememberCoroutineScope()
+    var expanded by remember { mutableStateOf(false) }
 
     AnimatedVisibility(
-        modifier = Modifier
-            .align(Alignment.CenterEnd)
-            .offset(x = -ScreenOffset),
         visible = visible,
-        enter = slideInHorizontally { fullWidth ->
+        enter = slideInVertically { fullWidth ->
             fullWidth + ScreenOffset.value.toInt()
         } + fadeIn(),
-        exit = slideOutHorizontally { fullWidth ->
+        exit = slideOutVertically { fullWidth ->
             fullWidth + ScreenOffset.value.toInt()
         } + fadeOut()
     ) {
-        VerticalFloatingToolbar(
-            expanded = false,
-            colors = FloatingToolbarDefaults.vibrantFloatingToolbarColors()
+        FloatingActionButtonMenu(
+            expanded = expanded,
+            button = {
+                ToggleFloatingActionButton(
+                    checked = expanded,
+                    onCheckedChange = { expanded = it },
+                ) {
+                    val imageVector by remember {
+                        derivedStateOf {
+                            if (checkedProgress > 0.5f) Icons.Filled.Close else Icons.Filled.Add
+                        }
+                    }
+
+                    Icon(
+                        painter = rememberVectorPainter(imageVector),
+                        contentDescription = null,
+                        modifier = Modifier.animateIcon({ checkedProgress }),
+                    )
+                }
+            }
         ) {
-            ToolbarButton(
+            FabButton(
                 onClick = {
                     viewModel.resetInput()
                     scope.launch {
                         viewModel.setDefaultInputValues()
                     }
                 },
-                tooltip = stringResource(Res.string.new_file),
+                text = stringResource(Res.string.new_file),
                 imageVector = Icons.Filled.ClearAll,
                 contentDescription = stringResource(Res.string.new_file)
             )
-            ToolbarButton(
+            FabButton(
                 onClick = viewModel::openFileChooser,
-                tooltip = stringResource(Res.string.open_file),
+                text = stringResource(Res.string.open_file),
                 imageVector = Icons.Filled.FileOpen,
                 contentDescription = stringResource(Res.string.new_file)
             )
-            ToolbarButton(
+            FabButton(
                 onClick = viewModel::openFileSaver,
-                tooltip = stringResource(Res.string.save_file),
+                text = stringResource(Res.string.save_file),
                 imageVector = Icons.Filled.Save,
                 contentDescription = stringResource(Res.string.save_file)
             )
-            ToolbarButton(
+            FabButton(
                 onClick = viewModel::openPdfExport,
-                tooltip = stringResource(Res.string.export_file),
+                text = stringResource(Res.string.export_file),
                 imageVector = Icons.Filled.PictureAsPdf,
                 contentDescription = stringResource(Res.string.export_file)
             )
@@ -76,27 +86,21 @@ fun BoxScope.Toolbar(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-private fun ToolbarButton(
+private fun FloatingActionButtonMenuScope.FabButton(
     onClick: () -> Unit,
-    tooltip: String,
+    text: String,
     imageVector: ImageVector,
     contentDescription: String
 ) {
-    TooltipBox(
-        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
-        tooltip = {
-            PlainTooltip {
-                Text(tooltip)
-            }
-        },
-        state = rememberTooltipState()
-    ) {
-        IconButton(
-            onClick = onClick
-        ) {
+    FloatingActionButtonMenuItem(
+        onClick = onClick,
+        icon = {
             Icon(imageVector, contentDescription = contentDescription)
+        },
+        text = {
+            Text(text)
         }
-    }
+    )
 }

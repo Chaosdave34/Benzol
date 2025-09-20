@@ -5,7 +5,7 @@ import androidx.compose.ui.awt.AwtWindow
 import benzol.composeapp.generated.resources.Res
 import benzol.composeapp.generated.resources.export_file
 import benzol.composeapp.generated.resources.open_file
-import benzol.composeapp.generated.resources.save
+import benzol.composeapp.generated.resources.save_file
 import io.github.chaosdave34.benzol.files.HtmlFile
 import io.github.chaosdave34.benzol.files.htmlToPdf
 import io.github.chaosdave34.benzol.settings.Settings
@@ -61,7 +61,7 @@ actual fun FileSaver(
 ) {
     val output = output()
 
-    val title = stringResource(Res.string.save)
+    val title = stringResource(Res.string.save_file)
     AwtWindow(
         create = {
             object : FileDialog(null as Frame?, title, SAVE) {

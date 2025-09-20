@@ -2,9 +2,13 @@
     <string name="title">Benzol</string>
 
     <string name="new_file">Neue Betriebsanweisung</string>
-    <string name="open_file">Betriebsanweisung öffnen</string>
+    <string name="open_file">Datei öffnen</string>
+    <string name="save_file">Datei Speichern</string>
+    <string name="export_file">PDF exportieren</string>
+
     <string name="save">Speichern</string>
-    <string name="export_file">Als PDF exportieren</string>
+    <string name="general">Allgemein</string>
+    <string name="properties">Eigenschaften</string>
 
     <string name="settings">Einstellungen</string>
 

@@ -1,10 +1,13 @@
 package io.github.chaosdave34.benzol.ui.safetysheet.search
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Delete
@@ -24,6 +27,7 @@ import io.github.chaosdave34.benzol.Substance
 import io.github.chaosdave34.benzol.search.Gestis
 import io.github.chaosdave34.benzol.ui.CustomScrollbar
 import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
+import io.github.chaosdave34.benzol.ui.adaptive.AdaptiveDialog
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
@@ -135,11 +139,12 @@ fun GestisSearch(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     ExposedDropdownMenuBox(
+                        modifier = Modifier.weight(0.4f),
                         expanded = dropdownExpanded,
                         onExpandedChange = { dropdownExpanded = it }
                     ) {
                         OutlinedTextField(
-                            modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+                            modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable).fillMaxWidth(),
                             value = stringResource(argument.searchType.stringResource),
                             readOnly = true,
                             onValueChange = {},
@@ -169,7 +174,7 @@ fun GestisSearch(
                     }
 
                     ExposedDropdownMenuBox(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.weight(0.6f),
                         expanded = suggestionsExpanded,
                         onExpandedChange = { suggestionsExpanded = it }
                     ) {
@@ -244,6 +249,7 @@ fun GestisSearch(
     }
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun SearchDialog(
     searchState: SearchState,
@@ -253,76 +259,37 @@ private fun SearchDialog(
     exactSearch: Boolean,
     onExactSearchChange: (Boolean) -> Unit
 ) {
-    Dialog(
-        onDismissRequest = onDismissRequest
-    ) {
-        Card(
-            Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.7f)
-        ) {
-            Scaffold(
-                Modifier.fillMaxWidth(),
-                containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                topBar = {
-                    Text(
-                        modifier = Modifier.padding(12.dp),
-                        text = stringResource(Res.string.search_results),
-                        style = MaterialTheme.typography.titleLarge
-                    )
-                },
-                bottomBar = {
-                    Row(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(12.dp),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(stringResource(Res.string.exact_search))
-                        Switch(
-                            checked = exactSearch,
-                            onCheckedChange = onExactSearchChange
-                        )
-
-                        Spacer(Modifier.weight(1f))
-
-                        TextButton(
-                            onClick = onDismissRequest
-                        ) {
-                            Text(stringResource(Res.string.close))
-                        }
-                    }
-                }
-            ) { contentPadding ->
-                Box(
-                    Modifier
-                        .padding(contentPadding)
-                        .background(MaterialTheme.colorScheme.surface)
-                        .padding(12.dp)
-                ) {
-                    val scrollState = rememberScrollState()
-
-                    when (searchState) {
-                        SearchState.Input -> {}
-                        SearchState.Search -> Loading(scrollState)
-                        SearchState.Success -> SearchResults(
-                            searchResult = searchResults,
-                            onSelectResult = onSelectResult,
-                            scrollState = scrollState
-                        )
-
-                        SearchState.Error -> Error(scrollState)
-                    }
-
-                    if (!(searchState == SearchState.Search && searchResults.isNotEmpty())) {
-                        CustomScrollbar(
-                            scrollState = scrollState,
-                            offset = 12.dp
-                        )
-                    }
-                }
+    AdaptiveDialog(
+        title = stringResource(Res.string.search_results),
+        onDismissRequest = onDismissRequest,
+        actions = {
+            ToggleButton(
+                checked = exactSearch,
+                onCheckedChange = onExactSearchChange
+            ) {
+                Text(stringResource(Res.string.exact_search))
             }
+        }
+    ) {
+        val scrollState = rememberScrollState()
+
+        when (searchState) {
+            SearchState.Input -> {}
+            SearchState.Search -> Loading(scrollState)
+            SearchState.Success -> SearchResults(
+                searchResult = searchResults,
+                onSelectResult = onSelectResult,
+                scrollState = scrollState
+            )
+
+            SearchState.Error -> Error(scrollState)
+        }
+
+        if (!(searchState == SearchState.Search && searchResults.isNotEmpty())) {
+            CustomScrollbar(
+                scrollState = scrollState,
+                offset = 12.dp
+            )
         }
     }
 }
@@ -375,7 +342,7 @@ private fun BoxScope.SearchResults(
         val lazyListState = rememberLazyListState()
         LazyColumn(
             Modifier.fillMaxHeight(),
-            verticalArrangement = Arrangement.spacedBy(24.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
             state = lazyListState
         ) {
             items(items = searchResult.sortedBy { it.rank }, key = { it.rank }) {
@@ -385,7 +352,6 @@ private fun BoxScope.SearchResults(
                     ),
                     headlineContent = { Text(it.name) },
                     supportingContent = { Text(it.casNumber ?: "-") },
-                    colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
                 )
             }
         }
