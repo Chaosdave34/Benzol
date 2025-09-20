@@ -11,22 +11,21 @@ import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.*
 import androidx.compose.material3.FloatingToolbarDefaults.ScreenOffset
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import benzol.composeapp.generated.resources.*
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun BoxScope.Toolbar(
     visible: Boolean,
-    viewModel: SafetySheetViewModel
+    onResetInput: () -> Unit,
+    onChooseFile: () -> Unit,
+    onSaveFile: () -> Unit,
+    onExportPdf: () -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
-
     AnimatedVisibility(
         modifier = Modifier
             .align(Alignment.CenterEnd)
@@ -44,30 +43,25 @@ fun BoxScope.Toolbar(
             colors = FloatingToolbarDefaults.vibrantFloatingToolbarColors()
         ) {
             ToolbarButton(
-                onClick = {
-                    viewModel.resetInput()
-                    scope.launch {
-                        viewModel.setDefaultInputValues()
-                    }
-                },
+                onClick = { onResetInput() },
                 tooltip = stringResource(Res.string.new_file),
                 imageVector = Icons.Filled.ClearAll,
                 contentDescription = stringResource(Res.string.new_file)
             )
             ToolbarButton(
-                onClick = viewModel::openFileChooser,
+                onClick = onChooseFile,
                 tooltip = stringResource(Res.string.open_file),
                 imageVector = Icons.Filled.FileOpen,
                 contentDescription = stringResource(Res.string.new_file)
             )
             ToolbarButton(
-                onClick = viewModel::openFileSaver,
+                onClick = onSaveFile,
                 tooltip = stringResource(Res.string.save_file),
                 imageVector = Icons.Filled.Save,
                 contentDescription = stringResource(Res.string.save_file)
             )
             ToolbarButton(
-                onClick = viewModel::openPdfExport,
+                onClick = onExportPdf,
                 tooltip = stringResource(Res.string.export_file),
                 imageVector = Icons.Filled.PictureAsPdf,
                 contentDescription = stringResource(Res.string.export_file)

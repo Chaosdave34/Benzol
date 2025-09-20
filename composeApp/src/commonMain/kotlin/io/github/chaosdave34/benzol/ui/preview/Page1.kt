@@ -6,15 +6,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.Substance
-import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
+import io.github.chaosdave34.benzol.data.SafetySheetInputState
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -23,16 +21,13 @@ import kotlin.text.Typography.nbsp
 @Composable
 fun Page1(
     modifier: Modifier = Modifier,
-    viewModel: SafetySheetViewModel,
+    inputState: SafetySheetInputState,
+    substances: List<Substance>
 ) {
     Page(
         modifier = modifier
     ) {
         val modifier = Modifier.fillMaxWidth().border(1.dp, MaterialTheme.colorScheme.outlineVariant).padding(10.dp)
-
-        val inputState by viewModel.inputState.collectAsState()
-        val substances by viewModel.substances.collectAsState()
-
 
         HeaderTitle(inputState.documentTitle)
         HeaderTitle(inputState.organisation)

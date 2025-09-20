@@ -1,15 +1,14 @@
 package io.github.chaosdave34.benzol
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import benzol.composeapp.generated.resources.*
+import io.github.chaosdave34.benzol.data.SafetySheetUiState
 import io.github.chaosdave34.benzol.files.CaBr2File
 import io.github.chaosdave34.benzol.files.HtmlFile
 import io.github.chaosdave34.benzol.files.InputData
 import io.github.chaosdave34.benzol.settings.Settings
-import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.rememberResourceEnvironment
@@ -17,13 +16,16 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun FileDialogs(
-    viewModel: SafetySheetViewModel,
+    uiState: SafetySheetUiState,
+    settings: Settings,
+    snackbarHostState: SnackbarHostState,
+    onImport: (InputData) -> Unit,
+    onExport: () -> InputData,
+    onCloseFileChooser: () -> Unit,
+    onCloseFileSaver: () -> Unit,
+    onClosePdfExport: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
-
-    val uiState by viewModel.uiState.collectAsState()
-    val snackbarHostState by viewModel.snackbarHostState.collectAsState()
-
     val resourceEnvironment = rememberResourceEnvironment()
 
     val unnamed = stringResource(Res.string.unnamed_file)
@@ -34,7 +36,7 @@ fun FileDialogs(
     if (uiState.fileChooserVisible) {
         FileChooser(
             coroutineScope = scope,
-            settings = viewModel.settings,
+            settings = settings,
             result = { json, fileName ->
                 if (json != null) {
                     val caBr2File = CaBr2File.fromJson(json)
@@ -57,25 +59,24 @@ fun FileDialogs(
                             disposal = caBr2File.disposal
                         )
 
-                        viewModel.importInput(inputDate)
+                        onImport(inputDate)
                         return@FileChooser
                     }
                 }
                 scope.launch {
-                    viewModel.snackbarHostState.value.showSnackbar(failedToLoadFile)
+                    snackbarHostState.showSnackbar(failedToLoadFile)
                 }
             },
-            onClose = viewModel::closeFileChooser
+            onClose = onCloseFileChooser
         )
     }
 
     if (uiState.fileSaverVisible) { // Only trim input, linebreaks should be saved
         FileSaver(
             coroutineScope = scope,
-            settings = viewModel.settings,
+            settings = settings,
             output = {
-                val inputData = viewModel.exportInput()
-
+                val inputData = onExport()
                 val header = CaBr2File.CaBr2Data.Header(
                     inputData.documentTitle.trim(),
                     inputData.organisation.trim(),
@@ -99,16 +100,16 @@ fun FileDialogs(
 
                 Pair(CaBr2File.toJson(content), fileName)
             },
-            onClose = viewModel::closeFileSaver
+            onClose = onCloseFileSaver
         )
     }
 
     if (uiState.pdfExportVisible) { // Trim input and remove linebreaks
         PdfExport(
             coroutineScope = scope,
-            settings = viewModel.settings,
+            settings = settings,
             output = {
-                val inputData = viewModel.exportInput()
+                val inputData = onExport()
 
                 val htmlFile = HtmlFile(
                     inputData.documentTitle.trim(),
@@ -131,7 +132,7 @@ fun FileDialogs(
                 Pair(htmlFile, fileName)
             },
             onClose = { success ->
-                viewModel.closePdfExport()
+                onClosePdfExport()
                 scope.launch {
                     snackbarHostState.showSnackbar(if (success) pdfExportSuccess else pdfExportFailed)
                 }

@@ -26,7 +26,6 @@ import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.Substance
 import io.github.chaosdave34.benzol.search.Gestis
 import io.github.chaosdave34.benzol.ui.CustomScrollbar
-import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 import io.github.chaosdave34.benzol.ui.adaptive.AdaptiveDialog
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
@@ -35,12 +34,11 @@ import org.jetbrains.compose.resources.stringResource
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun GestisSearch(
-    viewModel: SafetySheetViewModel,
+    snackbarHostState: SnackbarHostState,
     onResult: (Substance) -> Unit,
     currentCasNumbers: List<String>
 ) {
     val scope = rememberCoroutineScope()
-    val snackbarHostState by viewModel.snackbarHostState.collectAsState()
 
     val allowedSearchTypes = rememberSaveable { Gestis.SearchType.entries.toMutableStateList() }
     val searchArguments = rememberSaveable { mutableStateListOf(Gestis.SearchArgument(allowedSearchTypes.removeFirst(), "")) }

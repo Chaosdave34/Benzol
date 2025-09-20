@@ -3,29 +3,41 @@ package io.github.chaosdave34.benzol.ui.safetysheet
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.Substance
-import io.github.chaosdave34.benzol.ui.*
+import io.github.chaosdave34.benzol.data.SafetySheetInputState
+import io.github.chaosdave34.benzol.ui.AddListElementButton
+import io.github.chaosdave34.benzol.ui.AppPageBox
+import io.github.chaosdave34.benzol.ui.CustomTextField
+import io.github.chaosdave34.benzol.ui.Section
 import io.github.chaosdave34.benzol.ui.safetysheet.search.SubstanceSearch
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SafetySheetPage(
-    viewModel: SafetySheetViewModel,
+    snackbarHostState: SnackbarHostState,
+    inputState: SafetySheetInputState,
+    substances: SnapshotStateList<Substance>,
+    humanAndEnvironmentDanger: SnapshotStateList<String>,
+    rulesOfConduct: SnapshotStateList<String>,
+    inCaseOfDanger: SnapshotStateList<String>,
+    disposal: SnapshotStateList<String>,
+    onFilenameChange: (String) -> Unit,
+    onDocumentTitleChange: (String) -> Unit,
+    onOrganisationChange: (String) -> Unit,
+    onCourseChange: (String) -> Unit,
+    onNameChange: (String) -> Unit,
+    onPlaceChange: (String) -> Unit,
+    onAssistantChange: (String) -> Unit,
+    onPreparationChange: (String) -> Unit,
 ) {
-    val inputState by viewModel.inputState.collectAsState()
-
-    val substances by viewModel.substances.collectAsState()
-    val humanAndEnvironmentDanger by viewModel.humanAndEnvironmentDanger.collectAsState()
-    val rulesOfConduct by viewModel.rulesOfConduct.collectAsState()
-    val inCaseOfDanger by viewModel.inCaseOfDanger.collectAsState()
-    val disposal by viewModel.disposal.collectAsState()
-
     var editSubstanceDialogVisible by rememberSaveable { mutableStateOf(false) }
     var selectedSubstance by remember { mutableIntStateOf(0) }
 
@@ -53,8 +65,8 @@ fun SafetySheetPage(
             Section {
                 CustomTextField(
                     value = inputState.filename,
-                    onValueChange = viewModel::setFilename,
-                    label = Res.string.filename
+                    onValueChange = onFilenameChange,
+                    label = stringResource(Res.string.filename)
                 )
                 HorizontalDivider(
                     modifier = Modifier.padding(vertical = 10.dp),
@@ -62,18 +74,18 @@ fun SafetySheetPage(
                 )
                 CustomTextField(
                     value = inputState.documentTitle,
-                    onValueChange = viewModel::setDocumentTitle,
-                    label = Res.string.document_title
+                    onValueChange = onDocumentTitleChange,
+                    label = stringResource(Res.string.document_title)
                 )
                 CustomTextField(
                     value = inputState.organisation,
-                    onValueChange = viewModel::setOrganisation,
-                    label = Res.string.organisation
+                    onValueChange = onOrganisationChange,
+                    label = stringResource(Res.string.organisation)
                 )
                 CustomTextField(
                     value = inputState.course,
-                    onValueChange = viewModel::setCourse,
-                    label = Res.string.course
+                    onValueChange = onCourseChange,
+                    label = stringResource(Res.string.course)
                 )
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -81,32 +93,32 @@ fun SafetySheetPage(
                     CustomTextField(
                         modifier = Modifier.weight(0.33f),
                         value = inputState.name,
-                        onValueChange = viewModel::setName,
-                        label = Res.string.name
+                        onValueChange = onNameChange,
+                        label = stringResource(Res.string.name)
                     )
                     CustomTextField(
                         modifier = Modifier.weight(0.33f),
                         value = inputState.place,
-                        onValueChange = viewModel::setPlace,
-                        label = Res.string.place
+                        onValueChange = onPlaceChange,
+                        label = stringResource(Res.string.place)
                     )
                     CustomTextField(
                         modifier = Modifier.weight(0.33f),
                         value = inputState.assistant,
-                        onValueChange = viewModel::setAssistant,
-                        label = Res.string.assistant
+                        onValueChange = onAssistantChange,
+                        label = stringResource(Res.string.assistant)
                     )
                 }
                 CustomTextField(
                     value = inputState.preparation,
-                    onValueChange = viewModel::setPreparation,
-                    label = Res.string.preparation
+                    onValueChange = onPreparationChange,
+                    label = stringResource(Res.string.preparation)
                 )
             }
 
             Section {
                 SubstanceSearch(
-                    viewModel = viewModel,
+                    snackbarHostState = snackbarHostState,
                     onSearch = substances::add,
                     currentCasNumbers = substances.map { it.casNumber }
                 )

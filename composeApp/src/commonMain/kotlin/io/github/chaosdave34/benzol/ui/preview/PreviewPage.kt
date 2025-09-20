@@ -10,12 +10,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.window.core.layout.WindowSizeClass
+import io.github.chaosdave34.benzol.Substance
+import io.github.chaosdave34.benzol.data.SafetySheetInputState
 import io.github.chaosdave34.benzol.ui.AppPageBox
-import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 
 @Composable
 fun PreviewPage(
-    viewModel: SafetySheetViewModel
+    inputState: SafetySheetInputState,
+    substances: List<Substance>,
+    humanAndEnvironmentDanger: List<String>,
+    rulesOfConduct: List<String>,
+    inCaseOfDanger: List<String>,
+    disposal: List<String>
 ) {
     AppPageBox { scrollState ->
         val windowSizeClass = currentWindowAdaptiveInfo(true).windowSizeClass
@@ -28,11 +34,15 @@ fun PreviewPage(
             ) {
                 Page1(
                     modifier = Modifier.weight(1f),
-                    viewModel = viewModel
+                    inputState = inputState,
+                    substances = substances
                 )
                 Page2(
                     modifier = Modifier.weight(1f),
-                    viewModel = viewModel
+                    humanAndEnvironmentDanger = humanAndEnvironmentDanger,
+                    rulesOfConduct = rulesOfConduct,
+                    inCaseOfDanger = inCaseOfDanger,
+                    disposal = disposal
                 )
             }
         } else {
@@ -40,8 +50,16 @@ fun PreviewPage(
                 modifier,
                 verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
-                Page1(viewModel = viewModel)
-                Page2(viewModel = viewModel)
+                Page1(
+                    inputState = inputState,
+                    substances = substances
+                )
+                Page2(
+                    humanAndEnvironmentDanger = humanAndEnvironmentDanger,
+                    rulesOfConduct = rulesOfConduct,
+                    inCaseOfDanger = inCaseOfDanger,
+                    disposal = disposal
+                )
             }
         }
     }

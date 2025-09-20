@@ -1,8 +1,6 @@
 package io.github.chaosdave34.benzol.ui
 
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.toMutableStateList
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.Substance
@@ -25,26 +23,8 @@ class SafetySheetViewModel : ViewModel() {
     private val _uiState: MutableStateFlow<SafetySheetUiState> = MutableStateFlow(SafetySheetUiState(settings))
     val uiState: StateFlow<SafetySheetUiState> = _uiState.asStateFlow()
 
-    private val _snackBarHostState = MutableStateFlow(SnackbarHostState())
-    val snackbarHostState = _snackBarHostState.asStateFlow()
-
     private val _inputState = MutableStateFlow(SafetySheetInputState())
     val inputState = _inputState.asStateFlow()
-
-    private val _substances = MutableStateFlow(mutableStateListOf<Substance>())
-    val substances = _substances.asStateFlow()
-
-    private val _humanAndEnvironmentDanger = MutableStateFlow(mutableStateListOf<String>())
-    val humanAndEnvironmentDanger = _humanAndEnvironmentDanger.asStateFlow()
-
-    private val _rulesOfConduct = MutableStateFlow(mutableStateListOf<String>())
-    val rulesOfConduct = _rulesOfConduct.asStateFlow()
-
-    private val _inCaseOfDanger = MutableStateFlow(mutableStateListOf<String>())
-    val inCaseOfDanger = _inCaseOfDanger.asStateFlow()
-
-    private val _disposal = MutableStateFlow(mutableStateListOf<String>())
-    val disposal = _disposal.asStateFlow()
 
     private fun setFileChooser(value: Boolean) {
         _uiState.update { currentState ->
@@ -182,79 +162,55 @@ class SafetySheetViewModel : ViewModel() {
         }
     }
 
-    private fun setSubstances(value: List<Substance>) {
-        _substances.update { _ ->
-            value.toMutableStateList()
-        }
-    }
-
-    private fun setHumanAndEnvironmentDanger(value: List<String>) {
-        _humanAndEnvironmentDanger.update { _ ->
-            value.toMutableStateList()
-        }
-    }
-
-    private fun setRulesOfConduct(value: List<String>) {
-        _rulesOfConduct.update { _ ->
-            value.toMutableStateList()
-        }
-    }
-
-    private fun setInCaseOfDanger(value: List<String>) {
-        _inCaseOfDanger.update { _ ->
-            value.toMutableStateList()
-        }
-    }
-
-    private fun setDisposal(value: List<String>) {
-        _disposal.update { _ ->
-            value.toMutableStateList()
-        }
-    }
-
-    fun resetInput() {
+    suspend fun resetInput(
+        substances: SnapshotStateList<Substance>,
+        humanAndEnvironmentDanger: SnapshotStateList<String>,
+        inCaseOfDanger: SnapshotStateList<String>,
+        rulesOfConduct: SnapshotStateList<String>,
+        disposal: SnapshotStateList<String>
+    ) {
         setFilename("")
-        setDocumentTitle("")
-        setOrganisation("")
-        setCourse("")
+        setDocumentTitle(getString(Res.string.document_title_default))
+        setOrganisation(getString(Res.string.organisation_default))
+        setCourse(getString(Res.string.course_default))
         setName("")
         setPlace("")
         setAssistant("")
         setPreparation("")
 
-        setSubstances(emptyList())
-        setHumanAndEnvironmentDanger(emptyList())
-        setRulesOfConduct(emptyList())
-        setInCaseOfDanger(emptyList())
-        setDisposal(emptyList())
-    }
+        substances.clear()
+        humanAndEnvironmentDanger.clear()
 
-    suspend fun setDefaultInputValues() {
-        setDocumentTitle(getString(Res.string.document_title_default))
-        setOrganisation(getString(Res.string.organisation_default))
-        setCourse(getString(Res.string.course_default))
-        setInCaseOfDanger(getStringArray(Res.array.in_case_of_danger_defaults))
-        setRulesOfConduct(getStringArray(Res.array.rules_of_conduct_defaults))
+        inCaseOfDanger.clear()
+        inCaseOfDanger.addAll(getStringArray(Res.array.in_case_of_danger_defaults))
+
+        rulesOfConduct.clear()
+        rulesOfConduct.addAll(getStringArray(Res.array.rules_of_conduct_defaults))
+
+        disposal.clear()
     }
 
     fun importInput(data: InputData) {
-        setFilename(data.filename)
-        setDocumentTitle(data.documentTitle)
-        setOrganisation(data.organisation)
-        setCourse(data.course)
-        setName(data.name)
-        setPlace(data.place)
-        setAssistant(data.assistant)
-        setPreparation(data.preparation)
-
-        setSubstances(data.substances)
-        setHumanAndEnvironmentDanger(data.humanAndEnvironmentDanger)
-        setRulesOfConduct(data.rulesOfConduct)
-        setInCaseOfDanger(data.inCaseOfDanger)
-        setDisposal(data.disposal)
+        _inputState.update { currentState ->
+            currentState.copy(
+                filename = data.filename,
+                documentTitle = data.documentTitle,
+                course = data.course,
+                name = data.name,
+                place = data.place,
+                assistant = data.assistant,
+                preparation = data.preparation
+            )
+        }
     }
 
-    fun exportInput() = InputData(
+    fun exportInput(
+        substances: SnapshotStateList<Substance>,
+        humanAndEnvironmentDanger: SnapshotStateList<String>,
+        inCaseOfDanger: SnapshotStateList<String>,
+        rulesOfConduct: SnapshotStateList<String>,
+        disposal: SnapshotStateList<String>
+    ) = InputData(
         filename = _inputState.value.filename,
         documentTitle = _inputState.value.documentTitle,
         organisation = _inputState.value.organisation,
@@ -263,10 +219,10 @@ class SafetySheetViewModel : ViewModel() {
         place = _inputState.value.place,
         assistant = _inputState.value.assistant,
         preparation = _inputState.value.preparation,
-        substances = _substances.value,
-        humanAndEnvironmentDanger = _humanAndEnvironmentDanger.value,
-        rulesOfConduct = _rulesOfConduct.value,
-        inCaseOfDanger = _inCaseOfDanger.value,
-        disposal = _disposal.value
+        substances = substances,
+        humanAndEnvironmentDanger = humanAndEnvironmentDanger,
+        rulesOfConduct = rulesOfConduct,
+        inCaseOfDanger = inCaseOfDanger,
+        disposal = disposal
     )
 }

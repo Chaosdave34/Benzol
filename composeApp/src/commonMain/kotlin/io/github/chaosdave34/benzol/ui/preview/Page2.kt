@@ -6,29 +6,25 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.*
-import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun Page2(
     modifier: Modifier = Modifier,
-    viewModel: SafetySheetViewModel
+    humanAndEnvironmentDanger: List<String>,
+    rulesOfConduct: List<String>,
+    inCaseOfDanger: List<String>,
+    disposal: List<String>
 ) {
     Page(
         modifier = modifier
     ) {
-        val humanAndEnvironmentDanger by viewModel.humanAndEnvironmentDanger.collectAsState()
-        val rulesOfConduct by viewModel.rulesOfConduct.collectAsState()
-        val inCaseOfDanger by viewModel.inCaseOfDanger.collectAsState()
-        val disposal by viewModel.disposal.collectAsState()
 
         ListWithTitle(
             title = Res.string.human_and_environment_danger,

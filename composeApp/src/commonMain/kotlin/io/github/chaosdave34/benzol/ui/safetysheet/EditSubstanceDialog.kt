@@ -138,13 +138,13 @@ fun EditSubstanceDialog(
                             Modifier.weight(0.5f),
                             value = name,
                             onValueChange = { name = it },
-                            label = Res.string.name
+                            label = stringResource(Res.string.name)
                         )
                         CustomTextField(
                             Modifier.weight(0.5f),
                             value = casNumber,
                             onValueChange = { casNumber = it },
-                            label = Res.string.cas_number
+                            label = stringResource(Res.string.cas_number)
                         )
                     }
                     Row(
@@ -154,13 +154,13 @@ fun EditSubstanceDialog(
                             Modifier.weight(0.5f),
                             value = molecularFormula,
                             onValueChange = { molecularFormula = it },
-                            label = Res.string.molecular_formula
+                            label = stringResource(Res.string.molecular_formula)
                         )
                         CustomTextField(
                             Modifier.weight(0.5f),
                             value = formattedMolecularFormula,
                             onValueChange = { formattedMolecularFormula = it },
-                            label = Res.string.formatted_molecular_formula,
+                            label = stringResource(Res.string.formatted_molecular_formula),
                             supportingText = {
                                 if (formattedMolecularFormula.isBlank()) {
                                     Text(stringResource(Res.string.formatted_molecular_formula_hint))
@@ -182,13 +182,13 @@ fun EditSubstanceDialog(
                             Modifier.weight(0.5f),
                             value = wgk,
                             onValueChange = { wgk = it },
-                            label = Res.string.wgk
+                            label = stringResource(Res.string.wgk)
                         )
                         CustomTextField(
                             Modifier.weight(0.5f),
                             value = signalWord,
                             onValueChange = { signalWord = it },
-                            label = Res.string.signal_word
+                            label = stringResource(Res.string.signal_word)
                         )
                     }
                     Row(
@@ -198,7 +198,7 @@ fun EditSubstanceDialog(
                             Modifier.weight(0.33f),
                             value = molarMass,
                             onValueChange = { molarMass = it },
-                            label = Res.string.molar_mass,
+                            label = stringResource(Res.string.molar_mass),
                             suffix = {
                                 Text(stringResource(Res.string.molar_mass_unit))
                             }
@@ -207,7 +207,7 @@ fun EditSubstanceDialog(
                             Modifier.weight(0.33f),
                             value = lethalDose,
                             onValueChange = { lethalDose = it },
-                            label = Res.string.lethal_dose,
+                            label = stringResource(Res.string.lethal_dose),
                             suffix = {
                                 Text(stringResource(Res.string.lethal_dose_unit))
                             }
@@ -216,7 +216,7 @@ fun EditSubstanceDialog(
                             Modifier.weight(0.33f),
                             value = mak,
                             onValueChange = { mak = it },
-                            label = Res.string.mak,
+                            label = stringResource(Res.string.mak),
                             suffix = {
                                 Text(stringResource(Res.string.mak_unit))
                             }
@@ -229,7 +229,7 @@ fun EditSubstanceDialog(
                             Modifier.weight(0.33f),
                             value = meltingPoint,
                             onValueChange = { meltingPoint = it },
-                            label = Res.string.melting_point,
+                            label = stringResource(Res.string.melting_point),
                             suffix = {
                                 Text(stringResource(Res.string.celsius_unit))
                             }
@@ -238,7 +238,7 @@ fun EditSubstanceDialog(
                             Modifier.weight(0.33f),
                             value = boilingPoint,
                             onValueChange = { boilingPoint = it },
-                            label = Res.string.boiling_point,
+                            label = stringResource(Res.string.boiling_point),
                             suffix = {
                                 Text(stringResource(Res.string.celsius_unit))
                             }
@@ -251,14 +251,14 @@ fun EditSubstanceDialog(
                             modifier = Modifier.weight(0.4f),
                             value = quantity,
                             onValueChange = { quantity = it },
-                            label = Res.string.quantity
+                            label = stringResource(Res.string.quantity)
                         )
                         Spacer(Modifier.width(10.dp))
                         CustomTextField(
                             modifier = Modifier.weight(0.2f),
                             value = quantityUnit,
                             onValueChange = { quantityUnit = it },
-                            label = Res.string.unit
+                            label = stringResource(Res.string.unit)
                         )
                         Spacer(Modifier.weight(0.4f))
                     }

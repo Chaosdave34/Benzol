@@ -11,16 +11,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import benzol.composeapp.generated.resources.*
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun FloatingActionButtonMenu(
     visible: Boolean,
-    viewModel: SafetySheetViewModel
+    onResetInput: () -> Unit,
+    onChooseFile: () -> Unit,
+    onSaveFile: () -> Unit,
+    onExportPdf: () -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
     var expanded by remember { mutableStateOf(false) }
 
     AnimatedVisibility(
@@ -54,30 +55,25 @@ fun FloatingActionButtonMenu(
             }
         ) {
             FabButton(
-                onClick = {
-                    viewModel.resetInput()
-                    scope.launch {
-                        viewModel.setDefaultInputValues()
-                    }
-                },
+                onClick = onResetInput,
                 text = stringResource(Res.string.new_file),
                 imageVector = Icons.Filled.ClearAll,
                 contentDescription = stringResource(Res.string.new_file)
             )
             FabButton(
-                onClick = viewModel::openFileChooser,
+                onClick = onChooseFile,
                 text = stringResource(Res.string.open_file),
                 imageVector = Icons.Filled.FileOpen,
                 contentDescription = stringResource(Res.string.new_file)
             )
             FabButton(
-                onClick = viewModel::openFileSaver,
+                onClick = onSaveFile,
                 text = stringResource(Res.string.save_file),
                 imageVector = Icons.Filled.Save,
                 contentDescription = stringResource(Res.string.save_file)
             )
             FabButton(
-                onClick = viewModel::openPdfExport,
+                onClick = onExportPdf,
                 text = stringResource(Res.string.export_file),
                 imageVector = Icons.Filled.PictureAsPdf,
                 contentDescription = stringResource(Res.string.export_file)

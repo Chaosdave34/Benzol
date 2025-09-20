@@ -6,15 +6,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
-import org.jetbrains.compose.resources.StringResource
-import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun CustomTextField(
     modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
-    label: StringResource,
+    label: String,
     supportingText: @Composable (() -> Unit)? = null,
     suffix: @Composable (() -> Unit)? = null
 ) {
@@ -22,7 +20,7 @@ fun CustomTextField(
         modifier = modifier.fillMaxWidth(),
         value = value,
         onValueChange = onValueChange,
-        label = { Text(stringResource(label), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+        label = { Text(label, maxLines = 1, overflow = TextOverflow.Ellipsis) },
         singleLine = true,
         supportingText = supportingText,
         suffix = suffix
