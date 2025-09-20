@@ -53,7 +53,9 @@ fun SettingsPage(
             }
 
             if (PlatformUtils.IS_BROWSER) {
-                Section {
+                Section(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     ExportUrlSetting(
                         exportUrl = uiState.exportUrl,
                         onExportUrlChange = viewModel::setExportUrl
