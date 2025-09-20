@@ -9,8 +9,10 @@ import io.github.chaosdave34.benzol.files.CaBr2File
 import io.github.chaosdave34.benzol.files.HtmlFile
 import io.github.chaosdave34.benzol.files.InputData
 import io.github.chaosdave34.benzol.settings.Settings
+import io.ktor.util.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.rememberResourceEnvironment
 import org.jetbrains.compose.resources.stringResource
 
@@ -105,6 +107,13 @@ fun FileDialogs(
     }
 
     if (uiState.pdfExportVisible) { // Trim input and remove linebreaks
+        if (PlatformUtils.IS_BROWSER && settings.exportUrl.isEmpty()) {
+            scope.launch {
+                snackbarHostState.showSnackbar(getString(resourceEnvironment, Res.string.no_pdf_export_url_provided))
+            }
+            return
+        }
+
         PdfExport(
             coroutineScope = scope,
             settings = settings,
