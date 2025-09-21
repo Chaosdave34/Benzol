@@ -1,8 +1,8 @@
-package io.github.chaosdave34.benzol.files
+package io.github.chaosdave34.benzol.data
 
 import io.github.chaosdave34.benzol.Substance
 
-data class InputData(
+data class SafetySheetData(
     val filename: String,
     val documentTitle: String,
     val organisation: String,

@@ -4,10 +4,10 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import benzol.composeapp.generated.resources.*
+import io.github.chaosdave34.benzol.data.SafetySheetData
 import io.github.chaosdave34.benzol.data.SafetySheetUiState
 import io.github.chaosdave34.benzol.files.CaBr2File
 import io.github.chaosdave34.benzol.files.HtmlFile
-import io.github.chaosdave34.benzol.files.InputData
 import io.github.chaosdave34.benzol.settings.Settings
 import io.ktor.util.*
 import kotlinx.coroutines.CoroutineScope
@@ -21,8 +21,8 @@ fun FileDialogs(
     uiState: SafetySheetUiState,
     settings: Settings,
     snackbarHostState: SnackbarHostState,
-    onImport: (InputData) -> Unit,
-    onExport: () -> InputData,
+    onImport: (SafetySheetData) -> Unit,
+    onExport: () -> SafetySheetData,
     onCloseFileChooser: () -> Unit,
     onCloseFileSaver: () -> Unit,
     onClosePdfExport: () -> Unit
@@ -45,7 +45,7 @@ fun FileDialogs(
                     if (caBr2File != null) {
                         val header = caBr2File.header
 
-                        val inputDate = InputData(
+                        val inputDate = SafetySheetData(
                             filename = fileName.replace("\\.[^.]*$".toRegex(), ""),
                             documentTitle = header.documentTitle,
                             organisation = header.organisation,

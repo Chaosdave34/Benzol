@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.Substance
 import io.github.chaosdave34.benzol.SupportedLanguage
+import io.github.chaosdave34.benzol.data.SafetySheetData
 import io.github.chaosdave34.benzol.data.SafetySheetInputState
 import io.github.chaosdave34.benzol.data.SafetySheetUiState
-import io.github.chaosdave34.benzol.files.InputData
 import io.github.chaosdave34.benzol.settings.Settings
 import io.github.chaosdave34.benzol.settings.Theme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -190,7 +190,7 @@ class SafetySheetViewModel : ViewModel() {
         disposal.clear()
     }
 
-    fun importInput(data: InputData) {
+    fun importInput(data: SafetySheetData) {
         _inputState.update { currentState ->
             currentState.copy(
                 filename = data.filename,
@@ -210,7 +210,7 @@ class SafetySheetViewModel : ViewModel() {
         inCaseOfDanger: SnapshotStateList<String>,
         rulesOfConduct: SnapshotStateList<String>,
         disposal: SnapshotStateList<String>
-    ) = InputData(
+    ) = SafetySheetData(
         filename = _inputState.value.filename,
         documentTitle = _inputState.value.documentTitle,
         organisation = _inputState.value.organisation,
