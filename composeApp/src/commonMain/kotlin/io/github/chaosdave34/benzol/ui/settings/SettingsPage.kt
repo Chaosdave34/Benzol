@@ -85,7 +85,8 @@ private fun ThemeSetting(
             readOnly = true,
             onValueChange = {},
             label = { Text(stringResource(Res.string.theme)) },
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(dropdownExpanded) }
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(dropdownExpanded) },
+            colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
         )
 
         ExposedDropdownMenu(
@@ -124,7 +125,8 @@ private fun LanguageSetting(
             readOnly = true,
             onValueChange = {},
             label = { Text(stringResource(Res.string.language)) },
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(dropdownExpanded) }
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(dropdownExpanded) },
+            colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
         )
 
         ExposedDropdownMenu(

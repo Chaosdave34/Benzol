@@ -148,7 +148,8 @@ fun GestisSearch(
                             onValueChange = {},
                             label = { Text(stringResource(Res.string.search_option)) },
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(dropdownExpanded) },
-                            enabled = searchArguments.size < 4
+                            enabled = searchArguments.size < 4,
+                            colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
                         )
 
                         ExposedDropdownMenu(
@@ -204,11 +205,12 @@ fun GestisSearch(
                                 ) {
                                     Icon(Icons.Rounded.Delete, stringResource(Res.string.delete))
                                 }
-                            }
+                            },
+                            colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
                         )
 
                         ExposedDropdownMenu(
-                            modifier = Modifier.heightIn(max = 300.dp),
+                            modifier = Modifier.heightIn(max = (5 * 48 + 16).dp),
                             expanded = suggestionsExpanded,
                             onDismissRequest = { suggestionsExpanded = false },
                         ) {
