@@ -23,6 +23,7 @@ import io.github.chaosdave34.benzol.ui.CustomScrollbar
 import io.github.chaosdave34.benzol.ui.CustomTextField
 import io.github.chaosdave34.benzol.ui.FormattedMolecularFormula
 import io.github.chaosdave34.benzol.ui.adaptive.AdaptiveDialog
+import kotlinx.serialization.json.Json
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -267,13 +268,19 @@ fun EditSubstanceDialog(
                 DialogSection(
                     title = stringResource(Res.string.h_phrases)
                 ) {
-                    PhraseInput(hPhrases)
+                    PhraseInput(
+                        phraseType = PhraseType.H,
+                        phrases = hPhrases
+                    )
                 }
 
                 DialogSection(
                     title = stringResource(Res.string.p_phrases)
                 ) {
-                    PhraseInput(pPhrases)
+                    PhraseInput(
+                        phraseType = PhraseType.P,
+                        phrases = pPhrases
+                    )
                 }
 
                 DialogSection(
@@ -354,24 +361,66 @@ fun EditSubstanceDialog(
     }
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+private enum class PhraseType {
+    H,
+    P
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
 @Composable
 private fun PhraseInput(
+    phraseType: PhraseType,
     phrases: SnapshotStateList<Pair<String, String>>
 ) {
+    var phraseList by remember { mutableStateOf(mapOf<String, String>()) }
+
+    LaunchedEffect(Unit) {
+        phraseList = Json.decodeFromString(Res.readBytes("files/phrases.json").decodeToString())
+    }
+
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         phrases.forEachIndexed { index, phrase ->
+            var dropdownExpanded by remember { mutableStateOf(false) }
+
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                OutlinedTextField(
+                ExposedDropdownMenuBox(
                     modifier = Modifier.weight(0.3f),
-                    value = phrase.first,
-                    singleLine = true,
-                    onValueChange = { phrases[index] = phrase.copy(first = it) },
-                )
+                    expanded = dropdownExpanded,
+                    onExpandedChange = { dropdownExpanded = it }
+                ) {
+                    OutlinedTextField(
+                        modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable),
+                        colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
+                        value = phrase.first,
+                        singleLine = true,
+                        onValueChange = { phrases[index] = phrase.copy(first = it) },
+                    )
+
+                    ExposedDropdownMenu(
+                        modifier = Modifier.heightIn(max = (5 * 48 + 16).dp),
+                        expanded = dropdownExpanded,
+                        onDismissRequest = { dropdownExpanded = false }
+                    ) {
+                        val filteredPhrases = remember(phrase.first) { phraseList.filterKeys { it.startsWith(phrase.first) && it.startsWith(phraseType.name) } }
+                        filteredPhrases.forEach { (id, value) ->
+                            DropdownMenuItem(
+                                text = {
+                                    Text(id)
+                                },
+                                onClick = {
+                                    phrases[index] = phrase.copy(first = id, second = value)
+                                    dropdownExpanded = false
+                                },
+                                contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                            )
+                        }
+                    }
+                }
+
                 OutlinedTextField(
                     modifier = Modifier.weight(0.7f),
                     value = phrase.second,
