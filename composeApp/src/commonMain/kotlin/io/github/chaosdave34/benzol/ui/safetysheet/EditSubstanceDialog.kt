@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -16,9 +17,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.*
-import io.github.chaosdave34.benzol.GHSPictogram
-import io.github.chaosdave34.benzol.Substance
-import io.github.chaosdave34.benzol.ui.AddListElementButton
+import io.github.chaosdave34.benzol.data.GHSPictogram
+import io.github.chaosdave34.benzol.data.Substance
 import io.github.chaosdave34.benzol.ui.CustomScrollbar
 import io.github.chaosdave34.benzol.ui.CustomTextField
 import io.github.chaosdave34.benzol.ui.FormattedMolecularFormula
@@ -435,10 +435,11 @@ private fun PhraseInput(
                 )
             }
         }
-        AddListElementButton(
-            list = phrases,
-            element = Pair("", "")
-        )
+        FilledIconButton(
+            onClick = { phrases.add(Pair("", "")) },
+        ) {
+            Icon(Icons.Filled.Add, stringResource(Res.string.add))
+        }
     }
 }
 

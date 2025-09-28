@@ -2,58 +2,48 @@ package io.github.chaosdave34.benzol.ui.safetysheet
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.*
-import io.github.chaosdave34.benzol.Substance
-import io.github.chaosdave34.benzol.data.SafetySheetInputState
-import io.github.chaosdave34.benzol.ui.AddListElementButton
+import io.github.chaosdave34.benzol.data.Substance
 import io.github.chaosdave34.benzol.ui.AppPageBox
 import io.github.chaosdave34.benzol.ui.CustomTextField
+import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 import io.github.chaosdave34.benzol.ui.Section
 import io.github.chaosdave34.benzol.ui.safetysheet.search.SubstanceSearch
 import org.jetbrains.compose.resources.stringResource
 
+context(viewModel: SafetySheetViewModel)
 @Composable
-fun SafetySheetPage(
-    snackbarHostState: SnackbarHostState,
-    inputState: SafetySheetInputState,
-    substances: SnapshotStateList<Substance>,
-    humanAndEnvironmentDanger: SnapshotStateList<String>,
-    rulesOfConduct: SnapshotStateList<String>,
-    inCaseOfDanger: SnapshotStateList<String>,
-    disposal: SnapshotStateList<String>,
-    onFilenameChange: (String) -> Unit,
-    onDocumentTitleChange: (String) -> Unit,
-    onOrganisationChange: (String) -> Unit,
-    onCourseChange: (String) -> Unit,
-    onNameChange: (String) -> Unit,
-    onPlaceChange: (String) -> Unit,
-    onAssistantChange: (String) -> Unit,
-    onPreparationChange: (String) -> Unit,
-) {
+fun SafetySheetPage() {
+    val inputState by viewModel.inputState.collectAsState()
+
     var editSubstanceDialogVisible by rememberSaveable { mutableStateOf(false) }
     var selectedSubstance by remember { mutableIntStateOf(0) }
 
     EditSubstanceDialog(
         visible = editSubstanceDialogVisible,
-        substance = substances.getOrNull(selectedSubstance),
+        substance = inputState.substances.getOrNull(selectedSubstance),
         onDismissRequest = { editSubstanceDialogVisible = false },
         onEdit = {
-            substances[selectedSubstance] = it
+            viewModel.updateSubstance(selectedSubstance, it)
             editSubstanceDialogVisible = false
         }
     )
 
     AppPageBox(
-        Modifier.fillMaxWidth(),
-        contentAlignment = Alignment.TopCenter
+        Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp),
+        contentAlignment = Alignment.TopCenter,
     ) { scrollState ->
         Column(
             Modifier
@@ -65,7 +55,7 @@ fun SafetySheetPage(
             Section {
                 CustomTextField(
                     value = inputState.filename,
-                    onValueChange = onFilenameChange,
+                    onValueChange = viewModel::setFilename,
                     label = stringResource(Res.string.filename)
                 )
                 HorizontalDivider(
@@ -74,17 +64,17 @@ fun SafetySheetPage(
                 )
                 CustomTextField(
                     value = inputState.documentTitle,
-                    onValueChange = onDocumentTitleChange,
+                    onValueChange = viewModel::setDocumentTitle,
                     label = stringResource(Res.string.document_title)
                 )
                 CustomTextField(
                     value = inputState.organisation,
-                    onValueChange = onOrganisationChange,
+                    onValueChange = viewModel::setOrganisation,
                     label = stringResource(Res.string.organisation)
                 )
                 CustomTextField(
                     value = inputState.course,
-                    onValueChange = onCourseChange,
+                    onValueChange = viewModel::setCourse,
                     label = stringResource(Res.string.course)
                 )
                 Row(
@@ -93,73 +83,86 @@ fun SafetySheetPage(
                     CustomTextField(
                         modifier = Modifier.weight(0.33f),
                         value = inputState.name,
-                        onValueChange = onNameChange,
+                        onValueChange = viewModel::setName,
                         label = stringResource(Res.string.name)
                     )
                     CustomTextField(
                         modifier = Modifier.weight(0.33f),
                         value = inputState.place,
-                        onValueChange = onPlaceChange,
+                        onValueChange = viewModel::setPlace,
                         label = stringResource(Res.string.place)
                     )
                     CustomTextField(
                         modifier = Modifier.weight(0.33f),
                         value = inputState.assistant,
-                        onValueChange = onAssistantChange,
+                        onValueChange = viewModel::setAssistant,
                         label = stringResource(Res.string.assistant)
                     )
                 }
                 CustomTextField(
                     value = inputState.preparation,
-                    onValueChange = onPreparationChange,
+                    onValueChange = viewModel::setPreparation,
                     label = stringResource(Res.string.preparation)
                 )
             }
 
             Section {
                 SubstanceSearch(
-                    snackbarHostState = snackbarHostState,
-                    onSearch = substances::add,
-                    currentCasNumbers = substances.map { it.casNumber }
+                    onSearch = viewModel::addSubstance,
+                    currentCasNumbers = inputState.substances.map { it.casNumber }
                 )
             }
 
             Section {
                 SubstanceList(
-                    substances = substances,
+                    substances = inputState.substances,
                     onSubstanceClick = {
                         editSubstanceDialogVisible = true
                         selectedSubstance = it
-                    }
+                    },
+                    onRemove = viewModel::removeSubstance
                 )
-                AddListElementButton(
-                    list = substances,
-                    element = Substance()
-                )
+                FilledIconButton(
+                    onClick = { viewModel.addSubstance(Substance()) }
+                ) {
+                    Icon(Icons.Filled.Add, stringResource(Res.string.add))
+                }
             }
 
             Section {
                 ListInput(
                     title = stringResource(Res.string.human_and_environment_danger),
-                    list = humanAndEnvironmentDanger
+                    list = inputState.humanAndEnvironmentDanger,
+                    onRemove = viewModel::removeHumanAndEnvironmentDanger,
+                    onValueChange = viewModel::updateHumanAndEnvironmentDanger,
+                    onAdd = { viewModel.addHumanAndEnvironmentDanger("") }
                 )
             }
             Section {
                 ListInput(
                     title = stringResource(Res.string.rules_of_conduct),
-                    list = rulesOfConduct
+                    list = inputState.rulesOfConduct,
+                    onRemove = viewModel::removeRuleOfConduct,
+                    onValueChange = viewModel::updateRuleOfConduct,
+                    onAdd = { viewModel.addRuleOfConduct("") }
                 )
             }
             Section {
                 ListInput(
                     title = stringResource(Res.string.in_case_of_danger),
-                    list = inCaseOfDanger
+                    list = inputState.inCaseOfDanger,
+                    onRemove = viewModel::removeInCaseOfDanger,
+                    onValueChange = viewModel::updateInCaseOfDanger,
+                    onAdd = { viewModel.addInCaseOfDanger("") }
                 )
             }
             Section {
                 ListInput(
                     title = stringResource(Res.string.disposal),
-                    list = disposal
+                    list = inputState.disposal,
+                    onRemove = viewModel::removeDisposal,
+                    onValueChange = viewModel::updateDisposal,
+                    onAdd = { viewModel.addDisposal("") }
                 )
             }
         }

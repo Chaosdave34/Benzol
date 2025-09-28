@@ -68,7 +68,7 @@
     <string name="search">Search</string>
     <string name="do_search">Search</string>
     <string name="exact_search">Exact search</string>
-    <string name="no_search_results">No results</string>
+    <string name="no_search_results">No results found</string>
     <string name="failed_search">An error occurred in the search.</string>
 
     <string name="theme">Theme</string>
@@ -137,5 +137,7 @@
     <string name="substance_exists">A substance with the same CAS number already exists.</string>
 
     <string name="no_pdf_export_url_provided">No PDF export url provided!</string>
+
+    <string name="clear">Clear</string>
 </resources>
 

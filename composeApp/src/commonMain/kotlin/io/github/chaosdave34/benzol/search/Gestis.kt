@@ -1,10 +1,11 @@
 package io.github.chaosdave34.benzol.search
 
 import benzol.composeapp.generated.resources.*
-import io.github.chaosdave34.benzol.GHSPictogram
-import io.github.chaosdave34.benzol.Substance
+import io.github.chaosdave34.benzol.data.GHSPictogram
+import io.github.chaosdave34.benzol.data.Substance
 import io.ktor.client.*
 import io.ktor.client.call.*
+import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -13,7 +14,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.StringResource
 
-private const val BASE_URL = "https://gestis-api.dguv.de/api"
 private const val TOKEN = "dddiiasjhduuvnnasdkkwUUSHhjaPPKMasd" // don't ask, just leave it (https://gestis.dguv.de/search)
 
 object Gestis {
@@ -21,13 +21,25 @@ object Gestis {
         install(ContentNegotiation) {
             json()
         }
+        defaultRequest {
+            url("https://gestis-api.dguv.de/api/")
+        }
     }
 
-    suspend fun search(search: Search): List<SearchResult>? {
-        val parameters = search.search.joinToString("&") { "${it.searchType.parameterName}=${it.value}" }
-        val url = "$BASE_URL/search/de?$parameters&exact=${search.exact}"
-
-        val response = client.get(url)
+    suspend fun search(
+        search: List<Pair<SearchType, String>>,
+        exact: Boolean
+    ): List<SearchResult>? {
+        val response = try {
+            client.get("search/de") {
+                search.forEach { (searchType, value) ->
+                    parameter(searchType.parameterName, value)
+                }
+                parameter("exact", exact)
+            }
+        } catch (_: Throwable) {
+            return null
+        }
 
         return if (response.status == HttpStatusCode.OK) {
             val searchResults: List<SearchResult> = response.body()
@@ -36,10 +48,14 @@ object Gestis {
         } else null
     }
 
-    suspend fun getSearchSuggestions(search: SearchArgument): List<String> {
-        val url = "$BASE_URL/search_suggestions/de?${search.searchType.parameterName}=${search.value}"
-
-        val response = client.get(url)
+    suspend fun getSearchSuggestions(searchType: SearchType, value: String): List<String> {
+        val response = try {
+            client.get("search_suggestions/de") {
+                parameter(searchType.parameterName, value)
+            }
+        } catch (_: Throwable) {
+            return emptyList()
+        }
 
         return if (response.status == HttpStatusCode.OK) {
             return response.body()
@@ -48,10 +64,12 @@ object Gestis {
     }
 
     suspend fun getSubstanceInformation(search: SearchResult): SubstanceInformation? {
-        val url = "$BASE_URL/article/de/${search.zgvNumber}"
-
-        val response = client.get(url) {
-            header("Authorization", "Bearer $TOKEN")
+        val response = try {
+            client.get("article/de/${search.zgvNumber}") {
+                header("Authorization", "Bearer $TOKEN")
+            }
+        } catch (_: Throwable) {
+            return null
         }
 
         return if (response.status == HttpStatusCode.OK) {
@@ -59,20 +77,10 @@ object Gestis {
         } else null
     }
 
-    data class Search(
-        val search: List<SearchArgument>,
-        val exact: Boolean
-    )
-
-    data class SearchArgument(
-        var searchType: SearchType,
-        var value: String,
-    )
-
-    enum class SearchType(val stringResource: StringResource, val parameterName: String) {
+    enum class SearchType(val label: StringResource, val parameterName: String) {
         ChemicalName(Res.string.chemical_name, "stoffname"),
-        MolecularFormula(Res.string.molecular_formula, "summenformel"),
         CasNumber(Res.string.number, "nummern"),
+        MolecularFormula(Res.string.molecular_formula, "summenformel"),
         FullText(Res.string.full_text, "volltextsuche")
     }
 

@@ -2,23 +2,26 @@ package io.github.chaosdave34.benzol.ui.safetysheet
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.Res
+import benzol.composeapp.generated.resources.add
 import benzol.composeapp.generated.resources.delete
-import io.github.chaosdave34.benzol.ui.AddListElementButton
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ListInput(
     title: String,
-    list: SnapshotStateList<String>
+    list: List<String>,
+    onRemove: (Int) -> Unit,
+    onValueChange: (Int, String) -> Unit,
+    onAdd: () -> Unit
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -37,10 +40,10 @@ fun ListInput(
                 OutlinedTextField(
                     modifier = Modifier.weight(1f),
                     value = element,
-                    onValueChange = { list[index] = it },
+                    onValueChange = { onValueChange(index, it) },
                     trailingIcon = {
                         IconButton(
-                            onClick = { if (index >= 0 && index <= list.lastIndex) list.removeAt(index) },
+                            onClick = { onRemove(index) },
                         ) {
                             Icon(Icons.Filled.Delete, stringResource(Res.string.delete))
                         }
@@ -54,9 +57,10 @@ fun ListInput(
 //                )
             }
         }
-        AddListElementButton(
-            list = list,
-            element = ""
-        )
+        FilledIconButton(
+            onClick = onAdd,
+        ) {
+            Icon(Icons.Filled.Add, stringResource(Res.string.add))
+        }
     }
 }

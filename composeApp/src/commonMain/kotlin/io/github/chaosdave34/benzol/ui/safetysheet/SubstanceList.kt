@@ -9,14 +9,13 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Source
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.Res
 import benzol.composeapp.generated.resources.delete
 import benzol.composeapp.generated.resources.edit_substance
-import io.github.chaosdave34.benzol.Substance
+import io.github.chaosdave34.benzol.data.Substance
 import io.github.chaosdave34.benzol.search.Source
 import io.github.chaosdave34.benzol.ui.FormattedMolecularFormula
 import io.github.chaosdave34.benzol.ui.adaptive.AdaptiveButton
@@ -25,8 +24,9 @@ import org.jetbrains.compose.resources.stringResource
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun SubstanceList(
-    substances: SnapshotStateList<Substance>,
+    substances: List<Substance>,
     onSubstanceClick: (Int) -> Unit,
+    onRemove: (Int) -> Unit
 ) {
     val uriHandler = LocalUriHandler.current
 
@@ -44,16 +44,16 @@ fun SubstanceList(
                 },
                 supportingContent = {
                     Column {
+                        if (substance.casNumber.isNotBlank()) {
+                            Text(substance.casNumber)
+                        }
+
                         val formula = substance.formattedMolecularFormula
                         if (formula.isNotBlank()) {
-                            FormattedMolecularFormula(
-                                Modifier.weight(0.25f),
-                                formula = formula
-                            )
+                            FormattedMolecularFormula(formula = formula)
                         } else {
                             Text(substance.molecularFormula)
                         }
-                        Text(substance.casNumber)
                     }
                 },
                 trailingContent = {
@@ -74,7 +74,7 @@ fun SubstanceList(
                             enabled = substance.source.first != Source.Custom
                         )
                         FilledIconButton(
-                            onClick = { if (index >= 0 && index <= substances.lastIndex) substances.removeAt(index) },
+                            onClick = { onRemove(index) },
                         ) {
                             Icon(Icons.Filled.Delete, contentDescription = stringResource(Res.string.delete))
                         }

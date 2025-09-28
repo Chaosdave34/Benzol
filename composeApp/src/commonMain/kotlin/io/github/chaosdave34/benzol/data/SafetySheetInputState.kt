@@ -1,6 +1,5 @@
 package io.github.chaosdave34.benzol.data
 
-
 data class SafetySheetInputState(
     val filename: String = "",
     val documentTitle: String = "",
@@ -10,4 +9,9 @@ data class SafetySheetInputState(
     val place: String = "",
     val assistant: String = "",
     val preparation: String = "",
+    val substances: List<Substance> = emptyList(),
+    val humanAndEnvironmentDanger: List<String> = emptyList(),
+    val inCaseOfDanger: List<String> = emptyList(),
+    val rulesOfConduct: List<String> = emptyList(),
+    val disposal: List<String> = emptyList()
 )

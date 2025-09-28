@@ -1,4 +1,4 @@
-package io.github.chaosdave34.benzol
+package io.github.chaosdave34.benzol.data
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -167,7 +167,7 @@ data class Substance(
     }
 
     @Composable
-    fun FormattedMolecularFormula(modifier: Modifier = Modifier, formula: String = formattedMolecularFormula, align: TextAlign? = null) {
+    fun FormattedMolecularFormula(modifier: Modifier = Modifier.Companion, formula: String = formattedMolecularFormula, align: TextAlign? = null) {
         var sub = false
         val splits = formula.split("[<>]".toRegex())
         Text(

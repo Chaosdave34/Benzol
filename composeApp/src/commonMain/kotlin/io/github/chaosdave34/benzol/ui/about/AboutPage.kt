@@ -16,11 +16,13 @@ import benzol.composeapp.generated.resources.Res
 import benzol.composeapp.generated.resources.disclaimer
 import benzol.composeapp.generated.resources.github
 import io.github.chaosdave34.benzol.ui.AppPageBox
+import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 import io.github.chaosdave34.benzol.ui.Section
 import io.github.chaosdave34.benzol.ui.adaptive.AdaptivePageColumn
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
+context(viewModel: SafetySheetViewModel)
 @Composable
 fun AboutPage() {
     val uriHandler = LocalUriHandler.current

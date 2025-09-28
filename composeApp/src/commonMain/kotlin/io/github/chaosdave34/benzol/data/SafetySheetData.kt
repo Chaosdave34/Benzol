@@ -1,7 +1,5 @@
 package io.github.chaosdave34.benzol.data
 
-import io.github.chaosdave34.benzol.Substance
-
 data class SafetySheetData(
     val filename: String,
     val documentTitle: String,

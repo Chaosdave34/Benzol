@@ -6,27 +6,28 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.*
-import io.github.chaosdave34.benzol.Substance
-import io.github.chaosdave34.benzol.data.SafetySheetInputState
+import io.github.chaosdave34.benzol.data.Substance
+import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import kotlin.text.Typography.nbsp
 
+context(viewModel: SafetySheetViewModel)
 @Composable
-fun Page1(
-    modifier: Modifier = Modifier,
-    inputState: SafetySheetInputState,
-    substances: List<Substance>
-) {
+fun Page1(modifier: Modifier = Modifier) {
     Page(
         modifier = modifier
     ) {
+        val inputState by viewModel.inputState.collectAsState()
+
         val modifier = Modifier.fillMaxWidth().border(1.dp, MaterialTheme.colorScheme.outlineVariant).padding(10.dp)
 
         HeaderTitle(inputState.documentTitle)
@@ -96,7 +97,7 @@ fun Page1(
                 textAlign = TextAlign.Center
             )
         }
-        substances.forEach { substance ->
+        inputState.substances.forEach { substance ->
             ListRow {
                 SubstanceColumn(6f) {
                     CenteredText(substance.name)
@@ -154,12 +155,12 @@ fun Page1(
         ListRow {
             PhraseList(
                 weight = 1f,
-                list = substances,
+                list = inputState.substances,
                 transform = { it.hPhrases }
             )
             PhraseList(
                 weight = 1f,
-                list = substances,
+                list = inputState.substances,
                 transform = { it.pPhrases }
             )
         }
@@ -172,7 +173,7 @@ fun Page1(
                 fontWeight = FontWeight.Bold
             )
             @Suppress("SimplifiableCallChain")
-            Text(Substance.sources(substances).map { stringResource(it.label) }.joinToString(", "))
+            Text(Substance.sources(inputState.substances).map { stringResource(it.label) }.joinToString(", "))
         }
     }
 }

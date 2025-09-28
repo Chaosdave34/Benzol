@@ -12,21 +12,19 @@ import benzol.composeapp.generated.resources.export_url
 import benzol.composeapp.generated.resources.language
 import benzol.composeapp.generated.resources.theme
 import io.github.chaosdave34.benzol.SupportedLanguage
-import io.github.chaosdave34.benzol.data.SafetySheetUiState
 import io.github.chaosdave34.benzol.settings.Theme
 import io.github.chaosdave34.benzol.ui.AppPageBox
+import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 import io.github.chaosdave34.benzol.ui.Section
 import io.github.chaosdave34.benzol.ui.adaptive.AdaptivePageColumn
 import io.ktor.util.*
 import org.jetbrains.compose.resources.stringResource
 
+context(viewModel: SafetySheetViewModel)
 @Composable
-fun SettingsPage(
-    uiState: SafetySheetUiState,
-    onLanguageChange: (SupportedLanguage) -> Unit,
-    onThemeChange: (Theme) -> Unit,
-    onExportUrlChange: (String) -> Unit
-) {
+fun SettingsPage() {
+    val uiState by viewModel.uiState.collectAsState()
+
     AppPageBox(
         Modifier.fillMaxWidth(),
         contentAlignment = Alignment.TopCenter,
@@ -40,7 +38,7 @@ fun SettingsPage(
             ) {
                 LanguageSetting(
                     language = uiState.language,
-                    onLanguageChange = onLanguageChange
+                    onLanguageChange = viewModel::setLanguage
                 )
             }
 
@@ -49,7 +47,7 @@ fun SettingsPage(
             ) {
                 ThemeSetting(
                     theme = uiState.theme,
-                    onThemeChange = onThemeChange
+                    onThemeChange = viewModel::setTheme
                 )
             }
 
@@ -59,7 +57,7 @@ fun SettingsPage(
                 ) {
                     ExportUrlSetting(
                         exportUrl = uiState.exportUrl,
-                        onExportUrlChange = onExportUrlChange
+                        onExportUrlChange = viewModel::setExportUrl
                     )
                 }
             }

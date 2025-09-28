@@ -6,41 +6,40 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.*
+import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
+context(viewModel: SafetySheetViewModel)
 @Composable
-fun Page2(
-    modifier: Modifier = Modifier,
-    humanAndEnvironmentDanger: List<String>,
-    rulesOfConduct: List<String>,
-    inCaseOfDanger: List<String>,
-    disposal: List<String>
-) {
+fun Page2(modifier: Modifier = Modifier) {
     Page(
         modifier = modifier
     ) {
+        val inputState by viewModel.inputState.collectAsState()
 
         ListWithTitle(
             title = Res.string.human_and_environment_danger,
-            list = humanAndEnvironmentDanger
+            list = inputState.humanAndEnvironmentDanger
         )
         ListWithTitle(
             title = Res.string.rules_of_conduct,
-            list = rulesOfConduct
+            list = inputState.rulesOfConduct
         )
         ListWithTitle(
             title = Res.string.in_case_of_danger,
-            list = inCaseOfDanger
+            list = inputState.inCaseOfDanger
         )
         ListWithTitle(
             title = Res.string.disposal,
-            list = disposal
+            list = inputState.disposal
         )
 
         ListRow {

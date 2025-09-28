@@ -1,18 +1,11 @@
 package io.github.chaosdave34.benzol.ui.safetysheet.search
 
-import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.*
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -20,352 +13,232 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import androidx.window.core.layout.WindowSizeClass
 import benzol.composeapp.generated.resources.*
-import io.github.chaosdave34.benzol.Substance
+import io.github.chaosdave34.benzol.LocalSnackbarHostState
+import io.github.chaosdave34.benzol.data.Substance
 import io.github.chaosdave34.benzol.search.Gestis
-import io.github.chaosdave34.benzol.ui.CustomScrollbar
-import io.github.chaosdave34.benzol.ui.adaptive.AdaptiveDialog
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.rememberResourceEnvironment
 import org.jetbrains.compose.resources.stringResource
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun GestisSearch(
-    snackbarHostState: SnackbarHostState,
     onResult: (Substance) -> Unit,
     currentCasNumbers: List<String>
 ) {
+    val snackbarHostState = LocalSnackbarHostState.current
     val scope = rememberCoroutineScope()
+    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
+    val resourceEnvironment = rememberResourceEnvironment()
 
-    val allowedSearchTypes = rememberSaveable { Gestis.SearchType.entries.toMutableStateList() }
-    val searchArguments = rememberSaveable { mutableStateListOf(Gestis.SearchArgument(allowedSearchTypes.removeFirst(), "")) }
+    var chemicalName by rememberSaveable { mutableStateOf("") }
+    var casNumber by rememberSaveable { mutableStateOf("") }
+    var molecularFormula by rememberSaveable { mutableStateOf("") }
+    var fullText by rememberSaveable { mutableStateOf("") }
 
-    var searchState by rememberSaveable { mutableStateOf(SearchState.Input) }
-
-    var exactSearch by rememberSaveable { mutableStateOf(false) }
     var searchResults by rememberSaveable { mutableStateOf(listOf<Gestis.SearchResult>()) }
 
-    var selectedResult: Gestis.SearchResult? by rememberSaveable { mutableStateOf(null) }
+    var resultsDialogVisible by rememberSaveable { mutableStateOf(false) }
+    var loading by rememberSaveable { mutableStateOf(false) }
 
-    selectedResult?.let {
-        scope.launch {
-            val result = Gestis.getSubstanceInformation(it)
-            if (result != null) onResult(result.getSubstance())
-            selectedResult = null
+    val onSelectResult = fun(result: Gestis.SearchResult) {
+        if (result.casNumber in currentCasNumbers) {
+            scope.launch {
+                snackbarHostState.showSnackbar(getString(resourceEnvironment, Res.string.substance_exists))
+            }
+        } else {
+            loading = true
+            chemicalName = ""
+            casNumber = ""
+            molecularFormula = ""
+            fullText = ""
+            scope.launch {
+                Gestis.getSubstanceInformation(result)?.let {
+                    onResult(it.getSubstance())
+                }
+                loading = false
+            }
         }
-        Dialog(onDismissRequest = {}) {
+    }
+
+    val onSearch = fun(exactSearch: Boolean) {
+        loading = true
+        scope.launch {
+            val search = Gestis.search(
+                listOf(
+                    Pair(Gestis.SearchType.ChemicalName, chemicalName),
+                    Pair(Gestis.SearchType.CasNumber, casNumber),
+                    Pair(Gestis.SearchType.MolecularFormula, molecularFormula),
+                    Pair(Gestis.SearchType.FullText, fullText)
+                ),
+                exactSearch
+            )
+            loading = false
+
+            if (search == null) {
+                snackbarHostState.showSnackbar(getString(resourceEnvironment, Res.string.failed_search))
+            } else {
+                when (search.size) {
+                    0 -> snackbarHostState.showSnackbar(getString(resourceEnvironment, Res.string.no_search_results))
+                    1 -> onSelectResult(search[0])
+                    else -> {
+                        searchResults = search
+                        resultsDialogVisible = true
+                    }
+                }
+            }
+        }
+    }
+
+    if (loading) {
+        Dialog(
+            onDismissRequest = {},
+            properties = DialogProperties(usePlatformDefaultWidth = false)
+        ) {
             LoadingIndicator(Modifier.size(100.dp))
         }
     }
 
-    LaunchedEffect(searchState, exactSearch) {
-        if (searchState == SearchState.Search) {
-            val search = Gestis.search(Gestis.Search(searchArguments, exactSearch))
-
-            if (search == null) {
-                searchState = SearchState.Error
-            } else {
-                searchResults = search
-                searchState = SearchState.Success
-            }
-        }
-    }
-
-    if (searchState != SearchState.Input) {
-        val alreadyExists = stringResource(Res.string.substance_exists)
-
-        SearchDialog(
-            searchState = searchState,
-            searchResults = searchResults,
-            onDismissRequest = { searchState = SearchState.Input },
-            onSelectResult = { result ->
-                if (result.casNumber in currentCasNumbers) {
-                    scope.launch {
-                        snackbarHostState.showSnackbar(alreadyExists)
-                    }
-                } else {
-                    selectedResult = result
-                }
-
-                searchState = SearchState.Input
-
-                searchArguments.forEach {
-                    it.value = ""
-                }
-
-                exactSearch = false
-            },
-            exactSearch = exactSearch,
-            onExactSearchChange = {
-                exactSearch = it
-                searchState = SearchState.Search
-            }
-        )
-    }
+    SearchResultsDialog(
+        visible = resultsDialogVisible,
+        searchResults = searchResults,
+        onDismissRequest = { resultsDialogVisible = false },
+        onSelectResult = onSelectResult
+    )
 
     Column(
+        Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(stringResource(Res.string.gestis_hint))
 
-        Column(
-            Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+        val maxItemsInEachRow = if (windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND)) 2 else 1
+
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            maxItemsInEachRow = maxItemsInEachRow
         ) {
-            searchArguments.forEachIndexed { index, argument ->
-                var dropdownExpanded by remember { mutableStateOf(false) }
-
-                var suggestionsExpanded by remember { mutableStateOf(false) }
-                var suggestions by rememberSaveable { mutableStateOf(emptyList<String>()) }
-
-                LaunchedEffect(argument, searchState) {
-                    if (argument.value.length >= 3 && searchState == SearchState.Input) {
-                        suggestions = Gestis.getSearchSuggestions(argument)
-                        if (suggestions.isNotEmpty()) suggestionsExpanded = true
-                    } else {
-                        suggestions = emptyList()
-                        suggestionsExpanded = false
-                    }
-                }
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    ExposedDropdownMenuBox(
-                        modifier = Modifier.weight(0.4f),
-                        expanded = dropdownExpanded,
-                        onExpandedChange = { dropdownExpanded = it }
-                    ) {
-                        OutlinedTextField(
-                            modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable).fillMaxWidth(),
-                            value = stringResource(argument.searchType.stringResource),
-                            readOnly = true,
-                            onValueChange = {},
-                            label = { Text(stringResource(Res.string.search_option)) },
-                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(dropdownExpanded) },
-                            enabled = searchArguments.size < 4,
-                            colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
-                        )
-
-                        ExposedDropdownMenu(
-                            expanded = dropdownExpanded,
-                            onDismissRequest = { dropdownExpanded = false }
-                        ) {
-                            Gestis.SearchType.entries.forEach {
-                                DropdownMenuItem(
-                                    text = { Text(stringResource(it.stringResource)) },
-                                    onClick = {
-                                        allowedSearchTypes.add(argument.searchType)
-                                        allowedSearchTypes.remove(it)
-
-                                        searchArguments[index] = argument.copy(searchType = it)
-                                        dropdownExpanded = false
-                                    },
-                                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
-                                )
-                            }
-                        }
-                    }
-
-                    ExposedDropdownMenuBox(
-                        modifier = Modifier.weight(0.6f),
-                        expanded = suggestionsExpanded,
-                        onExpandedChange = { suggestionsExpanded = it }
-                    ) {
-
-                        OutlinedTextField(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
-                                .onKeyEvent { event ->
-                                    if (event.key == Key.Enter) {
-                                        searchState = SearchState.Search
-                                        suggestionsExpanded = false
-                                        return@onKeyEvent true
-                                    }
-                                    false
-                                },
-                            value = argument.value,
-                            onValueChange = { searchArguments[index] = argument.copy(value = it) },
-                            singleLine = true,
-                            label = { Text(stringResource(Res.string.search)) },
-                            leadingIcon = { Icon(Icons.Rounded.Search, null) },
-                            trailingIcon = {
-                                IconButton(
-                                    onClick = {
-                                        searchArguments.removeAt(index)
-                                        allowedSearchTypes.add(argument.searchType)
-                                    },
-                                    enabled = searchArguments.size != 1
-                                ) {
-                                    Icon(Icons.Rounded.Delete, stringResource(Res.string.delete))
-                                }
-                            },
-                            colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
-                        )
-
-                        ExposedDropdownMenu(
-                            modifier = Modifier.heightIn(max = (5 * 48 + 16).dp),
-                            expanded = suggestionsExpanded,
-                            onDismissRequest = { suggestionsExpanded = false },
-                        ) {
-                            suggestions.forEach {
-                                DropdownMenuItem(
-                                    text = { Text(it) },
-                                    onClick = {
-                                        searchArguments[index] = argument.copy(value = it)
-                                        suggestionsExpanded = false
-                                    },
-                                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
-                                )
-                            }
-                        }
-                    }
-                }
-            }
+            SearchBar(
+                modifier = Modifier.weight(0.5f),
+                searchType = Gestis.SearchType.ChemicalName,
+                value = chemicalName,
+                onValueChange = { chemicalName = it },
+                onSearch = { onSearch(false) }
+            )
+            SearchBar(
+                modifier = Modifier.weight(0.5f),
+                searchType = Gestis.SearchType.CasNumber,
+                value = casNumber,
+                onValueChange = { casNumber = it },
+                onSearch = { onSearch(false) }
+            )
+            SearchBar(
+                modifier = Modifier.weight(0.5f),
+                searchType = Gestis.SearchType.MolecularFormula,
+                value = molecularFormula,
+                onValueChange = { molecularFormula = it },
+                onSearch = { onSearch(false) }
+            )
+            SearchBar(
+                modifier = Modifier.weight(0.5f),
+                searchType = Gestis.SearchType.FullText,
+                value = fullText,
+                onValueChange = { fullText = it },
+                onSearch = { onSearch(false) }
+            )
         }
+
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)
         ) {
-            FilledIconButton(
-                onClick = { searchArguments.add(Gestis.SearchArgument(allowedSearchTypes.removeFirst(), "")) },
-                enabled = searchArguments.size < 4
-            ) {
-                Icon(Icons.Rounded.Add, stringResource(Res.string.add))
-            }
-
             Button(
-                onClick = { searchState = SearchState.Search },
-            ) { Text(stringResource(Res.string.do_search)) }
-
-            Spacer(Modifier.width(ButtonDefaults.MinWidth))
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-@Composable
-private fun SearchDialog(
-    searchState: SearchState,
-    searchResults: List<Gestis.SearchResult>,
-    onDismissRequest: () -> Unit,
-    onSelectResult: (Gestis.SearchResult) -> Unit,
-    exactSearch: Boolean,
-    onExactSearchChange: (Boolean) -> Unit
-) {
-    AdaptiveDialog(
-        title = stringResource(Res.string.search_results),
-        onDismissRequest = onDismissRequest,
-        actions = {
-            ToggleButton(
-                checked = exactSearch,
-                onCheckedChange = onExactSearchChange
+                onClick = { onSearch(false) },
+            ) {
+                Text(stringResource(Res.string.do_search))
+            }
+            Button(
+                onClick = { onSearch(true) }
             ) {
                 Text(stringResource(Res.string.exact_search))
             }
         }
-    ) {
-        val scrollState = rememberScrollState()
-
-        when (searchState) {
-            SearchState.Input -> {}
-            SearchState.Search -> Loading(scrollState)
-            SearchState.Success -> SearchResults(
-                searchResult = searchResults,
-                onSelectResult = onSelectResult,
-                scrollState = scrollState
-            )
-
-            SearchState.Error -> Error(scrollState)
-        }
-
-        if (!(searchState == SearchState.Search && searchResults.isNotEmpty())) {
-            CustomScrollbar(
-                scrollState = scrollState,
-                offset = 12.dp
-            )
-        }
     }
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun Loading(
-    scrollState: ScrollState
+private fun SearchBar(
+    modifier: Modifier = Modifier,
+    searchType: Gestis.SearchType,
+    value: String,
+    onValueChange: (String) -> Unit,
+    onSearch: () -> Unit
 ) {
-    Box(
-        Modifier
-            .fillMaxSize()
-            .verticalScroll(scrollState),
-        contentAlignment = Alignment.Center
-    ) {
-        LoadingIndicator()
-    }
-}
+    var expanded by remember { mutableStateOf(false) }
+    var suggestions by remember { mutableStateOf(emptyList<String>()) }
 
-@Composable
-private fun Error(
-    scrollState: ScrollState
-) {
-    Box(
-        Modifier
-            .fillMaxSize()
-            .verticalScroll(scrollState),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(stringResource(Res.string.failed_search))
+    LaunchedEffect(value) {
+        suggestions = if (value.length >= 3) Gestis.getSearchSuggestions(searchType, value) else emptyList()
     }
-}
 
-@Composable
-private fun BoxScope.SearchResults(
-    searchResult: List<Gestis.SearchResult>,
-    onSelectResult: (Gestis.SearchResult) -> Unit,
-    scrollState: ScrollState
-) {
-    if (searchResult.isEmpty()) {
-        Box(
-            Modifier
-                .fillMaxSize()
-                .verticalScroll(scrollState),
-            contentAlignment = Alignment.Center
+    ExposedDropdownMenuBox(
+        modifier = modifier,
+        expanded = expanded,
+        onExpandedChange = { expanded = it }
+    ) {
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
+                .onKeyEvent { event ->
+                    if (event.key == Key.Enter) {
+                        onSearch()
+                        expanded = false
+                        return@onKeyEvent true
+                    }
+                    false
+                },
+            value = value,
+            onValueChange = onValueChange,
+            singleLine = true,
+            label = { Text(stringResource(searchType.label), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+            leadingIcon = { Icon(Icons.Rounded.Search, null) },
+            trailingIcon = {
+                IconButton(
+                    onClick = { onValueChange("") },
+                    enabled = value.isNotEmpty(),
+                ) {
+                    Icon(Icons.Rounded.Clear, stringResource(Res.string.clear))
+                }
+            },
+            colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
+        )
+
+        ExposedDropdownMenu(
+            modifier = Modifier.heightIn(max = (5 * 48 + 16).dp),
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
         ) {
-            Text(stringResource(Res.string.no_search_results))
-        }
-    } else {
-        val lazyListState = rememberLazyListState()
-        LazyColumn(
-            Modifier.fillMaxHeight(),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            state = lazyListState
-        ) {
-            items(items = searchResult.sortedBy { it.rank }, key = { it.rank }) {
-                ListItem(
-                    modifier = Modifier.clickable(
-                        onClick = { onSelectResult(it) }
-                    ),
-                    headlineContent = { Text(it.name) },
-                    supportingContent = { Text(it.casNumber ?: "-") },
+            suggestions.forEach {
+                DropdownMenuItem(
+                    text = { Text(it) },
+                    onClick = {
+                        onValueChange(it)
+                        expanded = false
+                    },
+                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
                 )
             }
         }
-
-        CustomScrollbar(
-            lazyListState = lazyListState,
-            offset = 12.dp
-        )
     }
-}
-
-private enum class SearchState {
-    Input,
-    Search,
-    Success,
-    Error,
 }

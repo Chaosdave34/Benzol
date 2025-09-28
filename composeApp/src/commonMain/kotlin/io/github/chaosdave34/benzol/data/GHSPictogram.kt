@@ -1,9 +1,8 @@
-package io.github.chaosdave34.benzol
+package io.github.chaosdave34.benzol.data
 
 import benzol.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.DrawableResource
 import kotlin.io.encoding.Base64
-
 
 enum class GHSPictogram(val drawableResource: DrawableResource, private val fileName: String, val alt: String) {
     Explosion(Res.drawable.explosion, "explosion", "ghs01"),

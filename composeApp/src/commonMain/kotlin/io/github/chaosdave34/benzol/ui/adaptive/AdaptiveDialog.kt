@@ -7,6 +7,7 @@ import androidx.compose.material3.*
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -20,7 +21,7 @@ import org.jetbrains.compose.resources.stringResource
 fun AdaptiveDialog(
     title: String,
     onDismissRequest: () -> Unit,
-    actions: @Composable RowScope.() -> Unit,
+    actions: @Composable RowScope.() -> Unit = {},
     content: @Composable BoxScope.() -> Unit,
 ) {
     val adaptiveInfo = currentWindowAdaptiveInfo()
@@ -67,8 +68,12 @@ private fun AdaptiveDialogScaffold(
     actions: @Composable RowScope.() -> Unit,
     content: @Composable BoxScope.() -> Unit,
 ) {
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
     Scaffold(
-        Modifier.fillMaxWidth(),
+        Modifier
+            .fillMaxWidth()
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopAppBar(
                 title = {
@@ -87,7 +92,8 @@ private fun AdaptiveDialogScaffold(
                     if (fullscreen) {
                         actions()
                     }
-                }
+                },
+                scrollBehavior = scrollBehavior
             )
         },
         bottomBar = {
@@ -108,7 +114,7 @@ private fun AdaptiveDialogScaffold(
         Box(
             Modifier
                 .padding(contentPadding)
-                .padding(12.dp)
+                .padding(horizontal = 12.dp)
         ) {
             content()
         }

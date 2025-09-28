@@ -1,7 +1,7 @@
 package io.github.chaosdave34.benzol.files
 
 import benzol.composeapp.generated.resources.*
-import io.github.chaosdave34.benzol.Substance
+import io.github.chaosdave34.benzol.data.Substance
 import kotlinx.html.*
 import kotlinx.html.stream.appendHTML
 import org.jetbrains.compose.resources.ExperimentalResourceApi

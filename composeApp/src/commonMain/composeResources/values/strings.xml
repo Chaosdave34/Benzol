@@ -69,7 +69,7 @@
     <string name="do_search">Suchen</string>
     <string name="exact_search">Exakte Suche</string>
     <string name="failed_search">Es ist ein Fehler bei der Suche aufgetreten.</string>
-    <string name="no_search_results">Keine Ergebnisse</string>
+    <string name="no_search_results">Keine Ergebnisse gefunden</string>
 
     <string name="theme">Farbschema</string>
     <string name="follow_system">System</string>
@@ -140,4 +140,6 @@
     <string name="substance_exists">Eine Substanz mit dieser CAS-Nummer existiert bereits.</string>
 
     <string name="no_pdf_export_url_provided">Keine PDF Export URL angegeben!</string>
+
+    <string name="clear">Leeren</string>
 </resources>

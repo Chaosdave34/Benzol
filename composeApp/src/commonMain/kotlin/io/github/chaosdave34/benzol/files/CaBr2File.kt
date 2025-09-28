@@ -1,7 +1,7 @@
 package io.github.chaosdave34.benzol.files
 
-import io.github.chaosdave34.benzol.GHSPictogram
-import io.github.chaosdave34.benzol.Substance
+import io.github.chaosdave34.benzol.data.GHSPictogram
+import io.github.chaosdave34.benzol.data.Substance
 import io.github.chaosdave34.benzol.files.CaBr2File.CaBr2Data.Source.Companion.toProvider
 import io.github.chaosdave34.benzol.files.CaBr2File.CaBr2Data.ValuePair.Companion.toListPair
 import io.github.chaosdave34.benzol.files.CaBr2File.CaBr2Data.ValuePair.Companion.toStringPair
