@@ -1,6 +1,7 @@
 package io.github.chaosdave34.benzol.ui.settings
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -26,7 +27,9 @@ fun SettingsPage() {
     val uiState by viewModel.uiState.collectAsState()
 
     AppPageBox(
-        Modifier.fillMaxWidth(),
+        Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp),
         contentAlignment = Alignment.TopCenter,
     ) { scrollState ->
         AdaptivePageColumn(
