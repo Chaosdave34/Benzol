@@ -13,14 +13,11 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import benzol.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
 
+context(viewModel: SafetySheetViewModel)
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun FloatingActionButtonMenu(
     visible: Boolean,
-    onResetInput: () -> Unit,
-    onChooseFile: () -> Unit,
-    onSaveFile: () -> Unit,
-    onExportPdf: () -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -55,25 +52,37 @@ fun FloatingActionButtonMenu(
             }
         ) {
             FabButton(
-                onClick = onResetInput,
+                onClick = {
+                    viewModel.resetInput()
+                    expanded = false
+                },
                 text = stringResource(Res.string.new_file),
                 imageVector = Icons.Filled.ClearAll,
                 contentDescription = stringResource(Res.string.new_file)
             )
             FabButton(
-                onClick = onChooseFile,
+                onClick = {
+                    viewModel.openFileChooser()
+                    expanded = false
+                },
                 text = stringResource(Res.string.open_file),
                 imageVector = Icons.Filled.FileOpen,
                 contentDescription = stringResource(Res.string.new_file)
             )
             FabButton(
-                onClick = onSaveFile,
+                onClick = {
+                    viewModel.openFileSaver()
+                    expanded = false
+                },
                 text = stringResource(Res.string.save_file),
                 imageVector = Icons.Filled.Save,
                 contentDescription = stringResource(Res.string.save_file)
             )
             FabButton(
-                onClick = onExportPdf,
+                onClick = {
+                    viewModel.openPdfExport()
+                    expanded = false
+                },
                 text = stringResource(Res.string.export_file),
                 imageVector = Icons.Filled.PictureAsPdf,
                 contentDescription = stringResource(Res.string.export_file)

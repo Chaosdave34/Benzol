@@ -1,7 +1,7 @@
 package io.github.chaosdave34.benzol.ui
 
 import androidx.lifecycle.ViewModel
-import benzol.composeapp.generated.resources.*
+import androidx.lifecycle.viewModelScope
 import io.github.chaosdave34.benzol.SupportedLanguage
 import io.github.chaosdave34.benzol.data.SafetySheetData
 import io.github.chaosdave34.benzol.data.SafetySheetInputState
@@ -9,13 +9,14 @@ import io.github.chaosdave34.benzol.data.SafetySheetUiState
 import io.github.chaosdave34.benzol.data.Substance
 import io.github.chaosdave34.benzol.settings.Settings
 import io.github.chaosdave34.benzol.settings.Theme
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import org.jetbrains.compose.resources.getString
-import org.jetbrains.compose.resources.getStringArray
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class SafetySheetViewModel(
     val startDestination: Destination
 ) : ViewModel() {
@@ -24,7 +25,7 @@ class SafetySheetViewModel(
     private val _uiState: MutableStateFlow<SafetySheetUiState> = MutableStateFlow(SafetySheetUiState(startDestination, settings))
     val uiState: StateFlow<SafetySheetUiState> = _uiState.asStateFlow()
 
-    private val _inputState = MutableStateFlow(SafetySheetInputState())
+    private val _inputState: MutableStateFlow<SafetySheetInputState> = MutableStateFlow(SafetySheetInputState())
     val inputState = _inputState.asStateFlow()
 
     fun setSelectedDestination(destination: Destination) {
@@ -110,10 +111,6 @@ class SafetySheetViewModel(
     }
 
     // Substances
-    fun setSubstances(substances: List<Substance>) {
-        _inputState.update { it.copy(substances = substances) }
-    }
-
     fun addSubstance(substance: Substance) {
         _inputState.update { it.copy(substances = it.substances + substance) }
     }
@@ -134,11 +131,7 @@ class SafetySheetViewModel(
         }
     }
 
-    // Humand and Environment Danger
-    fun setHumanAndEnvironmentDanger(list: List<String>) {
-        _inputState.update { it.copy(humanAndEnvironmentDanger = list) }
-    }
-
+    // Human and Environment Danger
     fun addHumanAndEnvironmentDanger(item: String) {
         _inputState.update { it.copy(humanAndEnvironmentDanger = it.humanAndEnvironmentDanger + item) }
     }
@@ -160,10 +153,6 @@ class SafetySheetViewModel(
     }
 
     // In Case of Danger
-    fun setInCaseOfDanger(list: List<String>) {
-        _inputState.update { it.copy(inCaseOfDanger = list) }
-    }
-
     fun addInCaseOfDanger(item: String) {
         _inputState.update { it.copy(inCaseOfDanger = it.inCaseOfDanger + item) }
     }
@@ -185,10 +174,6 @@ class SafetySheetViewModel(
     }
 
     // Rules of Conduct
-    fun setRulesOfConduct(list: List<String>) {
-        _inputState.update { it.copy(rulesOfConduct = list) }
-    }
-
     fun addRuleOfConduct(item: String) {
         _inputState.update { it.copy(rulesOfConduct = it.rulesOfConduct + item) }
     }
@@ -210,10 +195,6 @@ class SafetySheetViewModel(
     }
 
     // Disposal
-    fun setDisposal(list: List<String>) {
-        _inputState.update { it.copy(disposal = list) }
-    }
-
     fun addDisposal(item: String) {
         _inputState.update { it.copy(disposal = it.disposal + item) }
     }
@@ -234,21 +215,12 @@ class SafetySheetViewModel(
         }
     }
 
-    suspend fun resetInput() {
-        setFilename("")
-        setDocumentTitle(getString(Res.string.document_title_default))
-        setOrganisation(getString(Res.string.organisation_default))
-        setCourse(getString(Res.string.course_default))
-        setName("")
-        setPlace("")
-        setAssistant("")
-        setPreparation("")
-
-        setSubstances(emptyList())
-        setHumanAndEnvironmentDanger(emptyList())
-        setInCaseOfDanger(getStringArray(Res.array.in_case_of_danger_defaults))
-        setRulesOfConduct(getStringArray(Res.array.rules_of_conduct_defaults))
-        setDisposal(emptyList())
+    fun resetInput() {
+        viewModelScope.launch {
+            _inputState.update { _ ->
+                SafetySheetInputState.default()
+            }
+        }
     }
 
     fun importData(data: SafetySheetData) {

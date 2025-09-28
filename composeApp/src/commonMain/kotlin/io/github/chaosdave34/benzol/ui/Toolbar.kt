@@ -17,15 +17,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import benzol.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
 
+context(viewModel: SafetySheetViewModel)
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun BoxScope.Toolbar(
-    visible: Boolean,
-    onResetInput: () -> Unit,
-    onChooseFile: () -> Unit,
-    onSaveFile: () -> Unit,
-    onExportPdf: () -> Unit,
-) {
+fun BoxScope.Toolbar(visible: Boolean) {
     AnimatedVisibility(
         modifier = Modifier
             .align(Alignment.CenterEnd)
@@ -43,25 +38,25 @@ fun BoxScope.Toolbar(
             colors = FloatingToolbarDefaults.vibrantFloatingToolbarColors()
         ) {
             ToolbarButton(
-                onClick = { onResetInput() },
+                onClick = viewModel::resetInput,
                 tooltip = stringResource(Res.string.new_file),
                 imageVector = Icons.Filled.ClearAll,
                 contentDescription = stringResource(Res.string.new_file)
             )
             ToolbarButton(
-                onClick = onChooseFile,
+                onClick = viewModel::openFileChooser,
                 tooltip = stringResource(Res.string.open_file),
                 imageVector = Icons.Filled.FileOpen,
                 contentDescription = stringResource(Res.string.new_file)
             )
             ToolbarButton(
-                onClick = onSaveFile,
+                onClick = viewModel::openFileSaver,
                 tooltip = stringResource(Res.string.save_file),
                 imageVector = Icons.Filled.Save,
                 contentDescription = stringResource(Res.string.save_file)
             )
             ToolbarButton(
-                onClick = onExportPdf,
+                onClick = viewModel::openPdfExport,
                 tooltip = stringResource(Res.string.export_file),
                 imageVector = Icons.Filled.PictureAsPdf,
                 contentDescription = stringResource(Res.string.export_file)

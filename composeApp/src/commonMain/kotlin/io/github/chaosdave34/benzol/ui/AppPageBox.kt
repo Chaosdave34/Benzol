@@ -11,7 +11,6 @@ import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -19,7 +18,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.window.core.layout.WindowSizeClass
 import io.github.chaosdave34.benzol.LocalSnackbarHostState
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
 context(viewModel: SafetySheetViewModel)
@@ -30,7 +28,6 @@ fun AppPageBox(
     contentAlignment: Alignment = Alignment.TopStart,
     content: @Composable BoxScope.(ScrollState) -> Unit
 ) {
-    val scope = rememberCoroutineScope()
     val snackbarHostState = LocalSnackbarHostState.current
     val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
     val uiState by viewModel.uiState.collectAsState()
@@ -71,17 +68,7 @@ fun AppPageBox(
             if (!windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND) ||
                 !windowSizeClass.isHeightAtLeastBreakpoint(WindowSizeClass.HEIGHT_DP_MEDIUM_LOWER_BOUND)
             ) {
-                FloatingActionButtonMenu(
-                    visible = fabOrToolbarVisible,
-                    onResetInput = {
-                        scope.launch {
-                            scope.launch { viewModel.resetInput() }
-                        }
-                    },
-                    onChooseFile = viewModel::openFileChooser,
-                    onSaveFile = viewModel::openFileSaver,
-                    onExportPdf = viewModel::openPdfExport
-                )
+                FloatingActionButtonMenu(fabOrToolbarVisible)
             }
         }
     ) { contentPadding ->
@@ -96,15 +83,7 @@ fun AppPageBox(
             if (windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND) &&
                 windowSizeClass.isHeightAtLeastBreakpoint(WindowSizeClass.HEIGHT_DP_MEDIUM_LOWER_BOUND)
             ) {
-                Toolbar(
-                    visible = fabOrToolbarVisible,
-                    onResetInput = {
-                        scope.launch { viewModel.resetInput() }
-                    },
-                    onChooseFile = viewModel::openFileChooser,
-                    onSaveFile = viewModel::openFileSaver,
-                    onExportPdf = viewModel::openPdfExport
-                )
+                Toolbar(fabOrToolbarVisible)
             }
         }
     }
