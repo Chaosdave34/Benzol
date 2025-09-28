@@ -1,4 +1,4 @@
-package io.github.chaosdave34.benzol.ui
+package io.github.chaosdave34.benzol.ui.safetysheet
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text

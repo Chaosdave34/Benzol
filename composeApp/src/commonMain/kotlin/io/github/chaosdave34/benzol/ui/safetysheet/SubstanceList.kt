@@ -17,7 +17,6 @@ import benzol.composeapp.generated.resources.delete
 import benzol.composeapp.generated.resources.edit_substance
 import io.github.chaosdave34.benzol.data.Substance
 import io.github.chaosdave34.benzol.search.Source
-import io.github.chaosdave34.benzol.ui.FormattedMolecularFormula
 import io.github.chaosdave34.benzol.ui.adaptive.AdaptiveButton
 import org.jetbrains.compose.resources.stringResource
 
