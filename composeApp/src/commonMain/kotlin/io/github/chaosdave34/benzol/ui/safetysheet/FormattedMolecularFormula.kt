@@ -1,6 +1,6 @@
 package io.github.chaosdave34.benzol.ui.safetysheet
 
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.SpanStyle
@@ -23,7 +23,7 @@ fun FormattedMolecularFormula(
                     withStyle(
                         style = SpanStyle(
                             baselineShift = BaselineShift.Subscript,
-                            fontSize = MaterialTheme.typography.bodySmall.fontSize
+                            fontSize = LocalTextStyle.current.fontSize * 0.7
                         )
                     ) {
                         append(it)
