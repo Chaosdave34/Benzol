@@ -50,10 +50,10 @@
     <string name="quantity">Menge</string>
     <string name="unit">Einheit</string>
 
-    <string name="human_and_environment_danger">Gefahren für Mensch und Umwelt, die von den Ausgangsmaterialien bzw. den Produkten ausgehen, soweit sie nicht durch genannte Angaben abgedeckt sind (z.B. krebserregend, fruchtschädigend, hautresorptiv):</string>
-    <string name="rules_of_conduct">Schutzmaßnahmen und Verhaltensregeln:</string>
-    <string name="in_case_of_danger">Verhalten im Gefahrenfall, Erste-Hilfe-Maßnahmen (gegebenenfalls Kopie der entsprechenden Literaturstelle beiheften):</string>
-    <string name="disposal">Entsorgung:</string>
+    <string name="human_and_environment_danger">Gefahren für Mensch und Umwelt, die von den Ausgangsmaterialien bzw. den Produkten ausgehen, soweit sie nicht durch genannte Angaben abgedeckt sind (z.B. krebserregend, fruchtschädigend, hautresorptiv)</string>
+    <string name="rules_of_conduct">Schutzmaßnahmen und Verhaltensregeln</string>
+    <string name="in_case_of_danger">Verhalten im Gefahrenfall, Erste-Hilfe-Maßnahmen (gegebenenfalls Kopie der entsprechenden Literaturstelle beiheften)</string>
+    <string name="disposal">Entsorgung</string>
 
     <string name="h_phrases">H-Sätze</string>
     <string name="p-phrases">P-Sätze</string>
@@ -81,17 +81,17 @@
     <string name="preview">Vorschau</string>
     <string name="name_with_plural">Name(n)</string>
 
-    <string name="used_substances">eingesetze Stoffe\nund Produkte</string>
+    <string name="used_substances">Eingesetze Stoffe\nund Produkte</string>
     <string name="molar_mass_with_unit">MG\n[g/mol]</string>
     <string name="temperatures">Sdp.\nSmp.</string>
     <string name="h_and_p_phrases_number">H/P-Sätze\n(Nummern)</string>
     <string name="mak_ld50_wgk">Mak\nLD50\nWGK</string>
     <string name="quantity_required">Für Ansatz benötigt</string>
 
-    <string name="sources">Quellen:</string>
+    <string name="sources">Quellen</string>
     <string name="source">Quelle</string>
 
-    <string name="title_h_and_p_phrases">Wortlaut der wesentlichen oben genannten H- und P-Sätze:</string>
+    <string name="title_h_and_p_phrases">Wortlaut der wesentlichen oben genannten H- und P-Sätze</string>
 
     <string name="signature_1">Hiermit verpflichte ich mich, den Versuch gemäß den in dieser Betriebsanweisung aufgeführten Sicherheitsvorschriften durchzuführen.</string>
     <string name="signature_2">Präparat zur Synthese mit den auf der Vorderseite berechneten Chemikalienmengen freigegeben.</string>
@@ -142,4 +142,6 @@
     <string name="no_pdf_export_url_provided">Keine PDF Export URL angegeben!</string>
 
     <string name="clear">Leeren</string>
+
+    <string name="search_substances">Substanzen suchen</string>
 </resources>

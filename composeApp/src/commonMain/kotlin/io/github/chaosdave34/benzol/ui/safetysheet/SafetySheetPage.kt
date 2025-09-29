@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -18,7 +19,7 @@ import io.github.chaosdave34.benzol.ui.AppPageBox
 import io.github.chaosdave34.benzol.ui.CustomTextField
 import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 import io.github.chaosdave34.benzol.ui.Section
-import io.github.chaosdave34.benzol.ui.safetysheet.search.SubstanceSearch
+import io.github.chaosdave34.benzol.ui.safetysheet.search.GestisSearch
 import org.jetbrains.compose.resources.stringResource
 
 context(viewModel: SafetySheetViewModel)
@@ -106,14 +107,32 @@ fun SafetySheetPage() {
                 )
             }
 
-            Section {
-                SubstanceSearch(
-                    onSearch = viewModel::addSubstance,
+            Section(
+                headlineContent = {
+                    Text(stringResource(Res.string.search_substances))
+                },
+                supportingContent = {
+                    Text(stringResource(Res.string.gestis_hint))
+                }
+            ) {
+//                SubstanceSearch(
+//                    onSearch = viewModel::addSubstance,
+//                    currentCasNumbers = inputState.substances.map { it.casNumber }
+//                )
+                GestisSearch(
+                    onResult = viewModel::addSubstance,
                     currentCasNumbers = inputState.substances.map { it.casNumber }
                 )
             }
 
-            Section {
+            Section(
+                headlineContent = {
+                    Text(stringResource(Res.string.used_substances).replace("\n", " "))
+                },
+                supportingContent = {
+                    Text(stringResource(Res.string.edit_substance))
+                }
+            ) {
                 SubstanceList(
                     substances = inputState.substances,
                     onSubstanceClick = {
@@ -129,36 +148,48 @@ fun SafetySheetPage() {
                 }
             }
 
-            Section {
+            Section(
+                headlineContent = {
+                    Text(stringResource(Res.string.human_and_environment_danger))
+                }
+            ) {
                 ListInput(
-                    title = stringResource(Res.string.human_and_environment_danger),
                     list = inputState.humanAndEnvironmentDanger,
                     onRemove = viewModel::removeHumanAndEnvironmentDanger,
                     onValueChange = viewModel::updateHumanAndEnvironmentDanger,
                     onAdd = { viewModel.addHumanAndEnvironmentDanger("") }
                 )
             }
-            Section {
+            Section(
+                headlineContent = {
+                    Text(stringResource(Res.string.rules_of_conduct))
+                }
+            ) {
                 ListInput(
-                    title = stringResource(Res.string.rules_of_conduct),
                     list = inputState.rulesOfConduct,
                     onRemove = viewModel::removeRuleOfConduct,
                     onValueChange = viewModel::updateRuleOfConduct,
                     onAdd = { viewModel.addRuleOfConduct("") }
                 )
             }
-            Section {
+            Section(
+                headlineContent = {
+                    Text(stringResource(Res.string.in_case_of_danger))
+                }
+            ) {
                 ListInput(
-                    title = stringResource(Res.string.in_case_of_danger),
                     list = inputState.inCaseOfDanger,
                     onRemove = viewModel::removeInCaseOfDanger,
                     onValueChange = viewModel::updateInCaseOfDanger,
                     onAdd = { viewModel.addInCaseOfDanger("") }
                 )
             }
-            Section {
+            Section(
+                headlineContent = {
+                    stringResource(Res.string.disposal)
+                }
+            ) {
                 ListInput(
-                    title = stringResource(Res.string.disposal),
                     list = inputState.disposal,
                     onRemove = viewModel::removeDisposal,
                     onValueChange = viewModel::updateDisposal,

@@ -17,19 +17,14 @@ import org.jetbrains.compose.resources.stringResource
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ListInput(
-    title: String,
     list: List<String>,
     onRemove: (Int) -> Unit,
     onValueChange: (Int, String) -> Unit,
     onAdd: () -> Unit
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleMediumEmphasized
-        )
         list.forEachIndexed { index, element ->
             Row(
                 modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Max),

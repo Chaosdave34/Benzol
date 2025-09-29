@@ -169,7 +169,7 @@ fun Page1(modifier: Modifier = Modifier) {
             modifier = modifier
         ) {
             Text(
-                text = stringResource(Res.string.sources) + " ",
+                text = stringResource(Res.string.sources) + ": ",
                 fontWeight = FontWeight.Bold
             )
             @Suppress("SimplifiableCallChain")

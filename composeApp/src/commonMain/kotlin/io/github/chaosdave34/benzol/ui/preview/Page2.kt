@@ -26,19 +26,19 @@ fun Page2(modifier: Modifier = Modifier) {
         val inputState by viewModel.inputState.collectAsState()
 
         ListWithTitle(
-            title = Res.string.human_and_environment_danger,
+            title = stringResource(Res.string.human_and_environment_danger) + ":",
             list = inputState.humanAndEnvironmentDanger
         )
         ListWithTitle(
-            title = Res.string.rules_of_conduct,
+            title = stringResource(Res.string.rules_of_conduct) + ":",
             list = inputState.rulesOfConduct
         )
         ListWithTitle(
-            title = Res.string.in_case_of_danger,
+            title = stringResource(Res.string.in_case_of_danger) + ":",
             list = inputState.inCaseOfDanger
         )
         ListWithTitle(
-            title = Res.string.disposal,
+            title = stringResource(Res.string.disposal) + ":",
             list = inputState.disposal
         )
 
@@ -57,7 +57,7 @@ fun Page2(modifier: Modifier = Modifier) {
 
 @Composable
 private fun ListWithTitle(
-    title: StringResource,
+    title: String,
     list: List<String>
 ) {
     val list = list.map { it.trim(); it.replace("\n", "") }
@@ -71,7 +71,7 @@ private fun ListWithTitle(
             modifier = Modifier.padding(bottom = 10.dp)
         ) {
             Text(
-                text = stringResource(title),
+                text = title,
                 fontWeight = FontWeight.Bold
             )
         }

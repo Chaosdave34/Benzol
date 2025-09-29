@@ -50,10 +50,10 @@
     <string name="quantity">Quantity</string>
     <string name="unit">Unit</string>
 
-    <string name="human_and_environment_danger">Hazards to humans and the environment posed by the starting materials or products, insofar as they are not covered by the information given (e.g. carcinogenic, teratogenic, skin-absorptive):</string>
-    <string name="rules_of_conduct">Protective measures and rules of conduct:</string>
-    <string name="in_case_of_danger">Behavior in case of danger, first aid measures (attach a copy of the relevant literature if necessary):</string>
-    <string name="disposal">Disposal:</string>
+    <string name="human_and_environment_danger">Hazards to humans and the environment posed by the starting materials or products, insofar as they are not covered by the information given (e.g. carcinogenic, teratogenic, skin-absorptive)</string>
+    <string name="rules_of_conduct">Protective measures and rules of conduct</string>
+    <string name="in_case_of_danger">Behavior in case of danger, first aid measures (attach a copy of the relevant literature if necessary)</string>
+    <string name="disposal">Disposal</string>
 
     <string name="h_phrases">H-phrases</string>
     <string name="p-phrases">P-phrases</string>
@@ -91,7 +91,7 @@
     <string name="sources">Sources:</string>
     <string name="source">Source</string>
 
-    <string name="title_h_and_p_phrases">Wording of the main H and P phrases mentioned above:</string>
+    <string name="title_h_and_p_phrases">Wording of the main H and P phrases mentioned above</string>
 
     <string name="signature_1">I hereby undertake to carry out the experiment in accordance with the safety regulations listed in these operating instructions.</string>
     <string name="signature_2">Preparation for synthesis approved with the quantities of chemicals calculated on the front.</string>
@@ -139,5 +139,7 @@
     <string name="no_pdf_export_url_provided">No PDF export url provided!</string>
 
     <string name="clear">Clear</string>
+
+    <string name="search_substances">Search Substances</string>
 </resources>
 

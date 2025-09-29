@@ -118,7 +118,7 @@ fun GestisSearch(
         Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Text(stringResource(Res.string.gestis_hint))
+        //Text(stringResource(Res.string.gestis_hint))
 
         val maxItemsInEachRow = if (windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND)) 2 else 1
 

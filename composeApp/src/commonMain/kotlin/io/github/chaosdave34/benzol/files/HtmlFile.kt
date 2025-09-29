@@ -44,11 +44,11 @@ class HtmlFile(
         val celsiusUnit = getString(resourceEnvironment, Res.string.celsius_unit)
 
         val hAndPPhrasesTitle = getString(resourceEnvironment, Res.string.title_h_and_p_phrases)
-        val sourcesTitle = getString(resourceEnvironment, Res.string.sources)
-        val humanAndEnvironmentDangerTitle = getString(resourceEnvironment, Res.string.human_and_environment_danger)
-        val rulesOfConductTitle = getString(resourceEnvironment, Res.string.rules_of_conduct)
-        val inCaseOfDangerTitle = getString(resourceEnvironment, Res.string.in_case_of_danger)
-        val disposalTitle = getString(resourceEnvironment, Res.string.disposal)
+        val sourcesTitle = getString(resourceEnvironment, Res.string.sources) + ":"
+        val humanAndEnvironmentDangerTitle = getString(resourceEnvironment, Res.string.human_and_environment_danger) + ":"
+        val rulesOfConductTitle = getString(resourceEnvironment, Res.string.rules_of_conduct) + ":"
+        val inCaseOfDangerTitle = getString(resourceEnvironment, Res.string.in_case_of_danger) + ":"
+        val disposalTitle = getString(resourceEnvironment, Res.string.disposal) + ":"
 
         val signature = getString(resourceEnvironment, Res.string.signature)
         val locationAndDate = getString(resourceEnvironment, Res.string.location_and_date)
