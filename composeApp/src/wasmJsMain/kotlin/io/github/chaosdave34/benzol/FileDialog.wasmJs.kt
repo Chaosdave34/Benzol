@@ -1,8 +1,6 @@
 package io.github.chaosdave34.benzol
 
 import androidx.compose.runtime.Composable
-import io.github.chaosdave34.benzol.data.SafetySheetUiState
-import io.github.chaosdave34.benzol.files.HtmlFile
 import io.github.chaosdave34.benzol.settings.Settings
 import io.ktor.client.*
 import io.ktor.client.request.*
@@ -23,9 +21,9 @@ private val client = HttpClient()
 @OptIn(ExperimentalWasmJsInterop::class)
 @Composable
 actual fun FileChooser(
-    coroutineScope: CoroutineScope,
+    scope: CoroutineScope,
     settings: Settings,
-    result: (String?, String) -> Unit,
+    onSelect: (String?, String) -> Unit,
     onClose: () -> Unit
 ) {
     val input = document.createElement("input") as HTMLInputElement
@@ -45,7 +43,7 @@ actual fun FileChooser(
         if (file != null) {
             val reader = FileReader()
             reader.onload = { _ ->
-                result(reader.result?.unsafeCast<JsString>()?.toString(), file.name)
+                onSelect(reader.result?.unsafeCast<JsString>()?.toString(), file.name)
             }
 
             reader.readAsText(file)
@@ -65,31 +63,30 @@ actual fun FileChooser(
 
 @Composable
 actual fun FileSaver(
-    coroutineScope: CoroutineScope,
+    scope: CoroutineScope,
     settings: Settings,
-    output: () -> Pair<String, String>,
+    fileName: String,
+    output: () -> String,
     onClose: () -> Unit
 ) {
-    coroutineScope.launch {
-        val output = output()
-
-        downloadFile(output.first.encodeToByteArray(), output.second)
+    scope.launch {
+        downloadFile(output().encodeToByteArray(), fileName)
         onClose()
     }
 }
 
 @Composable
 actual fun PdfExport(
-    coroutineScope: CoroutineScope,
+    scope: CoroutineScope,
     settings: Settings,
-    output: () -> Pair<HtmlFile, String>,
+    fileName: String,
+    html: suspend () -> String,
     onClose: (Boolean) -> Unit
 ) {
-    coroutineScope.launch {
-        val output = output()
+    scope.launch {
         val response = try {
             client.post(settings.exportUrl) {
-                setBody(output.first.create())
+                setBody(fileName)
             }
         } catch (_: Throwable) {
             onClose(false)
@@ -97,7 +94,7 @@ actual fun PdfExport(
         }
 
         if (response.status == HttpStatusCode.OK) {
-            downloadFile(response.bodyAsBytes(), output.second)
+            downloadFile(response.bodyAsBytes(), html())
 
             onClose(true)
         } else {

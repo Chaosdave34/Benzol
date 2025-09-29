@@ -7,3 +7,6 @@
 -keep class io.ktor.client.engine.cio.** {*;}
 -keep class io.ktor.serialization.kotlinx.** {*;}
 -keep class org.apache.commons.logging.impl.** {*;}
+
+-keep class com.sun.jna.** { *; }
+-keep class * implements com.sun.jna.** { *; }

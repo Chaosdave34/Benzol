@@ -6,7 +6,6 @@ import benzol.composeapp.generated.resources.Res
 import benzol.composeapp.generated.resources.export_file
 import benzol.composeapp.generated.resources.open_file
 import benzol.composeapp.generated.resources.save_file
-import io.github.chaosdave34.benzol.files.HtmlFile
 import io.github.chaosdave34.benzol.files.htmlToPdf
 import io.github.chaosdave34.benzol.settings.Settings
 import kotlinx.coroutines.CoroutineScope
@@ -19,109 +18,105 @@ import java.io.File
 
 @Composable
 actual fun FileChooser(
-    coroutineScope: CoroutineScope,
+    scope: CoroutineScope,
     settings: Settings,
-    result: (String?, String) -> Unit,
+    onSelect: (String?, String) -> Unit,
     onClose: () -> Unit
 ) {
-    val title = stringResource(Res.string.open_file)
-    AwtWindow(
-        create = {
-            object : FileDialog(null as Frame?, title, LOAD) {
-                init {
-                    directory = settings.lastUsedFolderOpen ?: System.getProperty("user.home")
+    ComposeFileDialog(
+        title = stringResource(Res.string.open_file),
+        mode = FileDialog.LOAD,
+        directory = settings.lastUsedFolderOpen,
+        callback = { directory, file ->
+            if (directory != null && file != null) {
+                scope.launch(Dispatchers.IO) {
+                    onSelect(File(directory + file).readText(), file)
+                    onClose()
                 }
-
-                override fun setVisible(visible: Boolean) {
-                    super.setVisible(visible)
-                    if (visible) {
-                        if (directory != null && file != null) {
-                            coroutineScope.launch(Dispatchers.IO) {
-                                result(File(directory + file).readText(), file)
-                                onClose()
-                            }
-                            settings.lastUsedFolderOpen = directory
-                        } else {
-                            onClose()
-                        }
-                    }
-                }
+                settings.lastUsedFolderOpen = directory
+            } else {
+                onClose()
             }
-        },
-        dispose = FileDialog::dispose,
+        }
     )
 }
 
 @Composable
 actual fun FileSaver(
-    coroutineScope: CoroutineScope,
+    scope: CoroutineScope,
     settings: Settings,
-    output: () -> Pair<String, String>,
+    fileName: String,
+    output: () -> String,
     onClose: () -> Unit
 ) {
-    val output = output()
-
-    val title = stringResource(Res.string.save_file)
-    AwtWindow(
-        create = {
-            object : FileDialog(null as Frame?, title, SAVE) {
-                init {
-                    directory = settings.lastUsedFolderSave ?: System.getProperty("user.home")
-                    file = output.second
+    ComposeFileDialog(
+        title = stringResource(Res.string.save_file),
+        mode = FileDialog.SAVE,
+        directory = settings.lastUsedFolderSave,
+        fileName = fileName,
+        callback = { directory, file ->
+            if (directory != null && file != null) {
+                scope.launch(Dispatchers.IO) {
+                    File(directory, file).writeText(output())
+                    onClose()
                 }
-
-                override fun setVisible(visible: Boolean) {
-                    super.setVisible(visible)
-                    if (visible) {
-                        if (directory != null && file != null) {
-                            coroutineScope.launch(Dispatchers.IO) {
-                                File(directory, file).writeText(output.first)
-                                onClose()
-                            }
-                            settings.lastUsedFolderSave = directory
-                        } else {
-                            onClose()
-                        }
-                    }
-                }
+                settings.lastUsedFolderSave = directory
+            } else {
+                onClose()
             }
-        },
-        dispose = FileDialog::dispose
+
+        }
     )
 }
 
 @Composable
 actual fun PdfExport(
-    coroutineScope: CoroutineScope,
+    scope: CoroutineScope,
     settings: Settings,
-    output: () -> Pair<HtmlFile, String>,
+    fileName: String,
+    html: suspend () -> String,
     onClose: (Boolean) -> Unit
 ) {
-    val output = output()
+    ComposeFileDialog(
+        title = stringResource(Res.string.export_file),
+        mode = FileDialog.SAVE,
+        directory = settings.lastUsedFolderExport,
+        fileName = fileName,
+        callback = { directory, file ->
+            if (directory != null && file != null) {
+                scope.launch(Dispatchers.IO) {
+                    val byteArray = htmlToPdf(html())
+                    File(directory, file).writeBytes(byteArray)
+                    onClose(true)
+                }
+                settings.lastUsedFolderExport = directory
+            } else {
+                onClose(false)
+            }
+        }
+    )
+}
 
-    val title = stringResource(Res.string.export_file)
+@Composable
+fun ComposeFileDialog(
+    title: String,
+    mode: Int,
+    directory: String?,
+    fileName: String? = null,
+    callback: (String?, String?) -> Unit
+) {
     AwtWindow(
         create = {
-            object : FileDialog(null as Frame?, title, SAVE) {
+            object : FileDialog(null as Frame?, title, mode) {
                 init {
-                    directory = settings.lastUsedFolderExport ?: System.getProperty("user.home")
-                    file = output.second
+                    this.directory = directory ?: System.getProperty("user.home")
+                    fileName?.let { this.file = it }
                 }
 
                 override fun setVisible(visible: Boolean) {
                     super.setVisible(visible)
                     if (visible) {
-                        if (directory != null && file != null) {
-                            coroutineScope.launch(Dispatchers.IO) {
-                                val html = output.first
-                                val byteArray = htmlToPdf(html.create())
-                                File(directory, file).writeBytes(byteArray)
-                                onClose(true)
-                            }
-                            settings.lastUsedFolderExport = directory
-                        } else {
-                            onClose(false)
-                        }
+                        callback(this.directory, file)
                     }
                 }
             }
@@ -129,4 +124,6 @@ actual fun PdfExport(
         dispose = FileDialog::dispose
     )
 }
+
+
 

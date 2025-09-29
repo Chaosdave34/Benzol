@@ -144,4 +144,6 @@
     <string name="clear">Leeren</string>
 
     <string name="search_substances">Substanzen suchen</string>
+
+    <string name="file_saved_success">Datei erfolgreich gespeichert</string>
 </resources>

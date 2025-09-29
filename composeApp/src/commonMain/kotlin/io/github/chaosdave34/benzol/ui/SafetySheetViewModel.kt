@@ -6,6 +6,7 @@ import io.github.chaosdave34.benzol.SupportedLanguage
 import io.github.chaosdave34.benzol.data.SafetySheetInputState
 import io.github.chaosdave34.benzol.data.SafetySheetUiState
 import io.github.chaosdave34.benzol.data.Substance
+import io.github.chaosdave34.benzol.files.CaBr2File
 import io.github.chaosdave34.benzol.settings.Settings
 import io.github.chaosdave34.benzol.settings.Theme
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -222,9 +223,27 @@ class SafetySheetViewModel(
         }
     }
 
-    fun importData(data: SafetySheetInputState) {
+    fun importCaBr2(fileName: String, data: CaBr2File.CaBr2Data) {
+        val header = data.header
+
+        val inputState = SafetySheetInputState(
+            filename = fileName.replace("\\.[^.]*$".toRegex(), ""),
+            documentTitle = header.documentTitle,
+            organisation = header.organisation,
+            course = header.labCourse,
+            name = header.name,
+            place = header.place,
+            assistant = header.assistant,
+            preparation = header.preparation,
+            substances = data.substanceData.map { it.import() },
+            humanAndEnvironmentDanger = data.humanAndEnvironmentDanger,
+            rulesOfConduct = data.rulesOfConduct,
+            inCaseOfDanger = data.inCaseOfDanger,
+            disposal = data.disposal
+        )
+
         _inputState.update {
-            data
+            inputState
         }
     }
 }

@@ -5,9 +5,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import benzol.composeapp.generated.resources.*
-import io.github.chaosdave34.benzol.data.SafetySheetInputState
 import io.github.chaosdave34.benzol.files.CaBr2File
-import io.github.chaosdave34.benzol.files.HtmlFile
+import io.github.chaosdave34.benzol.files.createHtml
 import io.github.chaosdave34.benzol.settings.Settings
 import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 import io.ktor.util.*
@@ -26,6 +25,7 @@ fun FileDialogs() {
 
     val settings = viewModel.settings
     val uiState by viewModel.uiState.collectAsState()
+    val inputData by viewModel.inputState.collectAsState()
 
     val unnamed = stringResource(Res.string.unnamed_file)
     val failedToLoadFile = stringResource(Res.string.failed_to_load_file)
@@ -34,31 +34,13 @@ fun FileDialogs() {
 
     if (uiState.fileChooserVisible) {
         FileChooser(
-            coroutineScope = scope,
+            scope = scope,
             settings = settings,
-            result = { json, fileName ->
+            onSelect = { json, fileName ->
                 if (json != null) {
                     val caBr2File = CaBr2File.fromJson(json)
                     if (caBr2File != null) {
-                        val header = caBr2File.header
-
-                        val inputDate = SafetySheetInputState(
-                            filename = fileName.replace("\\.[^.]*$".toRegex(), ""),
-                            documentTitle = header.documentTitle,
-                            organisation = header.organisation,
-                            course = header.labCourse,
-                            name = header.name,
-                            place = header.place,
-                            assistant = header.assistant,
-                            preparation = header.preparation,
-                            substances = caBr2File.substanceData.map { it.import() },
-                            humanAndEnvironmentDanger = caBr2File.humanAndEnvironmentDanger,
-                            rulesOfConduct = caBr2File.rulesOfConduct,
-                            inCaseOfDanger = caBr2File.inCaseOfDanger,
-                            disposal = caBr2File.disposal
-                        )
-
-                        viewModel.importData(inputDate)
+                        viewModel.importCaBr2(fileName, caBr2File)
                         return@FileChooser
                     }
                 }
@@ -72,10 +54,10 @@ fun FileDialogs() {
 
     if (uiState.fileSaverVisible) { // Only trim input, linebreaks should be saved
         FileSaver(
-            coroutineScope = scope,
+            scope = scope,
             settings = settings,
+            fileName = if (inputData.filename.isEmpty()) "$unnamed.cb2" else "${inputData.filename}.cb2",
             output = {
-                val inputData = viewModel.inputState.value
                 val header = CaBr2File.CaBr2Data.Header(
                     inputData.documentTitle.trim(),
                     inputData.organisation.trim(),
@@ -95,15 +77,13 @@ fun FileDialogs() {
                     inputData.disposal.map { it.trim() }
                 )
 
-                val fileName = if (inputData.filename.isEmpty()) "$unnamed.cb2" else "${inputData.filename}.cb2"
-
-                Pair(CaBr2File.toJson(content), fileName)
+                CaBr2File.toJson(content)
             },
             onClose = viewModel::closeFileSaver
         )
     }
 
-    if (uiState.pdfExportVisible) { // Trim input and remove linebreaks
+    if (uiState.pdfExportVisible) {
         if (PlatformUtils.IS_BROWSER && settings.exportUrl.isEmpty()) {
             scope.launch {
                 snackbarHostState.showSnackbar(getString(resourceEnvironment, Res.string.no_pdf_export_url_provided))
@@ -112,20 +92,10 @@ fun FileDialogs() {
         }
 
         PdfExport(
-            coroutineScope = scope,
+            scope = scope,
             settings = settings,
-            output = {
-                val inputData = viewModel.inputState.value
-
-                val htmlFile = HtmlFile(
-                    inputData,
-                    resourceEnvironment
-                )
-
-                val fileName = if (inputData.filename.isEmpty()) "$unnamed.pdf" else "${inputData.filename}.pdf"
-
-                Pair(htmlFile, fileName)
-            },
+            fileName = if (inputData.filename.isEmpty()) "$unnamed.pdf" else "${inputData.filename}.pdf",
+            html = { createHtml(inputData, resourceEnvironment) },
             onClose = { success ->
                 viewModel.closePdfExport()
                 scope.launch {
@@ -136,27 +106,28 @@ fun FileDialogs() {
     }
 }
 
-
 @Composable
 expect fun FileChooser(
-    coroutineScope: CoroutineScope,
+    scope: CoroutineScope,
     settings: Settings,
-    result: (String?, String) -> Unit,
+    onSelect: (String?, String) -> Unit,
     onClose: () -> Unit
 )
 
 @Composable
 expect fun FileSaver(
-    coroutineScope: CoroutineScope,
+    scope: CoroutineScope,
     settings: Settings,
-    output: () -> Pair<String, String>,
+    fileName: String,
+    output: () -> String,
     onClose: () -> Unit,
 )
 
 @Composable
 expect fun PdfExport(
-    coroutineScope: CoroutineScope,
+    scope: CoroutineScope,
     settings: Settings,
-    output: () -> Pair<HtmlFile, String>,
+    fileName: String,
+    html: suspend () -> String,
     onClose: (Boolean) -> Unit
 )

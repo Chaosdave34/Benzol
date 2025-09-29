@@ -141,5 +141,7 @@
     <string name="clear">Clear</string>
 
     <string name="search_substances">Search Substances</string>
+
+    <string name="file_saved_success">File saved successfully</string>
 </resources>
 
