@@ -50,15 +50,9 @@ fun EditSubstanceDialog(
         var quantity by remember { mutableStateOf(substance.quantity.value) }
         var quantityUnit by remember { mutableStateOf(substance.quantity.unit) }
 
-        val hPhrases = remember { mutableStateListOf<Pair<String, String>>() }
-        val pPhrases = remember { mutableStateListOf<Pair<String, String>>() }
-        val ghsPictograms = remember { mutableStateListOf<GHSPictogram>() }
-
-        LaunchedEffect(substance) {
-            hPhrases.addAll(substance.hPhrases)
-            pPhrases.addAll(substance.pPhrases)
-            ghsPictograms.addAll(substance.ghsPictograms)
-        }
+        val hPhrases = remember { mutableStateListOf<Pair<String, String>>().also { it.addAll(substance.hPhrases) } }
+        val pPhrases = remember { mutableStateListOf<Pair<String, String>>().also { it.addAll(substance.pPhrases) } }
+        val ghsPictograms = remember { mutableStateListOf<GHSPictogram>().also { it.addAll(substance.ghsPictograms) } }
 
         val onReset: () -> Unit = {
             name = substance.namePair.original
