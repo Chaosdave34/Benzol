@@ -5,7 +5,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import benzol.composeapp.generated.resources.*
-import io.github.chaosdave34.benzol.data.SafetySheetData
+import io.github.chaosdave34.benzol.data.SafetySheetInputState
 import io.github.chaosdave34.benzol.files.CaBr2File
 import io.github.chaosdave34.benzol.files.HtmlFile
 import io.github.chaosdave34.benzol.settings.Settings
@@ -42,7 +42,7 @@ fun FileDialogs() {
                     if (caBr2File != null) {
                         val header = caBr2File.header
 
-                        val inputDate = SafetySheetData(
+                        val inputDate = SafetySheetInputState(
                             filename = fileName.replace("\\.[^.]*$".toRegex(), ""),
                             documentTitle = header.documentTitle,
                             organisation = header.organisation,
@@ -75,7 +75,7 @@ fun FileDialogs() {
             coroutineScope = scope,
             settings = settings,
             output = {
-                val inputData = viewModel.exportData()
+                val inputData = viewModel.inputState.value
                 val header = CaBr2File.CaBr2Data.Header(
                     inputData.documentTitle.trim(),
                     inputData.organisation.trim(),
@@ -115,21 +115,10 @@ fun FileDialogs() {
             coroutineScope = scope,
             settings = settings,
             output = {
-                val inputData = viewModel.exportData()
+                val inputData = viewModel.inputState.value
 
                 val htmlFile = HtmlFile(
-                    inputData.documentTitle.trim(),
-                    inputData.organisation.trim(),
-                    inputData.course.trim(),
-                    inputData.name.trim(),
-                    inputData.place.trim(),
-                    inputData.assistant.trim(),
-                    inputData.preparation.trim(),
-                    inputData.substances,
-                    inputData.humanAndEnvironmentDanger.map { it.trim(); it.replace("\n", "") },
-                    inputData.rulesOfConduct.map { it.trim(); it.replace("\n", "") },
-                    inputData.inCaseOfDanger.map { it.trim(); it.replace("\n", "") },
-                    inputData.disposal.map { it.trim(); it.replace("\n", "") },
+                    inputData,
                     resourceEnvironment
                 )
 

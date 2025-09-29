@@ -1,6 +1,7 @@
 package io.github.chaosdave34.benzol.files
 
 import benzol.composeapp.generated.resources.*
+import io.github.chaosdave34.benzol.data.SafetySheetInputState
 import io.github.chaosdave34.benzol.data.Substance
 import kotlinx.html.*
 import kotlinx.html.stream.appendHTML
@@ -10,18 +11,7 @@ import org.jetbrains.compose.resources.getString
 import kotlin.text.Typography.nbsp
 
 class HtmlFile(
-    val documentTitle: String,
-    val organisation: String,
-    val course: String,
-    val name: String,
-    val place: String,
-    val assistant: String,
-    val preparation: String,
-    val substances: List<Substance>,
-    val humanAndEnvironmentDanger: List<String>,
-    val rulesOfConduct: List<String>,
-    val inCaseOfDanger: List<String>,
-    val disposal: List<String>,
+    val data: SafetySheetInputState,
     val resourceEnvironment: ResourceEnvironment
 ) {
     @OptIn(ExperimentalResourceApi::class)
@@ -57,7 +47,7 @@ class HtmlFile(
 
         val css = Res.readBytes("files/export.css").decodeToString()
 
-        val sources = Substance.sources(substances).map { getString(it.label) }.joinToString(", ")
+        val sources = Substance.sources(data.substances).map { getString(it.label) }.joinToString(", ")
 
         return buildString {
             appendLine("<!DOCTYPE html>")
@@ -75,13 +65,13 @@ class HtmlFile(
                     // page 1
                     table {
                         // header
-                        header(documentTitle)
-                        header(organisation)
-                        header(course)
+                        header(data.documentTitle.trim())
+                        header(data.organisation.trim())
+                        header(data.course.trim())
                         tr {
-                            textBlock(13, nameTitle, name)
-                            textBlock(8, placeTitle, place)
-                            textBlock(13, assistantTitle, assistant)
+                            textBlock(13, nameTitle, data.name.trim())
+                            textBlock(8, placeTitle, data.place.trim())
+                            textBlock(13, assistantTitle, data.assistant.trim())
                         }
                         tr {
                             td {
@@ -89,7 +79,7 @@ class HtmlFile(
                                 +preparationTitle
                                 br
                                 b {
-                                    +preparation
+                                    +data.preparation.trim()
                                 }
                             }
                         }
@@ -104,7 +94,7 @@ class HtmlFile(
                             ingredientTitle(4, makLd50WgkTitle)
                             ingredientTitle(4, quantityTitle)
                         }
-                        substances.forEach { substance ->
+                        data.substances.forEach { substance ->
                             tr {
                                 td("min-width-5cm center") {
                                     colSpan = "6"
@@ -209,10 +199,10 @@ class HtmlFile(
 
                     // page 2
                     table {
-                        listWithTitle(humanAndEnvironmentDangerTitle, humanAndEnvironmentDanger)
-                        listWithTitle(rulesOfConductTitle, rulesOfConduct)
-                        listWithTitle(inCaseOfDangerTitle, inCaseOfDanger)
-                        listWithTitle(disposalTitle, disposal)
+                        listWithTitle(humanAndEnvironmentDangerTitle, data.humanAndEnvironmentDanger)
+                        listWithTitle(rulesOfConductTitle, data.rulesOfConduct)
+                        listWithTitle(inCaseOfDangerTitle, data.inCaseOfDanger)
+                        listWithTitle(disposalTitle, data.disposal)
 
                         tr("no-break") {
                             signatureBox(7, signature1, signature, locationAndDate)
@@ -244,6 +234,7 @@ class HtmlFile(
     }
 
     fun TABLE.listWithTitle(title: String, list: List<String>) {
+        val list = list.map { it.trim(); it.replace("\n", "") }
         tr("no-break") {
             td("top") {
                 colSpan = "12"
@@ -264,7 +255,7 @@ class HtmlFile(
     fun TR.phrasesList(transform: (Substance) -> List<Pair<String, String>>) {
         td("top phrases") {
             colSpan = "17"
-            val iterator = Substance.formatPhrases(substances, transform).iterator()
+            val iterator = Substance.formatPhrases(data.substances, transform).iterator()
             while (iterator.hasNext()) {
                 val (number, content) = iterator.next()
                 +number

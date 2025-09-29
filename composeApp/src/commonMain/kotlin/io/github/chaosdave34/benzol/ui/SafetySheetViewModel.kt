@@ -3,7 +3,6 @@ package io.github.chaosdave34.benzol.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.chaosdave34.benzol.SupportedLanguage
-import io.github.chaosdave34.benzol.data.SafetySheetData
 import io.github.chaosdave34.benzol.data.SafetySheetInputState
 import io.github.chaosdave34.benzol.data.SafetySheetUiState
 import io.github.chaosdave34.benzol.data.Substance
@@ -223,42 +222,9 @@ class SafetySheetViewModel(
         }
     }
 
-    fun importData(data: SafetySheetData) {
+    fun importData(data: SafetySheetInputState) {
         _inputState.update {
-            it.copy(
-                filename = data.filename,
-                documentTitle = data.documentTitle,
-                course = data.course,
-                name = data.name,
-                place = data.place,
-                assistant = data.assistant,
-                preparation = data.preparation,
-                substances = data.substances,
-                humanAndEnvironmentDanger = data.humanAndEnvironmentDanger,
-                inCaseOfDanger = data.inCaseOfDanger,
-                rulesOfConduct = data.rulesOfConduct,
-                disposal = data.disposal
-            )
+            data
         }
-    }
-
-    fun exportData(): SafetySheetData {
-        val inputState = _inputState.value
-
-        return SafetySheetData(
-            filename = inputState.filename,
-            documentTitle = inputState.documentTitle,
-            organisation = inputState.organisation,
-            course = inputState.course,
-            name = inputState.name,
-            place = inputState.place,
-            assistant = inputState.assistant,
-            preparation = inputState.preparation,
-            substances = inputState.substances,
-            humanAndEnvironmentDanger = inputState.humanAndEnvironmentDanger,
-            rulesOfConduct = inputState.rulesOfConduct,
-            inCaseOfDanger = inputState.inCaseOfDanger,
-            disposal = inputState.disposal
-        )
     }
 }
