@@ -5,15 +5,20 @@ import androidx.compose.ui.window.application
 import benzol.composeapp.generated.resources.Res
 import benzol.composeapp.generated.resources.logo
 import benzol.composeapp.generated.resources.title
+import io.github.chaosdave34.benzol.files.setupLogging
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
-fun main() = application {
-    Window(
-        onCloseRequest = ::exitApplication,
-        title = stringResource(Res.string.title),
-        icon = painterResource(Res.drawable.logo)
-    ) {
-        App()
+fun main() {
+    setupLogging()
+
+    application {
+        Window(
+            onCloseRequest = ::exitApplication,
+            title = stringResource(Res.string.title),
+            icon = painterResource(Res.drawable.logo)
+        ) {
+            App()
+        }
     }
 }

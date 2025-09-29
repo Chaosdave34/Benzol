@@ -1,6 +1,7 @@
 package io.github.chaosdave34.benzol
 
 import io.github.chaosdave34.benzol.files.htmlToPdf
+import io.github.chaosdave34.benzol.files.setupLogging
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.config.*
@@ -10,7 +11,10 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-fun main(args: Array<String>): Unit = EngineMain.main(args)
+fun main(args: Array<String>) {
+    setupLogging()
+    EngineMain.main(args)
+}
 
 fun Application.module() {
     val allowAnyHost = environment.config.property("cors.allowAnyHost").getAs<Boolean>()

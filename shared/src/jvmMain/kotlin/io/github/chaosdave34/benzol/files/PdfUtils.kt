@@ -7,9 +7,11 @@ import com.openhtmltopdf.util.XRLog
 import java.io.ByteArrayOutputStream
 import java.util.logging.Level
 
-fun htmlToPdf(html: String): ByteArray {
+fun setupLogging() {
     XRLog.listRegisteredLoggers().forEach { XRLog.setLevel(it, Level.WARNING) }
+}
 
+fun htmlToPdf(html: String): ByteArray {
     val document = Ksoup.parse(html)
     document.outputSettings().syntax(Document.OutputSettings.Syntax.xml)
 
