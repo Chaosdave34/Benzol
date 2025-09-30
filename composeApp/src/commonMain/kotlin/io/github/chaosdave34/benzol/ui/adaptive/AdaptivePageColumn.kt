@@ -4,6 +4,7 @@ import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -13,7 +14,8 @@ import androidx.window.core.layout.WindowSizeClass
 fun AdaptivePageColumn(
     scrollState: ScrollState,
     maxWidth: Dp = WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND.dp,
-    content: @Composable ColumnScope.() -> Unit
+    horizontalAlignment: Alignment.Horizontal = Alignment.Start,
+    content: @Composable ColumnScope.() -> Unit,
 ) {
     Column(
         Modifier
@@ -22,6 +24,7 @@ fun AdaptivePageColumn(
             .fillMaxWidth()
             .padding(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalAlignment = horizontalAlignment,
         content = content
     )
 }

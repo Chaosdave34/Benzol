@@ -33,7 +33,8 @@ fun AboutPage() {
         contentAlignment = Alignment.TopCenter,
     ) { scrollState ->
         AdaptivePageColumn(
-            scrollState = scrollState
+            scrollState = scrollState,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CustomCard(
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -43,28 +44,22 @@ fun AboutPage() {
                 )
             }
 
-            CustomCard(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Button(
-                    onClick = {
-                        uriHandler.openUri("https://github.com/Chaosdave34/Benzol")
-                    }
-                ) {
-                    Icon(
-                        modifier = Modifier.size(ButtonDefaults.IconSize),
-                        painter = painterResource(Res.drawable.github),
-                        contentDescription = stringResource(Res.string.github)
-                    )
-                    Spacer(Modifier.width(ButtonDefaults.IconSpacing))
-                    Text(stringResource(Res.string.github))
+            Button(
+                onClick = {
+                    uriHandler.openUri("https://github.com/Chaosdave34/Benzol")
                 }
-            }
-            CustomCard(
-                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("Version 2.0.0")
+                Icon(
+                    modifier = Modifier.size(ButtonDefaults.IconSize),
+                    painter = painterResource(Res.drawable.github),
+                    contentDescription = stringResource(Res.string.github)
+                )
+                Spacer(Modifier.width(ButtonDefaults.IconSpacing))
+                Text(stringResource(Res.string.github))
             }
+
+
+            Text("Version 2.0.0")
         }
     }
 }
