@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.window.core.layout.WindowSizeClass
@@ -112,9 +111,7 @@ private fun AdaptiveDialogScaffold(
         }
     ) { contentPadding ->
         Box(
-            Modifier
-                .padding(contentPadding)
-                .padding(horizontal = 12.dp)
+            Modifier.padding(contentPadding)
         ) {
             content()
         }

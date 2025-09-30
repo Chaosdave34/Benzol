@@ -1,10 +1,7 @@
 package io.github.chaosdave34.benzol.ui.safetysheet
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
@@ -21,6 +18,7 @@ import io.github.chaosdave34.benzol.data.GHSPictogram
 import io.github.chaosdave34.benzol.data.Substance
 import io.github.chaosdave34.benzol.ui.CustomScrollbar
 import io.github.chaosdave34.benzol.ui.CustomTextField
+import io.github.chaosdave34.benzol.ui.Section
 import io.github.chaosdave34.benzol.ui.adaptive.AdaptiveDialog
 import kotlinx.serialization.json.Json
 import org.jetbrains.compose.resources.painterResource
@@ -119,11 +117,13 @@ fun EditSubstanceDialog(
             val scrollState = rememberScrollState()
 
             Column(
-                Modifier.verticalScroll(scrollState),
+                Modifier.verticalScroll(scrollState).padding(12.dp),
                 verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
-                DialogSection(
-                    title = stringResource(Res.string.general)
+                Section(
+                    headlineContent = {
+                        Text(stringResource(Res.string.general))
+                    }
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -166,8 +166,10 @@ fun EditSubstanceDialog(
                     }
                 }
 
-                DialogSection(
-                    title = stringResource(Res.string.properties)
+                Section(
+                    headlineContent = {
+                        Text(stringResource(Res.string.properties))
+                    }
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -258,8 +260,10 @@ fun EditSubstanceDialog(
                     }
                 }
 
-                DialogSection(
-                    title = stringResource(Res.string.h_phrases)
+                Section(
+                    headlineContent = {
+                        Text(stringResource(Res.string.h_phrases))
+                    }
                 ) {
                     PhraseInput(
                         phraseType = PhraseType.H,
@@ -267,8 +271,10 @@ fun EditSubstanceDialog(
                     )
                 }
 
-                DialogSection(
-                    title = stringResource(Res.string.p_phrases)
+                Section(
+                    headlineContent = {
+                        Text(stringResource(Res.string.p_phrases))
+                    }
                 ) {
                     PhraseInput(
                         phraseType = PhraseType.P,
@@ -276,14 +282,14 @@ fun EditSubstanceDialog(
                     )
                 }
 
-                DialogSection(
-                    title = stringResource(Res.string.ghs_pictograms)
+                Section(
+                    headlineContent = {
+                        Text(stringResource(Res.string.ghs_pictograms))
+                    },
+                    supportingContent = {
+                        Text(stringResource(Res.string.ghs_pictograms_hint))
+                    }
                 ) {
-                    Text(
-                        stringResource(Res.string.ghs_pictograms_hint),
-                        style = MaterialTheme.typography.titleSmall
-                    )
-
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
@@ -346,10 +352,7 @@ fun EditSubstanceDialog(
                 }
             }
 
-            CustomScrollbar(
-                scrollState = scrollState,
-                offset = 12.dp
-            )
+            CustomScrollbar(rememberScrollbarAdapter(scrollState))
         }
     }
 }
@@ -457,25 +460,5 @@ private fun GHSPictogram(
             contentDescription = pictogram.alt,
             colorFilter = if (!isSelected) ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) }) else null
         )
-    }
-}
-
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-@Composable
-private fun DialogSection(
-    title: String,
-    content: @Composable ColumnScope.() -> Unit
-) {
-    ElevatedCard {
-        Column(
-            Modifier.padding(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Text(
-                title,
-                style = MaterialTheme.typography.titleMediumEmphasized
-            )
-            content()
-        }
     }
 }

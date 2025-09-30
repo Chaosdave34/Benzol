@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
@@ -36,7 +37,7 @@ fun SearchResultsDialog(
             LazyColumn(
                 Modifier.fillMaxHeight(),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
-                state = lazyListState
+                state = lazyListState,
             ) {
                 items(items = searchResults.sortedBy { it.rank }, key = { it.rank }) {
                     ListItem(
@@ -52,10 +53,7 @@ fun SearchResultsDialog(
                 }
             }
 
-            CustomScrollbar(
-                lazyListState = lazyListState,
-                offset = 12.dp
-            )
+            CustomScrollbar(rememberScrollbarAdapter(lazyListState))
         }
     }
 }
