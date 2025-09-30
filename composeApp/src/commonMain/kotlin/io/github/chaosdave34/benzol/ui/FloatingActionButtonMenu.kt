@@ -16,13 +16,12 @@ import org.jetbrains.compose.resources.stringResource
 context(viewModel: SafetySheetViewModel)
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun FloatingActionButtonMenu(
-    visible: Boolean,
-) {
+fun FloatingActionButtonMenu() {
+    val uiState by viewModel.uiState.collectAsState()
     var expanded by remember { mutableStateOf(false) }
 
     AnimatedVisibility(
-        visible = visible,
+        visible = uiState.fabOrToolbarVisible,
         enter = slideInVertically { fullWidth ->
             fullWidth + ScreenOffset.value.toInt()
         } + fadeIn(),

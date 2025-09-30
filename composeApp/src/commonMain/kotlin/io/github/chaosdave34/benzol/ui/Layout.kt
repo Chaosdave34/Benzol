@@ -6,7 +6,6 @@ import androidx.compose.material3.*
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteItem
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
-import androidx.compose.material3.adaptive.navigationsuite.rememberNavigationSuiteScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -31,12 +30,10 @@ fun Layout() {
     val uiState by viewModel.uiState.collectAsState()
 
     val navController = rememberNavController()
-    val navigationScaffoldState = rememberNavigationSuiteScaffoldState()
 
-//    var fabOrToolbarVisible by rememberSaveable { mutableStateOf(true) }
-//    navController.addOnDestinationChangedListener { _, destination, _ ->
-//        fabOrToolbarVisible = destination.route in listOf(Destination.Sheet, Destination.Preview).map { it.route }
-//    }
+    navController.addOnDestinationChangedListener { _, destination, _ ->
+        viewModel.setFabOrToolbarVisible(destination.route in listOf(Destination.Sheet, Destination.Preview).map { it.route })
+    }
 
     NavigationSuiteScaffold(
         modifier = Modifier
@@ -45,7 +42,6 @@ fun Layout() {
                     focusManager.clearFocus()
                 }
             },
-        state = navigationScaffoldState,
         navigationItems = {
             Destination.entries.forEach { destination ->
                 val selected = uiState.selectedDestination == destination

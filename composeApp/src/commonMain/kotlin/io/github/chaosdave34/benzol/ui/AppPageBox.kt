@@ -39,8 +39,6 @@ fun AppPageBox(
         TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     }
 
-    val fabOrToolbarVisible = true
-
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -69,7 +67,7 @@ fun AppPageBox(
             if (!windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND) ||
                 !windowSizeClass.isHeightAtLeastBreakpoint(WindowSizeClass.HEIGHT_DP_MEDIUM_LOWER_BOUND)
             ) {
-                FloatingActionButtonMenu(fabOrToolbarVisible)
+                FloatingActionButtonMenu()
             }
         }
     ) { contentPadding ->
@@ -84,7 +82,7 @@ fun AppPageBox(
             if (windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND) &&
                 windowSizeClass.isHeightAtLeastBreakpoint(WindowSizeClass.HEIGHT_DP_MEDIUM_LOWER_BOUND)
             ) {
-                Toolbar(fabOrToolbarVisible)
+                Toolbar()
             }
         }
     }

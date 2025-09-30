@@ -11,6 +11,8 @@ import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.*
 import androidx.compose.material3.FloatingToolbarDefaults.ScreenOffset
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -20,12 +22,14 @@ import org.jetbrains.compose.resources.stringResource
 context(viewModel: SafetySheetViewModel)
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun BoxScope.Toolbar(visible: Boolean) {
+fun BoxScope.Toolbar() {
+    val uiState by viewModel.uiState.collectAsState()
+
     AnimatedVisibility(
         modifier = Modifier
             .align(Alignment.CenterEnd)
             .offset(x = -ScreenOffset),
-        visible = visible,
+        visible = uiState.fabOrToolbarVisible,
         enter = slideInHorizontally { fullWidth ->
             fullWidth + ScreenOffset.value.toInt()
         } + fadeIn(),

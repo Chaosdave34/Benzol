@@ -76,6 +76,10 @@ class SafetySheetViewModel(
         settings.exportUrl = exportUrl
     }
 
+    fun setFabOrToolbarVisible(visible: Boolean) {
+        _uiState.update { it.copy(fabOrToolbarVisible = visible) }
+    }
+
     fun setFilename(value: String) {
         _inputState.update { it.copy(filename = value) }
     }

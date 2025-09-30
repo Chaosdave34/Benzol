@@ -13,7 +13,8 @@ data class SafetySheetUiState(
     val disclaimerConfirmed: Boolean,
     val theme: Theme,
     val language: SupportedLanguage,
-    val exportUrl: String
+    val exportUrl: String,
+    val fabOrToolbarVisible: Boolean = false,
 ) {
     constructor(
         startDestination: Destination,
