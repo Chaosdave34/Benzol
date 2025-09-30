@@ -2,10 +2,8 @@ package io.github.chaosdave34.benzol.ui
 
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteItem
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.material3.adaptive.navigationsuite.rememberNavigationSuiteScaffoldState
@@ -67,7 +65,12 @@ fun Layout() {
                 )
             }
         },
-        navigationItemVerticalArrangement = Arrangement.Center
+        navigationItemVerticalArrangement = Arrangement.Center,
+        navigationSuiteColors = NavigationSuiteDefaults.colors(
+            wideNavigationRailColors = WideNavigationRailDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainer,
+            )
+        )
     ) {
         AppNavHost(navController = navController)
     }
