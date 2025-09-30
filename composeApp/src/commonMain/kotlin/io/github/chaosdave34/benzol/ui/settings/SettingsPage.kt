@@ -14,7 +14,6 @@ import benzol.composeapp.generated.resources.theme
 import io.github.chaosdave34.benzol.SupportedLanguage
 import io.github.chaosdave34.benzol.settings.Theme
 import io.github.chaosdave34.benzol.ui.AppPageBox
-import io.github.chaosdave34.benzol.ui.CustomCard
 import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 import io.github.chaosdave34.benzol.ui.adaptive.AdaptivePageColumn
 import io.ktor.util.*
@@ -31,35 +30,25 @@ fun SettingsPage() {
     ) { scrollState ->
         AdaptivePageColumn(
             scrollState = scrollState,
-            maxWidth = WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND.dp
+            maxWidth = WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND.dp,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CustomCard(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                LanguageSetting(
-                    language = uiState.language,
-                    onLanguageChange = viewModel::setLanguage
-                )
-            }
+            LanguageSetting(
+                language = uiState.language,
+                onLanguageChange = viewModel::setLanguage
+            )
 
-            CustomCard(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                ThemeSetting(
-                    theme = uiState.theme,
-                    onThemeChange = viewModel::setTheme
-                )
-            }
+
+            ThemeSetting(
+                theme = uiState.theme,
+                onThemeChange = viewModel::setTheme
+            )
 
             if (PlatformUtils.IS_BROWSER) {
-                CustomCard(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    ExportUrlSetting(
-                        exportUrl = uiState.exportUrl,
-                        onExportUrlChange = viewModel::setExportUrl
-                    )
-                }
+                ExportUrlSetting(
+                    exportUrl = uiState.exportUrl,
+                    onExportUrlChange = viewModel::setExportUrl
+                )
             }
         }
     }
