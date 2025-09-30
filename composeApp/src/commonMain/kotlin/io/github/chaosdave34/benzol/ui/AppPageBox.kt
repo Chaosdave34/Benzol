@@ -3,7 +3,6 @@ package io.github.chaosdave34.benzol.ui
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
@@ -16,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import androidx.window.core.layout.WindowSizeClass
 import io.github.chaosdave34.benzol.LocalSnackbarHostState
 import org.jetbrains.compose.resources.stringResource
@@ -57,10 +55,7 @@ fun AppPageBox(
         },
         snackbarHost = {
             SnackbarHost(
-                hostState = snackbarHostState,
-                modifier = Modifier
-                    .padding(bottom = 60.dp)
-                    .fillMaxWidth(0.7f)
+                hostState = snackbarHostState
             )
         },
         floatingActionButton = {
