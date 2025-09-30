@@ -86,7 +86,7 @@ actual fun PdfExport(
     scope.launch {
         val response = try {
             client.post(settings.exportUrl) {
-                setBody(fileName)
+                setBody(html())
             }
         } catch (_: Throwable) {
             onClose(false)
