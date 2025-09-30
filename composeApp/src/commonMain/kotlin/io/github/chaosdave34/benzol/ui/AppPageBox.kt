@@ -79,10 +79,7 @@ fun AppPageBox(
         ) {
             val scrollState = rememberScrollState()
             content(scrollState)
-            CustomScrollbar(
-                rememberScrollbarAdapter(scrollState),
-                offset = 12.dp
-            )
+            CustomScrollbar(rememberScrollbarAdapter(scrollState))
 
             if (windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND) &&
                 windowSizeClass.isHeightAtLeastBreakpoint(WindowSizeClass.HEIGHT_DP_MEDIUM_LOWER_BOUND)

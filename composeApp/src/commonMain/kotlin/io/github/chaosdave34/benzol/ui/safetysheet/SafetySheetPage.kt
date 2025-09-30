@@ -42,15 +42,15 @@ fun SafetySheetPage() {
 
     AppPageBox(
         Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 12.dp),
+            .fillMaxWidth(),
         contentAlignment = Alignment.TopCenter,
     ) { scrollState ->
         Column(
             Modifier
                 .widthIn(min = 600.dp, max = 1300.dp) // Todo use adaptive
                 .fillMaxWidth(0.8f)
-                .verticalScroll(scrollState),
+                .verticalScroll(scrollState)
+                .padding(12.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             CustomCard {

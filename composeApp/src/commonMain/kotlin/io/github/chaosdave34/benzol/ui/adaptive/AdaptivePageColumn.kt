@@ -19,7 +19,8 @@ fun AdaptivePageColumn(
         Modifier
             .verticalScroll(scrollState)
             .widthIn(max = maxWidth)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         content = content
     )
