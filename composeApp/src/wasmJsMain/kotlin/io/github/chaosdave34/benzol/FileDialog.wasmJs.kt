@@ -94,7 +94,7 @@ actual fun PdfExport(
         }
 
         if (response.status == HttpStatusCode.OK) {
-            downloadFile(response.bodyAsBytes(), html())
+            downloadFile(response.bodyAsBytes(), fileName)
 
             onClose(true)
         } else {
