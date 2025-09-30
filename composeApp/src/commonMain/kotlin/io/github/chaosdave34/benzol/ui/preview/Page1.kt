@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.data.Substance
 import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
+import io.github.chaosdave34.benzol.ui.safetysheet.FormattedMolecularFormula
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -102,7 +103,11 @@ fun Page1(modifier: Modifier = Modifier) {
                 SubstanceColumn(6f) {
                     CenteredText(substance.name)
                     if (substance.formattedMolecularFormula.isNotBlank()) {
-                        substance.FormattedMolecularFormula(modifier = Modifier.fillMaxWidth(), align = TextAlign.Center)
+                        FormattedMolecularFormula(
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center,
+                            formula = substance.formattedMolecularFormula
+                        )
                     } else {
                         CenteredText(substance.molecularFormula)
                     }

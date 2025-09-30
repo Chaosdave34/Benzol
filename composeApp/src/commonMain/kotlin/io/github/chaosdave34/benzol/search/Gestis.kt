@@ -103,7 +103,7 @@ object Gestis {
     ) {
         fun getSubstance(): Substance {
 
-            return Substance.fromSource(
+            return Substance(
                 name,
                 getCas(),
                 getMolecularFormula(),

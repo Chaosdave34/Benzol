@@ -1,10 +1,12 @@
 package io.github.chaosdave34.benzol.files
 
 import io.github.chaosdave34.benzol.data.GHSPictogram
+import io.github.chaosdave34.benzol.data.Modifiable
 import io.github.chaosdave34.benzol.data.Substance
 import io.github.chaosdave34.benzol.files.CaBr2File.CaBr2Data.Source.Companion.toProvider
-import io.github.chaosdave34.benzol.files.CaBr2File.CaBr2Data.ValuePair.Companion.toListPair
-import io.github.chaosdave34.benzol.files.CaBr2File.CaBr2Data.ValuePair.Companion.toStringPair
+import io.github.chaosdave34.benzol.files.CaBr2File.CaBr2Data.ValuePair.Companion.toListModifiable
+import io.github.chaosdave34.benzol.files.CaBr2File.CaBr2Data.ValuePair.Companion.toListValuePair
+import io.github.chaosdave34.benzol.files.CaBr2File.CaBr2Data.ValuePair.Companion.toModifiable
 import io.github.chaosdave34.benzol.files.CaBr2File.CaBr2Data.ValuePair.Companion.toValuePair
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -49,7 +51,7 @@ object CaBr2File {
             val alternativeNames: List<String>,
             val cas: ValuePair<String>,
             val molecularFormula: ValuePair<String>,
-            val formattedMolecularFormula: Substance.StringPair? = null, // Normally not in cb2 files
+            val formattedMolecularFormula: ValuePair<String>? = null, // Normally not in cb2 files
             val molarMass: ValuePair<String>,
             val meltingPoint: ValuePair<String>,
             val boilingPoint: ValuePair<String>,
@@ -67,24 +69,27 @@ object CaBr2File {
             companion object {
                 fun export(substance: Substance): SubstanceData {
                     return SubstanceData(
-                        substance.namePair.toValuePair(),
-                        emptyList(),
-                        substance.casNumberPair.toValuePair(),
-                        substance.molecularFormulaPair.toValuePair(),
-                        substance.formattedMolecularFormulaPair,
-                        substance.molarMassPair.toValuePair(),
-                        substance.meltingPointPair.toValuePair { if (this.isNotBlank()) "$this °C" else this },
-                        substance.boilingPointPair.toValuePair { if (this.isNotBlank()) "$this °C" else this },
-                        substance.wgkPair.toValuePair(),
-                        substance.hPhrasesPair.toValuePair { listOf(it.first, it.second) },
-                        substance.pPhrasesPair.toValuePair { listOf(it.first, it.second) },
-                        substance.signalWordPair.toValuePair(),
-                        substance.ghsPictogramsPair.toValuePair { ghsPictogramToSymbols(it) },
-                        substance.lethalDosePair.toValuePair { if (this.isNotBlank()) "$this mg/kg" else this },
-                        substance.makPair.toValuePair { if (this.isNotBlank()) "$this mg/m³" else this },
-                        if (substance.quantity.value.isBlank()) null else Amount(substance.quantity.value, Amount.Unit("CUSTOM", substance.quantity.unit)),
-                        Source(substance.source.first.toProvider(), substance.source.second, ""),
-                        false
+                        name = substance.nameModifiable.toValuePair(),
+                        alternativeNames = emptyList(),
+                        cas = substance.casNumberModifiable.toValuePair(),
+                        molecularFormula = substance.molecularFormulaModifiable.toValuePair(),
+                        formattedMolecularFormula = substance.formattedMolecularFormulaModifiable.toValuePair(),
+                        molarMass = substance.molarMassModifiable.toValuePair(),
+                        meltingPoint = substance.meltingPointModifiable.toValuePair { if (this.isNotBlank()) "$this °C" else this },
+                        boilingPoint = substance.boilingPointModifiable.toValuePair { if (this.isNotBlank()) "$this °C" else this },
+                        waterHazardClass = substance.wgkModifiable.toValuePair(),
+                        hPhrases = substance.hPhrasesModifiable.toListValuePair { listOf(it.first, it.second) },
+                        pPhrases = substance.pPhrasesModifiable.toListValuePair { listOf(it.first, it.second) },
+                        signalWord = substance.signalWordModifiable.toValuePair(),
+                        symbols = substance.ghsPictogramsModifiable.toListValuePair { ghsPictogramToSymbols(it) },
+                        lethalDose = substance.lethalDoseModifiable.toValuePair { if (this.isNotBlank()) "$this mg/kg" else this },
+                        mak = substance.makModifiable.toValuePair { if (this.isNotBlank()) "$this mg/m³" else this },
+                        amount = if (substance.quantity.value.isBlank()) null else Amount(
+                            substance.quantity.value,
+                            Amount.Unit("CUSTOM", substance.quantity.unit)
+                        ),
+                        source = Source(substance.source.first.toProvider(), substance.source.second, ""),
+                        checked = false
                     )
                 }
 
@@ -105,21 +110,21 @@ object CaBr2File {
 
             fun import(): Substance {
                 return Substance(
-                    name.toStringPair(),
-                    cas.toStringPair(),
-                    molecularFormula.toStringPair(),
-                    formattedMolecularFormula ?: Substance.StringPair(),
-                    waterHazardClass.toStringPair(),
-                    signalWord.toStringPair(),
-                    molarMass.toStringPair(),
-                    lethalDose.toStringPair { replace(" mg/kg", "") },
-                    mak.toStringPair { replace(" mg/m³", "") },
-                    meltingPoint.toStringPair { replace(" °C", "") },
-                    boilingPoint.toStringPair { replace(" °C", "") },
+                    name.toModifiable(),
+                    cas.toModifiable(),
+                    molecularFormula.toModifiable(),
+                    formattedMolecularFormula?.toModifiable() ?: Modifiable("", null),
+                    waterHazardClass.toModifiable(),
+                    signalWord.toModifiable(),
+                    molarMass.toModifiable(),
+                    lethalDose.toModifiable { replace(" mg/kg", "") },
+                    mak.toModifiable { replace(" mg/m³", "") },
+                    meltingPoint.toModifiable { replace(" °C", "") },
+                    boilingPoint.toModifiable { replace(" °C", "") },
                     amount?.toQuantity()?: Substance.Quantity(),
-                    hPhrases.toListPair { Pair(it.getOrElse(0) { "" }.trim(), it.getOrElse(1) { "" }.trim()) },
-                    pPhrases.toListPair { Pair(it.getOrElse(0) { "" }.trim(), it.getOrElse(1) { "" }.trim()) },
-                    symbols.toListPair { GHSPictogram.fromId(it) },
+                    hPhrases.toListModifiable { Pair(it.getOrElse(0) { "" }.trim(), it.getOrElse(1) { "" }.trim()) },
+                    pPhrases.toListModifiable { Pair(it.getOrElse(0) { "" }.trim(), it.getOrElse(1) { "" }.trim()) },
+                    symbols.toListModifiable { GHSPictogram.fromId(it) },
                     Pair(source.getSource(), source.url.trim())
                 )
             }
@@ -129,7 +134,7 @@ object CaBr2File {
         class Source(
             val provider: String,
             val url: String,
-            val lastUpdated: String
+            @Suppress("unused") val lastUpdated: String
         ) {
             companion object {
                 fun io.github.chaosdave34.benzol.search.Source.toProvider(): String {
@@ -156,19 +161,19 @@ object CaBr2File {
             val modifiedData: T? = null
         ) {
             companion object {
-                fun ValuePair<String>.toStringPair(transformer: String.() -> String = { this }): Substance.StringPair {
-                    return Substance.StringPair(originalData?.run(transformer)?.trim() ?: "", modifiedData?.run(transformer)?.trim())
+                fun ValuePair<String>.toModifiable(transformer: String.() -> String = { this }): Modifiable<String> {
+                    return Modifiable(originalData?.run(transformer)?.trim() ?: "", modifiedData?.run(transformer)?.trim())
                 }
 
-                fun <I, O> ValuePair<List<I>>.toListPair(map: (I) -> O?): Substance.ListPair<O> {
-                    return Substance.ListPair(originalData?.mapNotNull(map) ?: emptyList(), modifiedData?.mapNotNull(map))
+                fun <I, O> ValuePair<List<I>>.toListModifiable(map: (I) -> O?): Modifiable<List<O>> {
+                    return Modifiable(originalData?.mapNotNull(map) ?: emptyList(), modifiedData?.mapNotNull(map))
                 }
 
-                fun Substance.StringPair.toValuePair(transformer: String.() -> String = { this }): ValuePair<String> {
+                fun Modifiable<String>.toValuePair(transformer: String.() -> String = { this }): ValuePair<String> {
                     return ValuePair(this.original.run(transformer).trim(), this.modified?.run(transformer)?.trim())
                 }
 
-                fun <I, O> Substance.ListPair<I>.toValuePair(map: (I) -> O): ValuePair<List<O>> {
+                fun <I, O> Modifiable<List<I>>.toListValuePair(map: (I) -> O): ValuePair<List<O>> {
                     return ValuePair(this.original.map(map), this.modified?.map(map))
                 }
             }

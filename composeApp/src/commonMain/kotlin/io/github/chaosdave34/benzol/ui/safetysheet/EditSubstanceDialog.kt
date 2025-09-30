@@ -55,27 +55,27 @@ fun EditSubstanceDialog(
         val ghsPictograms = remember { mutableStateListOf<GHSPictogram>().also { it.addAll(substance.ghsPictograms) } }
 
         val onReset: () -> Unit = {
-            name = substance.namePair.original
-            casNumber = substance.casNumberPair.original
-            molecularFormula = substance.molecularFormulaPair.original
-            formattedMolecularFormula = substance.formattedMolecularFormulaPair.original
-            wgk = substance.wgkPair.original
-            signalWord = substance.signalWordPair.original
+            name = substance.nameModifiable.original
+            casNumber = substance.casNumberModifiable.original
+            molecularFormula = substance.molecularFormulaModifiable.original
+            formattedMolecularFormula = substance.formattedMolecularFormulaModifiable.original
+            wgk = substance.wgkModifiable.original
+            signalWord = substance.signalWordModifiable.original
 
-            molarMass = substance.molarMassPair.original
-            lethalDose = substance.lethalDosePair.original
-            mak = substance.makPair.original
-            meltingPoint = substance.meltingPointPair.original
-            boilingPoint = substance.boilingPointPair.original
+            molarMass = substance.molarMassModifiable.original
+            lethalDose = substance.lethalDoseModifiable.original
+            mak = substance.makModifiable.original
+            meltingPoint = substance.meltingPointModifiable.original
+            boilingPoint = substance.boilingPointModifiable.original
             quantity = Substance.Quantity().value
             quantityUnit = Substance.Quantity().unit
 
             hPhrases.clear()
-            hPhrases.addAll(substance.hPhrasesPair.original)
+            hPhrases.addAll(substance.hPhrasesModifiable.original)
             pPhrases.clear()
-            pPhrases.addAll(substance.pPhrasesPair.original)
+            pPhrases.addAll(substance.pPhrasesModifiable.original)
             ghsPictograms.clear()
-            ghsPictograms.addAll(substance.ghsPictogramsPair.original)
+            ghsPictograms.addAll(substance.ghsPictogramsModifiable.original)
         }
 
         val onSave: () -> Unit = {

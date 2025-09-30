@@ -1,78 +1,65 @@
 package io.github.chaosdave34.benzol.data
 
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.BaselineShift
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import io.github.chaosdave34.benzol.search.Source
-import kotlinx.serialization.Serializable
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
 data class Substance(
-    val namePair: StringPair = StringPair(),
-    val casNumberPair: StringPair = StringPair(),
-    val molecularFormulaPair: StringPair = StringPair(),
-    val formattedMolecularFormulaPair: StringPair = StringPair(),
-    val wgkPair: StringPair = StringPair(),
-    val signalWordPair: StringPair = StringPair(),
+    val nameModifiable: Modifiable<String>,
+    val casNumberModifiable: Modifiable<String>,
+    val molecularFormulaModifiable: Modifiable<String>,
+    val formattedMolecularFormulaModifiable: Modifiable<String>,
+    val wgkModifiable: Modifiable<String>,
+    val signalWordModifiable: Modifiable<String>,
+    val molarMassModifiable: Modifiable<String>,
+    val lethalDoseModifiable: Modifiable<String>,
+    val makModifiable: Modifiable<String>,
+    val meltingPointModifiable: Modifiable<String>,
+    val boilingPointModifiable: Modifiable<String>,
 
-    val molarMassPair: StringPair = StringPair(),
-    val lethalDosePair: StringPair = StringPair(),
-    val makPair: StringPair = StringPair(),
-    val meltingPointPair: StringPair = StringPair(),
-    val boilingPointPair: StringPair = StringPair(),
     var quantity: Quantity = Quantity(),
+    val hPhrasesModifiable: Modifiable<List<Pair<String, String>>>,
+    val pPhrasesModifiable: Modifiable<List<Pair<String, String>>>,
+    val ghsPictogramsModifiable: Modifiable<List<GHSPictogram>>,
 
-    var hPhrasesPair: ListPair<Pair<String, String>> = ListPair(),
-    var pPhrasesPair: ListPair<Pair<String, String>> = ListPair(),
-    var ghsPictogramsPair: ListPair<GHSPictogram> = ListPair(),
-
-    var source: Pair<Source, String> = Pair(Source.Custom, "")
+    var source: Pair<Source, String>
 ) {
+    constructor(
+        name: String = "",
+        casNumber: String = "",
+        molecularFormula: String = "",
+        formattedMolecularFormula: String = "",
+        wgk: String = "",
+        signalWord: String = "",
+        molarMass: String = "",
+        lethalDose: String = "",
+        mak: String = "",
+        meltingPoint: String = "",
+        boilingPoint: String = "",
+        hPhrases: List<Pair<String, String>> = emptyList(),
+        pPhrases: List<Pair<String, String>> = emptyList(),
+        ghsPictograms: List<GHSPictogram> = emptyList(),
+        source: Pair<Source, String> = Pair(Source.Custom, "")
+    ) : this(
+        nameModifiable = Modifiable(name),
+        casNumberModifiable = Modifiable(casNumber),
+        molecularFormulaModifiable = Modifiable(molecularFormula),
+        formattedMolecularFormulaModifiable = Modifiable(formattedMolecularFormula),
+        wgkModifiable = Modifiable(wgk),
+        signalWordModifiable = Modifiable(signalWord),
+        molarMassModifiable = Modifiable(molarMass),
+        lethalDoseModifiable = Modifiable(lethalDose),
+        makModifiable = Modifiable(mak),
+        meltingPointModifiable = Modifiable(meltingPoint),
+        boilingPointModifiable = Modifiable(boilingPoint),
+        quantity = Quantity(""),
+        hPhrasesModifiable = Modifiable(hPhrases),
+        pPhrasesModifiable = Modifiable(pPhrases),
+        ghsPictogramsModifiable = Modifiable(ghsPictograms),
+        source = source
+    )
 
     companion object {
-        fun fromSource(
-            name: String,
-            casNumber: String,
-            molecularFormula: String,
-            formattedMolecularFormula: String,
-            wgk: String,
-            signalWord: String,
-
-            molarMass: String,
-            lethalDose: String,
-            mak: String,
-            meltingPoint: String,
-            boilingPoint: String,
-            hPhrases: List<Pair<String, String>>,
-            pPhrases: List<Pair<String, String>>,
-            ghsPictograms: List<GHSPictogram>,
-            source: Pair<Source, String>
-        ) = Substance(
-            StringPair(original = name),
-            StringPair(original = casNumber),
-            StringPair(original = molecularFormula),
-            StringPair(original = formattedMolecularFormula),
-            StringPair(original = wgk),
-            StringPair(original = signalWord),
-            StringPair(original = molarMass),
-            StringPair(original = lethalDose),
-            StringPair(original = mak),
-            StringPair(original = meltingPoint),
-            StringPair(original = boilingPoint),
-            Quantity(),
-            ListPair(original = hPhrases),
-            ListPair(original = pPhrases),
-            ListPair(original = ghsPictograms),
-            source
-        )
-
         fun formatPhrases(list: List<Substance>, transform: (Substance) -> List<Pair<String, String>>): List<Pair<String, String>> {
             return list.map(transform).flatten().distinctBy { it.first }.sortedBy { it.first }
         }
@@ -82,52 +69,32 @@ data class Substance(
         }
     }
 
-    var name by StringPairDelegate(namePair)
-    var casNumber by StringPairDelegate(casNumberPair)
-    var molecularFormula by StringPairDelegate(molecularFormulaPair)
-    var formattedMolecularFormula by StringPairDelegate(formattedMolecularFormulaPair)
-    var wgk by StringPairDelegate(wgkPair)
-    var signalWord by StringPairDelegate(signalWordPair)
+    var name by ModifiableDelegate(nameModifiable)
+    var casNumber by ModifiableDelegate(casNumberModifiable)
+    var molecularFormula by ModifiableDelegate(molecularFormulaModifiable)
+    var formattedMolecularFormula by ModifiableDelegate(formattedMolecularFormulaModifiable)
+    var wgk by ModifiableDelegate(wgkModifiable)
+    var signalWord by ModifiableDelegate(signalWordModifiable)
 
-    var molarMass by StringPairDelegate(molarMassPair)
-    var lethalDose by StringPairDelegate(lethalDosePair)
-    var mak by StringPairDelegate(makPair)
-    var meltingPoint by StringPairDelegate(meltingPointPair)
-    var boilingPoint by StringPairDelegate(boilingPointPair)
+    var molarMass by ModifiableDelegate(molarMassModifiable)
+    var lethalDose by ModifiableDelegate(lethalDoseModifiable)
+    var mak by ModifiableDelegate(makModifiable)
+    var meltingPoint by ModifiableDelegate(meltingPointModifiable)
+    var boilingPoint by ModifiableDelegate(boilingPointModifiable)
 
-    var hPhrases by ListPairDelegate(hPhrasesPair)
-    var pPhrases by ListPairDelegate(pPhrasesPair)
-    var ghsPictograms by ListPairDelegate(ghsPictogramsPair)
+    var hPhrases by ModifiableDelegate(hPhrasesModifiable)
+    var pPhrases by ModifiableDelegate(pPhrasesModifiable)
+    var ghsPictograms by ModifiableDelegate(ghsPictogramsModifiable)
 
-    @Serializable
-    data class StringPair(val original: String = "", var modified: String? = null) {
-        fun get() = modified ?: original
+    private class ModifiableDelegate<T>(val modifiable: Modifiable<T>) : ReadWriteProperty<Any?, T> {
+        override fun getValue(thisRef: Any?, property: KProperty<*>): T = modifiable.current
 
-    }
-
-    data class ListPair<T>(val original: List<T> = emptyList(), var modified: List<T>? = null) {
-        fun get() = modified ?: original
-
+        override fun setValue(thisRef: Any?, property: KProperty<*>, value: T) {
+            modifiable.modified = value
+        }
     }
 
     data class Quantity(val value: String = "", val unit: String = "g")
-
-    private class StringPairDelegate(val stringPair: StringPair) : ReadWriteProperty<Substance, String> {
-        override fun getValue(thisRef: Substance, property: KProperty<*>) = stringPair.get()
-
-
-        override fun setValue(thisRef: Substance, property: KProperty<*>, value: String) {
-            stringPair.modified = value
-        }
-    }
-
-    private class ListPairDelegate<T>(val listPair: ListPair<T>) : ReadWriteProperty<Substance, List<T>> {
-        override fun getValue(thisRef: Substance, property: KProperty<*>) = listPair.get()
-
-        override fun setValue(thisRef: Substance, property: KProperty<*>, value: List<T>) {
-            listPair.modified = value
-        }
-    }
 
     fun copyAsModified(
         name: String,
@@ -147,49 +114,21 @@ data class Substance(
         ghsPictograms: List<GHSPictogram>
     ): Substance {
         return copy(
-            namePair = namePair.copy(modified = name),
-            casNumberPair = casNumberPair.copy(modified = casNumber),
-            molecularFormulaPair = molecularFormulaPair.copy(modified = molecularFormula),
-            formattedMolecularFormulaPair = formattedMolecularFormulaPair.copy(modified = formattedMolecularFormula),
-            wgkPair = wgkPair.copy(modified = wgk),
-            signalWordPair = signalWordPair.copy(modified = signalWord),
-            molarMassPair = molarMassPair.copy(modified = molarMass),
-            lethalDosePair = lethalDosePair.copy(modified = lethalDose),
-            makPair = makPair.copy(modified = mak),
-            meltingPointPair = meltingPointPair.copy(modified = meltingPoint),
-            boilingPointPair = boilingPointPair.copy(modified = boilingPoint),
+            nameModifiable = nameModifiable.copy(modified = name),
+            casNumberModifiable = casNumberModifiable.copy(modified = casNumber),
+            molecularFormulaModifiable = molecularFormulaModifiable.copy(modified = molecularFormula),
+            formattedMolecularFormulaModifiable = formattedMolecularFormulaModifiable.copy(modified = formattedMolecularFormula),
+            wgkModifiable = wgkModifiable.copy(modified = wgk),
+            signalWordModifiable = signalWordModifiable.copy(modified = signalWord),
+            molarMassModifiable = molarMassModifiable.copy(modified = molarMass),
+            lethalDoseModifiable = lethalDoseModifiable.copy(modified = lethalDose),
+            makModifiable = makModifiable.copy(modified = mak),
+            meltingPointModifiable = meltingPointModifiable.copy(modified = meltingPoint),
+            boilingPointModifiable = boilingPointModifiable.copy(modified = boilingPoint),
             quantity = quantity.copy(value = quantity.value, unit = quantity.unit),
-            hPhrasesPair = hPhrasesPair.copy(modified = hPhrases),
-            pPhrasesPair = pPhrasesPair.copy(modified = pPhrases),
-            ghsPictogramsPair = ghsPictogramsPair.copy(modified = ghsPictograms)
-        )
-
-    }
-
-    @Composable
-    fun FormattedMolecularFormula(modifier: Modifier = Modifier.Companion, formula: String = formattedMolecularFormula, align: TextAlign? = null) {
-        var sub = false
-        val splits = formula.split("[<>]".toRegex())
-        Text(
-            modifier = modifier,
-            text = buildAnnotatedString {
-                splits.forEach {
-                    if (sub) {
-                        withStyle(
-                            style = SpanStyle(
-                                baselineShift = BaselineShift.Subscript,
-                                fontSize = MaterialTheme.typography.bodySmall.fontSize
-                            )
-                        ) {
-                            append(it)
-                        }
-                    } else {
-                        append(it)
-                    }
-                    sub = !sub
-                }
-            },
-            textAlign = align
+            hPhrasesModifiable = hPhrasesModifiable.copy(modified = hPhrases),
+            pPhrasesModifiable = pPhrasesModifiable.copy(modified = pPhrases),
+            ghsPictogramsModifiable = ghsPictogramsModifiable.copy(modified = ghsPictograms)
         )
     }
 }
