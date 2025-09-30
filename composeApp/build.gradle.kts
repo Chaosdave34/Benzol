@@ -66,7 +66,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Exe, TargetFormat.Rpm)
             packageName = rootProject.name
-            packageVersion = "2.1.0"
+            packageVersion = "2.1.1"
             linux {
                 iconFile.set(project.file("src/jvmMain/resources/logo.png"))
             }
