@@ -16,9 +16,9 @@ import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.data.GHSPictogram
 import io.github.chaosdave34.benzol.data.Substance
+import io.github.chaosdave34.benzol.ui.CustomCard
 import io.github.chaosdave34.benzol.ui.CustomScrollbar
 import io.github.chaosdave34.benzol.ui.CustomTextField
-import io.github.chaosdave34.benzol.ui.Section
 import io.github.chaosdave34.benzol.ui.adaptive.AdaptiveDialog
 import kotlinx.serialization.json.Json
 import org.jetbrains.compose.resources.painterResource
@@ -120,7 +120,7 @@ fun EditSubstanceDialog(
                 Modifier.verticalScroll(scrollState).padding(12.dp),
                 verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
-                Section(
+                CustomCard(
                     headlineContent = {
                         Text(stringResource(Res.string.general))
                     }
@@ -166,7 +166,7 @@ fun EditSubstanceDialog(
                     }
                 }
 
-                Section(
+                CustomCard(
                     headlineContent = {
                         Text(stringResource(Res.string.properties))
                     }
@@ -260,7 +260,7 @@ fun EditSubstanceDialog(
                     }
                 }
 
-                Section(
+                CustomCard(
                     headlineContent = {
                         Text(stringResource(Res.string.h_phrases))
                     }
@@ -271,7 +271,7 @@ fun EditSubstanceDialog(
                     )
                 }
 
-                Section(
+                CustomCard(
                     headlineContent = {
                         Text(stringResource(Res.string.p_phrases))
                     }
@@ -282,7 +282,7 @@ fun EditSubstanceDialog(
                     )
                 }
 
-                Section(
+                CustomCard(
                     headlineContent = {
                         Text(stringResource(Res.string.ghs_pictograms))
                     },

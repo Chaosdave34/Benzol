@@ -16,9 +16,9 @@ import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.data.Substance
 import io.github.chaosdave34.benzol.ui.AppPageBox
+import io.github.chaosdave34.benzol.ui.CustomCard
 import io.github.chaosdave34.benzol.ui.CustomTextField
 import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
-import io.github.chaosdave34.benzol.ui.Section
 import io.github.chaosdave34.benzol.ui.safetysheet.search.GestisSearch
 import org.jetbrains.compose.resources.stringResource
 
@@ -53,7 +53,7 @@ fun SafetySheetPage() {
                 .verticalScroll(scrollState),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            Section {
+            CustomCard {
                 CustomTextField(
                     value = inputState.filename,
                     onValueChange = viewModel::setFilename,
@@ -107,7 +107,7 @@ fun SafetySheetPage() {
                 )
             }
 
-            Section(
+            CustomCard(
                 headlineContent = {
                     Text(stringResource(Res.string.search_substances))
                 },
@@ -125,7 +125,7 @@ fun SafetySheetPage() {
                 )
             }
 
-            Section(
+            CustomCard(
                 headlineContent = {
                     Text(stringResource(Res.string.used_substances).replace("\n", " "))
                 },
@@ -148,7 +148,7 @@ fun SafetySheetPage() {
                 }
             }
 
-            Section(
+            CustomCard(
                 headlineContent = {
                     Text(stringResource(Res.string.human_and_environment_danger))
                 }
@@ -160,7 +160,7 @@ fun SafetySheetPage() {
                     onAdd = { viewModel.addHumanAndEnvironmentDanger("") }
                 )
             }
-            Section(
+            CustomCard(
                 headlineContent = {
                     Text(stringResource(Res.string.rules_of_conduct))
                 }
@@ -172,7 +172,7 @@ fun SafetySheetPage() {
                     onAdd = { viewModel.addRuleOfConduct("") }
                 )
             }
-            Section(
+            CustomCard(
                 headlineContent = {
                     Text(stringResource(Res.string.in_case_of_danger))
                 }
@@ -184,9 +184,9 @@ fun SafetySheetPage() {
                     onAdd = { viewModel.addInCaseOfDanger("") }
                 )
             }
-            Section(
+            CustomCard(
                 headlineContent = {
-                    stringResource(Res.string.disposal)
+                    Text(stringResource(Res.string.disposal))
                 }
             ) {
                 ListInput(

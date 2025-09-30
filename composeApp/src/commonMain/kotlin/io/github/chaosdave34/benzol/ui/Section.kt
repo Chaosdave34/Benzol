@@ -8,12 +8,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun Section(
+fun CustomCard(
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
     headlineContent: @Composable (() -> Unit)? = null,
     supportingContent: @Composable (() -> Unit)? = null,
@@ -24,7 +23,7 @@ fun Section(
             headlineContent?.let {
                 ProvideContentColorTextStyle(
                     contentColor = MaterialTheme.colorScheme.onSurface,
-                    textStyle = MaterialTheme.typography.titleMediumEmphasized.merge(fontWeight = FontWeight.Bold),
+                    textStyle = MaterialTheme.typography.titleMediumEmphasized,
                     content = it
                 )
             }

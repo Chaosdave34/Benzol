@@ -15,8 +15,8 @@ import benzol.composeapp.generated.resources.theme
 import io.github.chaosdave34.benzol.SupportedLanguage
 import io.github.chaosdave34.benzol.settings.Theme
 import io.github.chaosdave34.benzol.ui.AppPageBox
+import io.github.chaosdave34.benzol.ui.CustomCard
 import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
-import io.github.chaosdave34.benzol.ui.Section
 import io.github.chaosdave34.benzol.ui.adaptive.AdaptivePageColumn
 import io.ktor.util.*
 import org.jetbrains.compose.resources.stringResource
@@ -36,7 +36,7 @@ fun SettingsPage() {
             scrollState = scrollState,
             maxWidth = WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND.dp
         ) {
-            Section(
+            CustomCard(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 LanguageSetting(
@@ -45,7 +45,7 @@ fun SettingsPage() {
                 )
             }
 
-            Section(
+            CustomCard(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 ThemeSetting(
@@ -55,7 +55,7 @@ fun SettingsPage() {
             }
 
             if (PlatformUtils.IS_BROWSER) {
-                Section(
+                CustomCard(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     ExportUrlSetting(

@@ -14,8 +14,8 @@ import benzol.composeapp.generated.resources.Res
 import benzol.composeapp.generated.resources.disclaimer
 import benzol.composeapp.generated.resources.github
 import io.github.chaosdave34.benzol.ui.AppPageBox
+import io.github.chaosdave34.benzol.ui.CustomCard
 import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
-import io.github.chaosdave34.benzol.ui.Section
 import io.github.chaosdave34.benzol.ui.adaptive.AdaptivePageColumn
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -34,7 +34,7 @@ fun AboutPage() {
         AdaptivePageColumn(
             scrollState = scrollState
         ) {
-            Section(
+            CustomCard(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
@@ -42,7 +42,7 @@ fun AboutPage() {
                 )
             }
 
-            Section(
+            CustomCard(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(
@@ -59,7 +59,7 @@ fun AboutPage() {
                     Text(stringResource(Res.string.github))
                 }
             }
-            Section(
+            CustomCard(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text("Version 2.0.0")
