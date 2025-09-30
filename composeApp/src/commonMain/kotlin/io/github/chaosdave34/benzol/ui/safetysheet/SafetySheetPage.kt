@@ -13,6 +13,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.window.core.layout.WindowSizeClass
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.data.Substance
 import io.github.chaosdave34.benzol.ui.AppPageBox
@@ -47,7 +48,7 @@ fun SafetySheetPage() {
     ) { scrollState ->
         Column(
             Modifier
-                .widthIn(min = 600.dp, max = 1300.dp) // Todo use adaptive
+                .widthIn(min = WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND.dp, max = WindowSizeClass.WIDTH_DP_EXTRA_LARGE_LOWER_BOUND.dp)
                 .fillMaxWidth(0.8f)
                 .verticalScroll(scrollState)
                 .padding(12.dp),
