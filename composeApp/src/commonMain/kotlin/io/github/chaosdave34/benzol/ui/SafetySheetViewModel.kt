@@ -135,6 +135,12 @@ class SafetySheetViewModel(
         }
     }
 
+    fun onSubstanceDrag(oldIndex: Int, newIndex: Int) {
+        _inputState.update { state ->
+            state.copy(substances = state.substances.toMutableList().apply { set(oldIndex, set(newIndex, get(oldIndex))) })
+        }
+    }
+
     // Human and Environment Danger
     fun addHumanAndEnvironmentDanger(item: String) {
         _inputState.update { it.copy(humanAndEnvironmentDanger = it.humanAndEnvironmentDanger + item) }
@@ -153,6 +159,12 @@ class SafetySheetViewModel(
     fun updateHumanAndEnvironmentDanger(index: Int, newValue: String) {
         _inputState.update { state ->
             state.copy(humanAndEnvironmentDanger = state.humanAndEnvironmentDanger.toMutableList().apply { set(index, newValue) })
+        }
+    }
+
+    fun onHumanAndEnvironmentDangerDrag(oldIndex: Int, newIndex: Int) {
+        _inputState.update { state ->
+            state.copy(humanAndEnvironmentDanger = state.humanAndEnvironmentDanger.toMutableList().apply { set(oldIndex, set(newIndex, get(oldIndex))) })
         }
     }
 
@@ -177,6 +189,12 @@ class SafetySheetViewModel(
         }
     }
 
+    fun onInCaseOfDangerDrag(oldIndex: Int, newIndex: Int) {
+        _inputState.update { state ->
+            state.copy(inCaseOfDanger = state.inCaseOfDanger.toMutableList().apply { set(oldIndex, set(newIndex, get(oldIndex))) })
+        }
+    }
+
     // Rules of Conduct
     fun addRuleOfConduct(item: String) {
         _inputState.update { it.copy(rulesOfConduct = it.rulesOfConduct + item) }
@@ -198,6 +216,12 @@ class SafetySheetViewModel(
         }
     }
 
+    fun onRuleOfConductDrag(oldIndex: Int, newIndex: Int) {
+        _inputState.update { state ->
+            state.copy(rulesOfConduct = state.rulesOfConduct.toMutableList().apply { set(oldIndex, set(newIndex, get(oldIndex))) })
+        }
+    }
+
     // Disposal
     fun addDisposal(item: String) {
         _inputState.update { it.copy(disposal = it.disposal + item) }
@@ -216,6 +240,12 @@ class SafetySheetViewModel(
     fun updateDisposal(index: Int, newValue: String) {
         _inputState.update { state ->
             state.copy(disposal = state.disposal.toMutableList().apply { set(index, newValue) })
+        }
+    }
+
+    fun onDisposalDrag(oldIndex: Int, newIndex: Int) {
+        _inputState.update { state ->
+            state.copy(disposal = state.disposal.toMutableList().apply { set(oldIndex, set(newIndex, get(oldIndex))) })
         }
     }
 

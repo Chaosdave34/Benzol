@@ -140,7 +140,8 @@ fun SafetySheetPage() {
                         editSubstanceDialogVisible = true
                         selectedSubstance = it
                     },
-                    onRemove = viewModel::removeSubstance
+                    onRemove = viewModel::removeSubstance,
+                    onDrag = viewModel::onSubstanceDrag
                 )
                 FilledIconButton(
                     onClick = { viewModel.addSubstance(Substance()) }
@@ -158,7 +159,8 @@ fun SafetySheetPage() {
                     list = inputState.humanAndEnvironmentDanger,
                     onRemove = viewModel::removeHumanAndEnvironmentDanger,
                     onValueChange = viewModel::updateHumanAndEnvironmentDanger,
-                    onAdd = { viewModel.addHumanAndEnvironmentDanger("") }
+                    onAdd = { viewModel.addHumanAndEnvironmentDanger("") },
+                    onDrag = viewModel::onHumanAndEnvironmentDangerDrag
                 )
             }
             CustomCard(
@@ -170,7 +172,8 @@ fun SafetySheetPage() {
                     list = inputState.rulesOfConduct,
                     onRemove = viewModel::removeRuleOfConduct,
                     onValueChange = viewModel::updateRuleOfConduct,
-                    onAdd = { viewModel.addRuleOfConduct("") }
+                    onAdd = { viewModel.addRuleOfConduct("") },
+                    onDrag = viewModel::onRuleOfConductDrag
                 )
             }
             CustomCard(
@@ -182,7 +185,8 @@ fun SafetySheetPage() {
                     list = inputState.inCaseOfDanger,
                     onRemove = viewModel::removeInCaseOfDanger,
                     onValueChange = viewModel::updateInCaseOfDanger,
-                    onAdd = { viewModel.addInCaseOfDanger("") }
+                    onAdd = { viewModel.addInCaseOfDanger("") },
+                    onDrag = viewModel::onInCaseOfDangerDrag
                 )
             }
             CustomCard(
@@ -194,7 +198,8 @@ fun SafetySheetPage() {
                     list = inputState.disposal,
                     onRemove = viewModel::removeDisposal,
                     onValueChange = viewModel::updateDisposal,
-                    onAdd = { viewModel.addDisposal("") }
+                    onAdd = { viewModel.addDisposal("") },
+                    onDrag = viewModel::onDisposalDrag
                 )
             }
         }
