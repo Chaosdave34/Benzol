@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ClearAll
 import androidx.compose.material.icons.filled.FileOpen
-import androidx.compose.material.icons.filled.PictureAsPdf
-import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.*
 import androidx.compose.material3.FloatingToolbarDefaults.ScreenOffset
 import androidx.compose.runtime.Composable
@@ -17,13 +15,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import benzol.composeapp.generated.resources.*
+import io.github.chaosdave34.benzol.ExportFileIconButton
+import io.github.chaosdave34.benzol.SaveFileIconButton
+import io.github.chaosdave34.benzol.rememberFilePicker
 import org.jetbrains.compose.resources.stringResource
 
 context(viewModel: SafetySheetViewModel)
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun BoxScope.Toolbar() {
+    val inputState by viewModel.inputState.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
+    val filePickerLauncher = rememberFilePicker()
 
     AnimatedVisibility(
         modifier = Modifier
@@ -48,22 +51,18 @@ fun BoxScope.Toolbar() {
                 contentDescription = stringResource(Res.string.new_file)
             )
             ToolbarButton(
-                onClick = viewModel::openFileChooser,
+                onClick = filePickerLauncher::launch,
                 tooltip = stringResource(Res.string.open_file),
                 imageVector = Icons.Filled.FileOpen,
                 contentDescription = stringResource(Res.string.new_file)
             )
             ToolbarButton(
-                onClick = viewModel::openFileSaver,
                 tooltip = stringResource(Res.string.save_file),
-                imageVector = Icons.Filled.Save,
-                contentDescription = stringResource(Res.string.save_file)
+                button = { SaveFileIconButton(inputState) }
             )
             ToolbarButton(
-                onClick = viewModel::openPdfExport,
                 tooltip = stringResource(Res.string.export_file),
-                imageVector = Icons.Filled.PictureAsPdf,
-                contentDescription = stringResource(Res.string.export_file)
+                button = { ExportFileIconButton(viewModel.settings.exportUrl, inputState) }
             )
         }
     }
@@ -72,10 +71,8 @@ fun BoxScope.Toolbar() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ToolbarButton(
-    onClick: () -> Unit,
     tooltip: String,
-    imageVector: ImageVector,
-    contentDescription: String
+    button: @Composable () -> Unit
 ) {
     TooltipBox(
         positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
@@ -85,6 +82,21 @@ private fun ToolbarButton(
             }
         },
         state = rememberTooltipState()
+    ) {
+        button()
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ToolbarButton(
+    onClick: () -> Unit,
+    tooltip: String,
+    imageVector: ImageVector,
+    contentDescription: String,
+) {
+    ToolbarButton(
+        tooltip = tooltip
     ) {
         IconButton(
             onClick = onClick

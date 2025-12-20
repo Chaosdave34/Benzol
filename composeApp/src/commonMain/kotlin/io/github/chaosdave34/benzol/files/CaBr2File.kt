@@ -2,6 +2,7 @@ package io.github.chaosdave34.benzol.files
 
 import io.github.chaosdave34.benzol.data.GHSPictogram
 import io.github.chaosdave34.benzol.data.Modifiable
+import io.github.chaosdave34.benzol.data.SafetySheetInputState
 import io.github.chaosdave34.benzol.data.Substance
 import io.github.chaosdave34.benzol.files.CaBr2File.CaBr2Data.Source.Companion.toProvider
 import io.github.chaosdave34.benzol.files.CaBr2File.CaBr2Data.ValuePair.Companion.toListModifiable
@@ -12,6 +13,29 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
 object CaBr2File {
+
+    fun exportInputState(inputState: SafetySheetInputState): String {
+        val header = CaBr2Data.Header(
+            inputState.documentTitle.trim(),
+            inputState.organisation.trim(),
+            inputState.course.trim(),
+            inputState.name.trim(),
+            inputState.place.trim(),
+            inputState.assistant.trim(),
+            inputState.preparation.trim()
+        )
+
+        val content = CaBr2Data(
+            header,
+            inputState.substances.map { CaBr2Data.SubstanceData.export(it) },
+            inputState.humanAndEnvironmentDanger.map { it.trim() },
+            inputState.rulesOfConduct.map { it.trim() },
+            inputState.inCaseOfDanger.map { it.trim() },
+            inputState.disposal.map { it.trim() }
+        )
+
+        return toJson(content)
+    }
 
     fun fromJson(value: String): CaBr2Data? {
         return try {

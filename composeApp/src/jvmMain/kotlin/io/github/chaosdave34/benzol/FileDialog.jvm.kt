@@ -1,129 +1,131 @@
 package io.github.chaosdave34.benzol
 
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.awt.AwtWindow
-import benzol.composeapp.generated.resources.Res
-import benzol.composeapp.generated.resources.export_file
-import benzol.composeapp.generated.resources.open_file
-import benzol.composeapp.generated.resources.save_file
+import androidx.compose.runtime.rememberCoroutineScope
+import benzol.composeapp.generated.resources.*
+import io.github.chaosdave34.benzol.data.SafetySheetInputState
+import io.github.chaosdave34.benzol.files.CaBr2File
+import io.github.chaosdave34.benzol.files.createHtml
 import io.github.chaosdave34.benzol.files.htmlToPdf
-import io.github.chaosdave34.benzol.settings.Settings
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import io.github.vinceglb.filekit.dialogs.compose.SaverResultLauncher
+import io.github.vinceglb.filekit.dialogs.compose.rememberFileSaverLauncher
+import io.github.vinceglb.filekit.write
+import io.github.vinceglb.filekit.writeString
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.rememberResourceEnvironment
 import org.jetbrains.compose.resources.stringResource
-import java.awt.FileDialog
-import java.awt.Frame
-import java.io.File
 
 @Composable
-actual fun FileChooser(
-    scope: CoroutineScope,
-    settings: Settings,
-    onSelect: (String?, String) -> Unit,
-    onClose: () -> Unit
-) {
-    ComposeFileDialog(
-        title = stringResource(Res.string.open_file),
-        mode = FileDialog.LOAD,
-        directory = settings.lastUsedFolderOpen,
-        callback = { directory, file ->
-            if (directory != null && file != null) {
-                scope.launch(Dispatchers.IO) {
-                    onSelect(File(directory + file).readText(), file)
-                    onClose()
-                }
-                settings.lastUsedFolderOpen = directory
-            } else {
-                onClose()
-            }
+private fun rememberFileSaver(
+    inputState: SafetySheetInputState
+): SaverResultLauncher {
+    val scope = rememberCoroutineScope()
+
+    return rememberFileSaverLauncher { file ->
+        if (file != null) {
+            val output = CaBr2File.exportInputState(inputState)
+
+            scope.launch { file.writeString(output) }
         }
-    )
+    }
 }
 
 @Composable
-actual fun FileSaver(
-    scope: CoroutineScope,
-    settings: Settings,
-    fileName: String,
-    output: () -> String,
-    onClose: () -> Unit
+actual fun SaveFileIconButton(
+    inputState: SafetySheetInputState
 ) {
-    ComposeFileDialog(
-        title = stringResource(Res.string.save_file),
-        mode = FileDialog.SAVE,
-        directory = settings.lastUsedFolderSave,
-        fileName = fileName,
-        callback = { directory, file ->
-            if (directory != null && file != null) {
-                scope.launch(Dispatchers.IO) {
-                    File(directory, file).writeText(output())
-                    onClose()
-                }
-                settings.lastUsedFolderSave = directory
-            } else {
-                onClose()
-            }
+    val launcher = rememberFileSaver(inputState)
+    val unnamed = stringResource(Res.string.unnamed_file)
 
-        }
-    )
-}
-
-@Composable
-actual fun PdfExport(
-    scope: CoroutineScope,
-    settings: Settings,
-    fileName: String,
-    html: suspend () -> String,
-    onClose: (Boolean) -> Unit
-) {
-    ComposeFileDialog(
-        title = stringResource(Res.string.export_file),
-        mode = FileDialog.SAVE,
-        directory = settings.lastUsedFolderExport,
-        fileName = fileName,
-        callback = { directory, file ->
-            if (directory != null && file != null) {
-                scope.launch(Dispatchers.IO) {
-                    val byteArray = htmlToPdf(html())
-                    File(directory, file).writeBytes(byteArray)
-                    onClose(true)
-                }
-                settings.lastUsedFolderExport = directory
-            } else {
-                onClose(false)
-            }
-        }
-    )
-}
-
-@Composable
-fun ComposeFileDialog(
-    title: String,
-    mode: Int,
-    directory: String?,
-    fileName: String? = null,
-    callback: (String?, String?) -> Unit
-) {
-    AwtWindow(
-        create = {
-            object : FileDialog(null as Frame?, title, mode) {
-                init {
-                    this.directory = directory ?: System.getProperty("user.home")
-                    fileName?.let { this.file = it }
-                }
-
-                override fun setVisible(visible: Boolean) {
-                    super.setVisible(visible)
-                    if (visible) {
-                        callback(this.directory, file)
-                    }
-                }
-            }
+    IconButton(
+        onClick = {
+            launcher.launch(
+                suggestedName = inputState.filename.ifEmpty { unnamed },
+                extension = "cb2"
+            )
         },
-        dispose = FileDialog::dispose
+    ) {
+        SaveIcon()
+    }
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+actual fun FloatingActionButtonMenuScope.SaveFileFabButton(inputState: SafetySheetInputState) {
+    val launcher = rememberFileSaver(inputState)
+    val unnamed = stringResource(Res.string.unnamed_file)
+
+    FloatingActionButtonMenuItem(
+        onClick = {
+            launcher.launch(
+                suggestedName = inputState.filename.ifEmpty { unnamed },
+                extension = "cb2"
+            )
+        },
+        icon = { SaveIcon() },
+        text = { Text(stringResource(Res.string.save_file)) }
     )
 }
 
+@Composable
+private fun rememberPdfExporter(
+    inputState: SafetySheetInputState
+): SaverResultLauncher {
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = LocalSnackbarHostState.current
+    val resourceEnvironment = rememberResourceEnvironment()
 
+    return rememberFileSaverLauncher { file ->
+        scope.launch {
+            if (file != null) {
+                val html = createHtml(inputState, resourceEnvironment)
+                file.write(htmlToPdf(html))
 
+                snackbarHostState.showSnackbar(getString(resourceEnvironment, Res.string.pdf_export_success))
+            }
+        }
+    }
+}
+
+@Composable
+actual fun ExportFileIconButton(
+    exportUrl: String,
+    inputState: SafetySheetInputState
+) {
+    val launcher = rememberPdfExporter(inputState)
+    val unnamed = stringResource(Res.string.unnamed_file)
+
+    IconButton(
+        onClick = {
+            launcher.launch(
+                suggestedName = inputState.filename.ifEmpty { unnamed },
+                extension = "pdf"
+            )
+        }
+    ) {
+        ExportFileIcon()
+    }
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+actual fun FloatingActionButtonMenuScope.ExportFileFabButton(
+    inputState: SafetySheetInputState,
+    exportUrl: String
+) {
+    val launcher = rememberPdfExporter(inputState)
+    val unnamed = stringResource(Res.string.unnamed_file)
+
+    FloatingActionButtonMenuItem(
+        onClick = {
+            launcher.launch(
+                suggestedName = inputState.filename.ifEmpty { unnamed },
+                extension = "pdf"
+            )
+        },
+        icon = { ExportFileIcon() },
+        text = { Text(stringResource(Res.string.export_file)) }
+    )
+}

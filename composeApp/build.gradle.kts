@@ -49,6 +49,8 @@ kotlin {
             implementation(libs.androidx.navigation)
             implementation(libs.compose.material3Adaptive)
             implementation("org.jetbrains.compose.material3:material3-adaptive-navigation-suite:1.10.0-alpha05")
+
+            implementation(libs.bundles.filekit.common)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -73,6 +75,7 @@ compose.desktop {
             packageVersion = "2.1.2"
             linux {
                 iconFile.set(project.file("src/jvmMain/resources/logo.png"))
+                modules("jdk.security.auth")
             }
             macOS {
                 iconFile.set(project.file("src/jvmMain/resources/logo.icns"))

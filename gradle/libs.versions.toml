@@ -14,6 +14,7 @@ kotlinx-serialization = "1.9.0"
 
 openhtmltopdf = "1.1.35"
 ksoup = "0.2.5"
+filekit = "0.12.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -40,6 +41,9 @@ compose-material3Adaptive = { module = "org.jetbrains.compose.material3.adaptive
 openhtmltopdf-core = { module = "io.github.openhtmltopdf:openhtmltopdf-core", version.ref = "openhtmltopdf" }
 openhtmltopdf-pdfbox = { module = "io.github.openhtmltopdf:openhtmltopdf-pdfbox", version.ref = "openhtmltopdf" }
 ksoup = { module = "com.fleeksoft.ksoup:ksoup", version.ref = "ksoup" }
+filekit-core = { module = "io.github.vinceglb:filekit-core", version.ref = "filekit" }
+filekit-dialogs = { module = "io.github.vinceglb:filekit-dialogs", version.ref = "filekit" }
+filekit-dialogs-compose = { module = "io.github.vinceglb:filekit-dialogs-compose", version.ref = "filekit" }
 
 [plugins]
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
@@ -54,3 +58,4 @@ serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref 
 ktor-clientCommon = ["ktor-clientCore", "ktor-clientContentNegotiation", "ktor-serializationKotlinxJson"]
 ktor-serverCommon = ["ktor-serverCore", "ktor-serverNetty", "ktor-serverCors"]
 openhtmltopdf-common = ["openhtmltopdf-core", "openhtmltopdf-pdfbox"]
+filekit-common = ["filekit-core", "filekit-dialogs", "filekit-dialogs-compose"]

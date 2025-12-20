@@ -32,8 +32,6 @@ fun App() {
                     GHSPictogram.setBase64()
                 }
 
-                FileDialogs()
-
                 val darkTheme = when (uiState.theme) {
                     Theme.System -> isSystemInDarkTheme()
                     Theme.Light -> false

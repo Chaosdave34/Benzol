@@ -32,30 +32,6 @@ class SafetySheetViewModel(
         _uiState.update { it.copy(selectedDestination = destination) }
     }
 
-    private fun setFileChooser(value: Boolean) {
-        _uiState.update { it.copy(fileChooserVisible = value) }
-    }
-
-    fun openFileChooser() = setFileChooser(true)
-
-    fun closeFileChooser() = setFileChooser(false)
-
-    private fun setFileSaver(visible: Boolean) {
-        _uiState.update { it.copy(fileSaverVisible = visible) }
-    }
-
-    fun openFileSaver() = setFileSaver(true)
-
-    fun closeFileSaver() = setFileSaver(false)
-
-    private fun setPdExport(visible: Boolean) {
-        _uiState.update { it.copy(pdfExportVisible = visible) }
-    }
-
-    fun openPdfExport() = setPdExport(true)
-
-    fun closePdfExport() = setPdExport(false)
-
     fun confirmDisclaimer() {
         _uiState.update { it.copy(disclaimerConfirmed = true) }
         settings.disclaimerConfirmed = true
@@ -261,7 +237,7 @@ class SafetySheetViewModel(
         val header = data.header
 
         val inputState = SafetySheetInputState(
-            filename = fileName.replace("\\.[^.]*$".toRegex(), ""),
+            filename = fileName,
             documentTitle = header.documentTitle,
             organisation = header.organisation,
             course = header.labCourse,

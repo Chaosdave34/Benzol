@@ -2,7 +2,10 @@ package io.github.chaosdave34.benzol.ui
 
 import androidx.compose.animation.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ClearAll
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.FileOpen
 import androidx.compose.material3.*
 import androidx.compose.material3.FloatingToolbarDefaults.ScreenOffset
 import androidx.compose.material3.ToggleFloatingActionButtonDefaults.animateIcon
@@ -10,7 +13,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import benzol.composeapp.generated.resources.*
+import benzol.composeapp.generated.resources.Res
+import benzol.composeapp.generated.resources.new_file
+import benzol.composeapp.generated.resources.open_file
+import io.github.chaosdave34.benzol.ExportFileFabButton
+import io.github.chaosdave34.benzol.SaveFileFabButton
+import io.github.chaosdave34.benzol.rememberFilePicker
 import org.jetbrains.compose.resources.stringResource
 
 context(viewModel: SafetySheetViewModel)
@@ -18,7 +26,9 @@ context(viewModel: SafetySheetViewModel)
 @Composable
 fun FloatingActionButtonMenu() {
     val uiState by viewModel.uiState.collectAsState()
+    val inputState by viewModel.inputState.collectAsState()
     var expanded by remember { mutableStateOf(false) }
+    val filePickerLauncher = rememberFilePicker()
 
     AnimatedVisibility(
         visible = uiState.fabOrToolbarVisible,
@@ -61,30 +71,17 @@ fun FloatingActionButtonMenu() {
             )
             FabButton(
                 onClick = {
-                    viewModel.openFileChooser()
+                    filePickerLauncher.launch()
                     expanded = false
                 },
                 text = stringResource(Res.string.open_file),
                 imageVector = Icons.Filled.FileOpen,
                 contentDescription = stringResource(Res.string.new_file)
             )
-            FabButton(
-                onClick = {
-                    viewModel.openFileSaver()
-                    expanded = false
-                },
-                text = stringResource(Res.string.save_file),
-                imageVector = Icons.Filled.Save,
-                contentDescription = stringResource(Res.string.save_file)
-            )
-            FabButton(
-                onClick = {
-                    viewModel.openPdfExport()
-                    expanded = false
-                },
-                text = stringResource(Res.string.export_file),
-                imageVector = Icons.Filled.PictureAsPdf,
-                contentDescription = stringResource(Res.string.export_file)
+            SaveFileFabButton(inputState)
+            ExportFileFabButton(
+                exportUrl = viewModel.settings.exportUrl,
+                inputState = inputState
             )
         }
     }
