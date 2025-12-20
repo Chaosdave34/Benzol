@@ -5,13 +5,17 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
-    alias(libs.plugins.composeHotReload)
 
     alias(libs.plugins.serialization)
 }
 
 kotlin {
     jvm()
+
+    js {
+        browser()
+        binaries.executable()
+    }
 
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
@@ -29,7 +33,7 @@ kotlin {
             implementation(compose.runtime)
             implementation(compose.foundation)
             //implementation(compose.material3)
-            implementation("org.jetbrains.compose.material3:material3:1.10.0-alpha01")
+            implementation("org.jetbrains.compose.material3:material3:1.10.0-alpha05")
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
@@ -44,7 +48,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.navigation)
             implementation(libs.compose.material3Adaptive)
-            implementation("org.jetbrains.compose.material3:material3-adaptive-navigation-suite:1.10.0-alpha01")
+            implementation("org.jetbrains.compose.material3:material3-adaptive-navigation-suite:1.10.0-alpha05")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
