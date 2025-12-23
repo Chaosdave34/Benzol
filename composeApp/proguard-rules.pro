@@ -12,3 +12,8 @@
 -keep class com.sun.jna.** { *; }
 -keep class * implements com.sun.jna.** { *; }
 -keep class * implements org.freedesktop.dbus.** { *; }
+
+# openhtmltopdf (PDF export)
+-keepclassmembers enum * {
+    public static **[] values();
+}
