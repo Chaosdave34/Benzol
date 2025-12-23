@@ -57,7 +57,10 @@ actual fun SaveFileIconButton(inputState: SafetySheetInputState) {
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-actual fun FloatingActionButtonMenuScope.SaveFileFabButton(inputState: SafetySheetInputState) {
+actual fun FloatingActionButtonMenuScope.SaveFileFabButton(
+    inputState: SafetySheetInputState,
+    onClick: () -> Unit
+) {
     val scope = rememberCoroutineScope()
     val resourceEnvironment = rememberResourceEnvironment()
 
@@ -69,6 +72,7 @@ actual fun FloatingActionButtonMenuScope.SaveFileFabButton(inputState: SafetyShe
                     resourceEnvironment = resourceEnvironment
                 )
             }
+            onClick()
         },
         icon = { SaveIcon() },
         text = { Text(stringResource(Res.string.save_file)) }
@@ -114,8 +118,8 @@ private suspend fun exportPdf(
 
 @Composable
 actual fun ExportFileIconButton(
-    exportUrl: String,
-    inputState: SafetySheetInputState
+    inputState: SafetySheetInputState,
+    exportUrl: String
 ) {
     val scope = rememberCoroutineScope()
     val resourceEnvironment = rememberResourceEnvironment()
@@ -141,7 +145,8 @@ actual fun ExportFileIconButton(
 @Composable
 actual fun FloatingActionButtonMenuScope.ExportFileFabButton(
     inputState: SafetySheetInputState,
-    exportUrl: String
+    exportUrl: String,
+    onClick: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val resourceEnvironment = rememberResourceEnvironment()
@@ -157,6 +162,7 @@ actual fun FloatingActionButtonMenuScope.ExportFileFabButton(
                     snackbarHostState = snackbarHostState
                 )
             }
+            onClick()
         },
         icon = { ExportFileIcon() },
         text = { Text(stringResource(Res.string.export_file)) }

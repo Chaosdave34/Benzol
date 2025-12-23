@@ -53,7 +53,10 @@ actual fun SaveFileIconButton(
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-actual fun FloatingActionButtonMenuScope.SaveFileFabButton(inputState: SafetySheetInputState) {
+actual fun FloatingActionButtonMenuScope.SaveFileFabButton(
+    inputState: SafetySheetInputState,
+    onClick: () -> Unit
+) {
     val launcher = rememberFileSaver(inputState)
     val unnamed = stringResource(Res.string.unnamed_file)
 
@@ -63,6 +66,7 @@ actual fun FloatingActionButtonMenuScope.SaveFileFabButton(inputState: SafetyShe
                 suggestedName = inputState.filename.ifEmpty { unnamed },
                 extension = "cb2"
             )
+            onClick()
         },
         icon = { SaveIcon() },
         text = { Text(stringResource(Res.string.save_file)) }
@@ -91,8 +95,8 @@ private fun rememberPdfExporter(
 
 @Composable
 actual fun ExportFileIconButton(
-    exportUrl: String,
-    inputState: SafetySheetInputState
+    inputState: SafetySheetInputState,
+    exportUrl: String
 ) {
     val launcher = rememberPdfExporter(inputState)
     val unnamed = stringResource(Res.string.unnamed_file)
@@ -113,7 +117,8 @@ actual fun ExportFileIconButton(
 @Composable
 actual fun FloatingActionButtonMenuScope.ExportFileFabButton(
     inputState: SafetySheetInputState,
-    exportUrl: String
+    exportUrl: String,
+    onClick: () -> Unit
 ) {
     val launcher = rememberPdfExporter(inputState)
     val unnamed = stringResource(Res.string.unnamed_file)
@@ -124,6 +129,7 @@ actual fun FloatingActionButtonMenuScope.ExportFileFabButton(
                 suggestedName = inputState.filename.ifEmpty { unnamed },
                 extension = "pdf"
             )
+            onClick()
         },
         icon = { ExportFileIcon() },
         text = { Text(stringResource(Res.string.export_file)) }

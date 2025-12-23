@@ -78,10 +78,18 @@ fun FloatingActionButtonMenu() {
                 imageVector = Icons.Filled.FileOpen,
                 contentDescription = stringResource(Res.string.new_file)
             )
-            SaveFileFabButton(inputState)
+            SaveFileFabButton(
+                inputState = inputState,
+                onClick = {
+                    expanded = false
+                }
+            )
             ExportFileFabButton(
+                inputState = inputState,
                 exportUrl = viewModel.settings.exportUrl,
-                inputState = inputState
+                onClick = {
+                    expanded = false
+                }
             )
         }
     }
