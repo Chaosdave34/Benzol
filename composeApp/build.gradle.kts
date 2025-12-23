@@ -86,7 +86,7 @@ compose.desktop {
         }
 
         buildTypes.release.proguard {
-            configurationFiles.from("proguard-rules.pro")
+            configurationFiles.from(project.file("compose-desktop.pro"))
         }
     }
 }
