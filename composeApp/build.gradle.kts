@@ -48,7 +48,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.navigation)
             implementation(libs.compose.material3Adaptive)
-            implementation("org.jetbrains.compose.material3:material3-adaptive-navigation-suite:1.10.0-alpha05")
+            implementation("org.jetbrains.compose.material3:material3-adaptive-navigation-suite:1.11.0-alpha01")
 
             implementation(libs.bundles.filekit.common)
         }
