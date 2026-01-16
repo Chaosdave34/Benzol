@@ -45,6 +45,7 @@ fun Layout() {
         navigationItems = {
             Destination.entries.forEach { destination ->
                 val selected = uiState.selectedDestination == destination
+                stringResource(destination.label) // temp fix to "load" the labels for web target
                 NavigationSuiteItem(
                     selected = selected,
                     onClick = {
