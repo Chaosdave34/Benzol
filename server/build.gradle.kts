@@ -5,7 +5,8 @@ plugins {
 }
 
 group = "io.github.chaosdave34.benzol"
-version = "2.1.2"
+version = "2.2.0"
+
 application {
     mainClass.set("io.github.chaosdave34.benzol.ApplicationKt")
 
