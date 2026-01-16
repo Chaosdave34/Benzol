@@ -33,7 +33,6 @@ kotlin {
             implementation(compose.runtime)
             implementation(compose.foundation)
             //implementation(compose.material3)
-            implementation("org.jetbrains.compose.material3:material3:1.10.0-alpha05")
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
@@ -41,6 +40,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(projects.shared)
 
+            implementation(libs.compose.material3)
             implementation(libs.kotlinx.html)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.bundles.ktor.clientCommon)
@@ -48,7 +48,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.navigation)
             implementation(libs.compose.material3Adaptive)
-            implementation("org.jetbrains.compose.material3:material3-adaptive-navigation-suite:1.11.0-alpha01")
+            implementation(libs.compose.material3AdaptiveNavigationSuite)
 
             implementation(libs.bundles.filekit.common)
         }
