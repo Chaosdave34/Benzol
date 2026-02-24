@@ -18,16 +18,16 @@ fun main(args: Array<String>) {
 
 fun Application.module() {
     val allowAnyHost = environment.config.property("cors.allowAnyHost").getAs<Boolean>()
-    val allowedHost = environment.config.property("cors.allowedHost").getAs<String>()
+    val allowedHosts = environment.config.property("cors.allowedHosts").getAs<String>().split(", *".toRegex())
 
     log.info("AllowAnyHost: $allowAnyHost")
-    log.info("AllowedHost: $allowedHost")
+    log.info("AllowedHost: $allowedHosts")
 
     install(CORS) {
         allowMethod(HttpMethod.Post)
 
         if (allowAnyHost) anyHost()
-        allowHost(allowedHost)
+        allowedHosts.forEach(::allowHost)
     }
     routing {
         post("/export") {
