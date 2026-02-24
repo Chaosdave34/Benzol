@@ -44,7 +44,7 @@ kotlin {
             implementation(libs.kotlinx.html)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.bundles.ktor.clientCommon)
-            implementation(compose.materialIconsExtended)
+            implementation(libs.compose.materialIcons)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.navigation)
             implementation(libs.compose.material3Adaptive)
@@ -70,7 +70,7 @@ compose.desktop {
         mainClass = "io.github.chaosdave34.benzol.MainKt"
 
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Exe, TargetFormat.Rpm)
+            targetFormats(TargetFormat.Dmg, TargetFormat.Exe, TargetFormat.AppImage)
             packageName = rootProject.name
             packageVersion = "2.2.0"
             linux {
