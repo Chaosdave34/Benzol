@@ -1,8 +1,5 @@
 package io.github.chaosdave34.benzol
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PictureAsPdf
-import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButtonMenuScope
 import androidx.compose.material3.Icon
@@ -20,15 +17,16 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.rememberResourceEnvironment
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 
 @Composable
 fun SaveIcon() {
-    Icon(Icons.Filled.Save, contentDescription = stringResource(Res.string.save_file))
+    Icon(vectorResource(Res.drawable.save_filled), contentDescription = stringResource(Res.string.save_file))
 }
 
 @Composable
 fun ExportFileIcon() {
-    Icon(Icons.Filled.PictureAsPdf, contentDescription = stringResource(Res.string.export_file))
+    Icon(vectorResource(Res.drawable.picture_as_pdf_filled), contentDescription = stringResource(Res.string.export_file))
 }
 
 @Composable

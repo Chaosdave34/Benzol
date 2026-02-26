@@ -6,17 +6,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.offset
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.DragIndicator
-import androidx.compose.material.icons.filled.Source
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -24,12 +15,12 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import benzol.composeapp.generated.resources.Res
-import benzol.composeapp.generated.resources.delete
+import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.data.Substance
 import io.github.chaosdave34.benzol.search.Source
 import io.github.chaosdave34.benzol.ui.adaptive.AdaptiveButton
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -81,7 +72,7 @@ fun SubstanceList(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         AdaptiveButton(
-                            icon = Icons.Filled.Source,
+                            icon = vectorResource(Res.drawable.topic_filled),
                             label = stringResource(substance.source.first.label),
                             onClick = {
                                 uriHandler.openUri(substance.source.second)
@@ -91,7 +82,7 @@ fun SubstanceList(
                         FilledIconButton(
                             onClick = { onRemove(index) },
                         ) {
-                            Icon(Icons.Filled.Delete, contentDescription = stringResource(Res.string.delete))
+                            Icon(vectorResource(Res.drawable.delete_filled), contentDescription = stringResource(Res.string.delete))
                         }
                         Surface(
                             onClick = {},
@@ -134,7 +125,7 @@ fun SubstanceList(
                                             }
                                         )
                                     },
-                                imageVector = Icons.Default.DragIndicator,
+                                imageVector = vectorResource(Res.drawable.drag_indicator),
                                 contentDescription = null
                             )
                         }

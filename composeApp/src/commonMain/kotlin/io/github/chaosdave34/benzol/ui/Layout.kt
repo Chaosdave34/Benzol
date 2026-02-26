@@ -21,6 +21,7 @@ import io.github.chaosdave34.benzol.ui.preview.PreviewPage
 import io.github.chaosdave34.benzol.ui.safetysheet.SafetySheetPage
 import io.github.chaosdave34.benzol.ui.settings.SettingsPage
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 
 context(viewModel: SafetySheetViewModel)
 @OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
@@ -45,7 +46,7 @@ fun Layout() {
         navigationItems = {
             Destination.entries.forEach { destination ->
                 val selected = uiState.selectedDestination == destination
-                stringResource(destination.label) // temp fix to "load" the labels for web target
+                stringResource(destination.label); vectorResource(destination.selectedIcon); vectorResource(destination.unselectedIcon) // temp fix to "load" the labels for web target
                 NavigationSuiteItem(
                     selected = selected,
                     onClick = {
@@ -54,7 +55,7 @@ fun Layout() {
                     },
                     icon = {
                         Icon(
-                            imageVector = if (selected) destination.selectedIcon else destination.unselectedIcon,
+                            imageVector = vectorResource(if (selected) destination.selectedIcon else destination.unselectedIcon),
                             contentDescription = stringResource(destination.label)
                         )
                     },

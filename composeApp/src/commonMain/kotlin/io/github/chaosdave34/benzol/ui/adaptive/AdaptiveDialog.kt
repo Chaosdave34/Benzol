@@ -1,8 +1,6 @@
 package io.github.chaosdave34.benzol.ui.adaptive
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
@@ -14,7 +12,9 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.window.core.layout.WindowSizeClass
 import benzol.composeapp.generated.resources.Res
 import benzol.composeapp.generated.resources.cancel
+import benzol.composeapp.generated.resources.close
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 
 @Composable
 fun AdaptiveDialog(
@@ -83,7 +83,7 @@ private fun AdaptiveDialogScaffold(
                         IconButton(
                             onClick = onDismissRequest
                         ) {
-                            Icon(Icons.Default.Close, contentDescription = stringResource(Res.string.cancel))
+                            Icon(vectorResource(Res.drawable.close), contentDescription = stringResource(Res.string.cancel))
                         }
                     }
                 },

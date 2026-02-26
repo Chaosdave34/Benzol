@@ -1,21 +1,13 @@
 package io.github.chaosdave34.benzol.ui
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Assignment
-import androidx.compose.material.icons.automirrored.outlined.Assignment
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Preview
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Preview
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.ui.graphics.vector.ImageVector
+
 import benzol.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
 
-enum class Destination(val route: String, val label: StringResource, val selectedIcon: ImageVector, val unselectedIcon: ImageVector) {
-    Sheet("sheet", Res.string.sheet, Icons.AutoMirrored.Filled.Assignment, Icons.AutoMirrored.Outlined.Assignment),
-    Preview("preview", Res.string.preview, Icons.Filled.Preview, Icons.Outlined.Preview),
-    Settings("settings", Res.string.settings, Icons.Filled.Settings, Icons.Outlined.Settings),
-    About("about", Res.string.about, Icons.Filled.Info, Icons.Outlined.Info)
+enum class Destination(val route: String, val label: StringResource, val selectedIcon: DrawableResource, val unselectedIcon: DrawableResource) {
+    Sheet("sheet", Res.string.sheet, Res.drawable.assignment_filled, Res.drawable.assignment),
+    Preview("preview", Res.string.preview, Res.drawable.preview_filled, Res.drawable.preview),
+    Settings("settings", Res.string.settings, Res.drawable.settings_filled, Res.drawable.settings),
+    About("about", Res.string.about, Res.drawable.info_filled, Res.drawable.info)
 }

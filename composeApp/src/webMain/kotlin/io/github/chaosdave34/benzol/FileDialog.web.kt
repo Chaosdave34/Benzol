@@ -1,7 +1,5 @@
 package io.github.chaosdave34.benzol
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PictureAsPdf
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -17,10 +15,7 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.utils.io.core.*
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.ResourceEnvironment
-import org.jetbrains.compose.resources.getString
-import org.jetbrains.compose.resources.rememberResourceEnvironment
-import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.*
 
 private val client = HttpClient()
 
@@ -137,7 +132,7 @@ actual fun ExportFileIconButton(
             }
         }
     ) {
-        Icon(Icons.Filled.PictureAsPdf, contentDescription = stringResource(Res.string.export_file))
+        Icon(vectorResource(Res.drawable.picture_as_pdf_filled), contentDescription = stringResource(Res.string.export_file))
     }
 }
 

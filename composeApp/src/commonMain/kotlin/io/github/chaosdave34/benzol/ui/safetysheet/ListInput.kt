@@ -1,30 +1,19 @@
 package io.github.chaosdave34.benzol.ui.safetysheet
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.DragIndicator
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import benzol.composeapp.generated.resources.Res
-import benzol.composeapp.generated.resources.add
-import benzol.composeapp.generated.resources.delete
+import benzol.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -96,7 +85,7 @@ fun ListInput(
                                         }
                                     )
                                 },
-                            imageVector = Icons.Default.DragIndicator,
+                            imageVector = vectorResource(Res.drawable.drag_indicator),
                             contentDescription = null
                         )
                     }
@@ -110,7 +99,7 @@ fun ListInput(
                             IconButton(
                                 onClick = { onRemove(index) },
                             ) {
-                                Icon(Icons.Filled.Delete, stringResource(Res.string.delete))
+                                Icon(vectorResource(Res.drawable.delete_filled), stringResource(Res.string.delete))
                             }
                         }
                     )
@@ -120,7 +109,7 @@ fun ListInput(
         FilledIconButton(
             onClick = onAdd,
         ) {
-            Icon(Icons.Filled.Add, stringResource(Res.string.add))
+            Icon(vectorResource(Res.drawable.add), stringResource(Res.string.add))
         }
     }
 }

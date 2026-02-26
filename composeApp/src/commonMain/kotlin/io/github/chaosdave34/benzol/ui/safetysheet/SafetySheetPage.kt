@@ -2,8 +2,6 @@ package io.github.chaosdave34.benzol.ui.safetysheet
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -22,6 +20,7 @@ import io.github.chaosdave34.benzol.ui.CustomTextField
 import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 import io.github.chaosdave34.benzol.ui.safetysheet.search.GestisSearch
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 
 context(viewModel: SafetySheetViewModel)
 @Composable
@@ -146,7 +145,7 @@ fun SafetySheetPage() {
                 FilledIconButton(
                     onClick = { viewModel.addSubstance(Substance()) }
                 ) {
-                    Icon(Icons.Filled.Add, stringResource(Res.string.add))
+                    Icon(vectorResource(Res.drawable.add), stringResource(Res.string.add))
                 }
             }
 

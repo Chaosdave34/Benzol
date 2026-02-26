@@ -2,9 +2,6 @@ package io.github.chaosdave34.benzol.ui.safetysheet
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -21,8 +18,10 @@ import io.github.chaosdave34.benzol.ui.CustomScrollbar
 import io.github.chaosdave34.benzol.ui.CustomTextField
 import io.github.chaosdave34.benzol.ui.adaptive.AdaptiveDialog
 import kotlinx.serialization.json.Json
+import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -425,7 +424,7 @@ private fun PhraseInput(
                         IconButton(
                             onClick = { if (index >= 0 && index <= phrases.lastIndex) phrases.removeAt(index) },
                         ) {
-                            Icon(Icons.Filled.Delete, stringResource(Res.string.delete))
+                            Icon(vectorResource(Res.drawable.delete_filled), stringResource(Res.string.delete))
                         }
                     }
                 )
@@ -434,7 +433,7 @@ private fun PhraseInput(
         FilledIconButton(
             onClick = { phrases.add(Pair("", "")) },
         ) {
-            Icon(Icons.Filled.Add, stringResource(Res.string.add))
+            Icon(imageResource(Res.drawable.add), stringResource(Res.string.add))
         }
     }
 }

@@ -1,9 +1,6 @@
 package io.github.chaosdave34.benzol.ui.safetysheet.search
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Clear
-import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.*
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.*
@@ -26,6 +23,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.rememberResourceEnvironment
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
@@ -212,13 +210,13 @@ private fun SearchBar(
             onValueChange = onValueChange,
             singleLine = true,
             label = { Text(stringResource(searchType.label), maxLines = 1, overflow = TextOverflow.Ellipsis) },
-            leadingIcon = { Icon(Icons.Rounded.Search, null) },
+            leadingIcon = { Icon(vectorResource(Res.drawable.search), null) },
             trailingIcon = {
                 IconButton(
                     onClick = { onValueChange("") },
                     enabled = value.isNotEmpty(),
                 ) {
-                    Icon(Icons.Rounded.Clear, stringResource(Res.string.clear))
+                    Icon(vectorResource(Res.drawable.close), stringResource(Res.string.clear))
                 }
             },
             colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),

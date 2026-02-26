@@ -3,9 +3,6 @@ package io.github.chaosdave34.benzol.ui
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.offset
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ClearAll
-import androidx.compose.material.icons.filled.FileOpen
 import androidx.compose.material3.*
 import androidx.compose.material3.FloatingToolbarDefaults.ScreenOffset
 import androidx.compose.runtime.Composable
@@ -19,6 +16,7 @@ import io.github.chaosdave34.benzol.ExportFileIconButton
 import io.github.chaosdave34.benzol.SaveFileIconButton
 import io.github.chaosdave34.benzol.rememberFilePicker
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 
 context(viewModel: SafetySheetViewModel)
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -47,13 +45,13 @@ fun BoxScope.Toolbar() {
             ToolbarButton(
                 onClick = viewModel::resetInput,
                 tooltip = stringResource(Res.string.new_file),
-                imageVector = Icons.Filled.ClearAll,
+                imageVector = vectorResource(Res.drawable.clear_all),
                 contentDescription = stringResource(Res.string.new_file)
             )
             ToolbarButton(
                 onClick = filePickerLauncher::launch,
                 tooltip = stringResource(Res.string.open_file),
-                imageVector = Icons.Filled.FileOpen,
+                imageVector = vectorResource(Res.drawable.file_open_filled),
                 contentDescription = stringResource(Res.string.new_file)
             )
             ToolbarButton(
