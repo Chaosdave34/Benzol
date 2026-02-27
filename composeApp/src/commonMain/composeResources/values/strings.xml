@@ -25,7 +25,7 @@
     <string name="organisation_default">Für chemische Laboratorien der Universität Regensburg</string>
     <string name="course_default">Praktikum anorganische Chemie</string>>
 
-    <string name="gestis">Gestis</string>
+    <string name="gestis">GESTIS-Stoffdatenbank</string>
     <string name="custom_source">Selbst erstellt</string>
 
     <string name="edit_substance">Zum Bearbeiten auf Substanz klicken.</string>
