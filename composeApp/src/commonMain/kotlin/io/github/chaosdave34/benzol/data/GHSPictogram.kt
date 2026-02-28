@@ -4,40 +4,29 @@ import benzol.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.DrawableResource
 import kotlin.io.encoding.Base64
 
-enum class GHSPictogram(val drawableResource: DrawableResource, private val fileName: String, val alt: String) {
-    Explosion(Res.drawable.explosion, "explosion", "ghs01"),
-    Flame(Res.drawable.flame, "flame", "ghs02"),
-    FlameOverCircle(Res.drawable.flame_over_circle, "flame_over_circle", "ghs03"),
-    GasBottle(Res.drawable.gas_bottle, "gas_bottle", "ghs04"),
-    Acid(Res.drawable.acid, "acid", "ghs05"),
-    Skull(Res.drawable.skull, "skull", "ghs06"),
-    Exclamation(Res.drawable.exclamation, "exclamation", "ghs07"),
-    Silhouette(Res.drawable.silhouette, "silhouette", "ghs08"),
-    Nature(Res.drawable.nature, "nature", "ghs09");
+enum class GHSPictogram(val drawableResource: DrawableResource) {
+    GHS_001(Res.drawable.ghs_001),
+    GHS_002(Res.drawable.ghs_002),
+    GHS_003(Res.drawable.ghs_003),
+    GHS_004(Res.drawable.ghs_004),
+    GHS_005(Res.drawable.ghs_005),
+    GHS_006(Res.drawable.ghs_006),
+    GHS_007(Res.drawable.ghs_007),
+    GHS_008(Res.drawable.ghs_008),
+    GHS_009(Res.drawable.ghs_009);
 
     var base64String: String = ""
+
+    val alt = name.lowercase().replace("_00", "")
 
     companion object {
         suspend fun setBase64() {
             entries.forEach {
-                val byteArray = Res.readBytes("drawable/${it.fileName}.png")
+                val byteArray = Res.readBytes("drawable/${it.name.lowercase()}.png")
                 it.base64String = Base64.encode(byteArray)
             }
         }
 
-        fun fromId(id: String): GHSPictogram? {
-            return when (id) {
-                "ghs01" -> Explosion
-                "ghs02" -> Flame
-                "ghs03" -> FlameOverCircle
-                "ghs04" -> GasBottle
-                "ghs05" -> Acid
-                "ghs06" -> Skull
-                "ghs07" -> Exclamation
-                "ghs08" -> Silhouette
-                "ghs09" -> Nature
-                else -> null
-            }
-        }
+        fun fromId(id: String) = entries.find { it.alt == id }
     }
 }

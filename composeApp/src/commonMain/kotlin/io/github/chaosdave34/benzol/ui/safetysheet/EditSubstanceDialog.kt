@@ -18,7 +18,6 @@ import io.github.chaosdave34.benzol.ui.CustomScrollbar
 import io.github.chaosdave34.benzol.ui.CustomTextField
 import io.github.chaosdave34.benzol.ui.adaptive.AdaptiveDialog
 import kotlinx.serialization.json.Json
-import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
@@ -289,64 +288,18 @@ fun EditSubstanceDialog(
                         Text(stringResource(Res.string.ghs_pictograms_hint))
                     }
                 ) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        GHSPictogram(
-                            modifier = Modifier.weight(0.3f),
-                            pictogram = GHSPictogram.Explosion,
-                            selected = ghsPictograms
-                        )
-                        GHSPictogram(
-                            modifier = Modifier.weight(0.3f),
-                            pictogram = GHSPictogram.Flame,
-                            selected = ghsPictograms
-                        )
-                        GHSPictogram(
-                            modifier = Modifier.weight(0.3f),
-                            pictogram = GHSPictogram.FlameOverCircle,
-                            selected = ghsPictograms
-                        )
-                    }
-
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        GHSPictogram(
-                            modifier = Modifier.weight(0.3f),
-                            pictogram = GHSPictogram.GasBottle,
-                            selected = ghsPictograms
-                        )
-                        GHSPictogram(
-                            modifier = Modifier.weight(0.3f),
-                            pictogram = GHSPictogram.Acid,
-                            selected = ghsPictograms
-                        )
-                        GHSPictogram(
-                            modifier = Modifier.weight(0.3f),
-                            pictogram = GHSPictogram.Skull,
-                            selected = ghsPictograms
-                        )
-                    }
-
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        GHSPictogram(
-                            modifier = Modifier.weight(0.3f),
-                            pictogram = GHSPictogram.Exclamation,
-                            selected = ghsPictograms
-                        )
-                        GHSPictogram(
-                            modifier = Modifier.weight(0.3f),
-                            pictogram = GHSPictogram.Silhouette,
-                            selected = ghsPictograms
-                        )
-                        GHSPictogram(
-                            modifier = Modifier.weight(0.3f),
-                            pictogram = GHSPictogram.Nature,
-                            selected = ghsPictograms
-                        )
+                    GHSPictogram.entries.chunked(3).forEach { list ->
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            list.forEach {
+                                GHSPictogram(
+                                    modifier = Modifier.weight(0.3f),
+                                    pictogram = it,
+                                    selected = ghsPictograms
+                                )
+                            }
+                        }
                     }
                 }
             }
