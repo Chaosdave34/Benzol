@@ -433,7 +433,7 @@ private fun PhraseInput(
         FilledIconButton(
             onClick = { phrases.add(Pair("", "")) },
         ) {
-            Icon(imageResource(Res.drawable.add), stringResource(Res.string.add))
+            Icon(vectorResource(Res.drawable.add), stringResource(Res.string.add))
         }
     }
 }
