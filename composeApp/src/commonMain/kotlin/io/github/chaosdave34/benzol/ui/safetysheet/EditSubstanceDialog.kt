@@ -174,12 +174,64 @@ fun EditSubstanceDialog(
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
+                        CustomTextField(
+                            Modifier.weight(0.33f),
+                            value = molarMass,
+                            onValueChange = { molarMass = it },
+                            label = stringResource(Res.string.molar_mass),
+                            suffix = {
+                                Text(stringResource(Res.string.molar_mass_unit))
+                            }
+                        )
+
+                        CustomTextField(
+                            Modifier.weight(0.33f),
+                            value = meltingPoint,
+                            onValueChange = { meltingPoint = it },
+                            label = stringResource(Res.string.melting_point),
+                            suffix = {
+                                Text(stringResource(Res.string.celsius_unit))
+                            }
+                        )
+                        CustomTextField(
+                            Modifier.weight(0.33f),
+                            value = boilingPoint,
+                            onValueChange = { boilingPoint = it },
+                            label = stringResource(Res.string.boiling_point),
+                            suffix = {
+                                Text(stringResource(Res.string.celsius_unit))
+                            }
+                        )
+                    }
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        CustomTextField(
+                            Modifier.weight(0.33f),
+                            value = mak,
+                            onValueChange = { mak = it },
+                            label = stringResource(Res.string.mak),
+                            suffix = {
+                                Text(stringResource(Res.string.mak_unit))
+                            }
+                        )
+
+                        CustomTextField(
+                            Modifier.weight(0.33f),
+                            value = lethalDose,
+                            onValueChange = { lethalDose = it },
+                            label = stringResource(Res.string.lethal_dose),
+                            suffix = {
+                                Text(stringResource(Res.string.lethal_dose_unit))
+                            }
+                        )
+
                         var wgkDropdownMenuExpanded by remember { mutableStateOf(false) }
 
                         ExposedDropdownMenuBox(
                             expanded = wgkDropdownMenuExpanded,
                             onExpandedChange = { wgkDropdownMenuExpanded = it },
-                            modifier = Modifier.weight(0.5f)
+                            modifier = Modifier.weight(0.33f)
                         ) {
                             OutlinedTextField(
                                 modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
@@ -208,84 +260,30 @@ fun EditSubstanceDialog(
                                 }
                             }
                         }
-
+                    }
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
                         CustomTextField(
                             Modifier.weight(0.5f),
                             value = signalWord,
                             onValueChange = { signalWord = it },
                             label = stringResource(Res.string.signal_word)
                         )
-                    }
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        CustomTextField(
-                            Modifier.weight(0.33f),
-                            value = molarMass,
-                            onValueChange = { molarMass = it },
-                            label = stringResource(Res.string.molar_mass),
-                            suffix = {
-                                Text(stringResource(Res.string.molar_mass_unit))
-                            }
-                        )
-                        CustomTextField(
-                            Modifier.weight(0.33f),
-                            value = lethalDose,
-                            onValueChange = { lethalDose = it },
-                            label = stringResource(Res.string.lethal_dose),
-                            suffix = {
-                                Text(stringResource(Res.string.lethal_dose_unit))
-                            }
-                        )
-                        CustomTextField(
-                            Modifier.weight(0.33f),
-                            value = mak,
-                            onValueChange = { mak = it },
-                            label = stringResource(Res.string.mak),
-                            suffix = {
-                                Text(stringResource(Res.string.mak_unit))
-                            }
-                        )
-                    }
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        CustomTextField(
-                            Modifier.weight(0.33f),
-                            value = meltingPoint,
-                            onValueChange = { meltingPoint = it },
-                            label = stringResource(Res.string.melting_point),
-                            suffix = {
-                                Text(stringResource(Res.string.celsius_unit))
-                            }
-                        )
-                        CustomTextField(
-                            Modifier.weight(0.33f),
-                            value = boilingPoint,
-                            onValueChange = { boilingPoint = it },
-                            label = stringResource(Res.string.boiling_point),
-                            suffix = {
-                                Text(stringResource(Res.string.celsius_unit))
-                            }
-                        )
-                    }
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
+
                         CustomTextField(
                             modifier = Modifier.weight(0.4f),
                             value = quantity,
                             onValueChange = { quantity = it },
                             label = stringResource(Res.string.quantity)
                         )
-                        Spacer(Modifier.width(10.dp))
+
                         CustomTextField(
                             modifier = Modifier.weight(0.2f),
                             value = quantityUnit,
                             onValueChange = { quantityUnit = it },
                             label = stringResource(Res.string.unit)
                         )
-                        Spacer(Modifier.weight(0.4f))
                     }
                 }
 
