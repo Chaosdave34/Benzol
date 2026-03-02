@@ -42,6 +42,8 @@ suspend fun createHtml(
     val signature1 = getString(resourceEnvironment, Res.string.signature_1)
     val signature2 = getString(resourceEnvironment, Res.string.signature_2)
 
+    val wgk = data.substances.map { getString(it.wgk.label) }
+
     val css = Res.readBytes("files/export.css").decodeToString()
 
     val sources = Substance.sources(data.substances).map { getString(it.label) }.joinToString(", ")
@@ -91,7 +93,7 @@ suspend fun createHtml(
                         ingredientTitle(4, makLd50WgkTitle)
                         ingredientTitle(4, quantityTitle)
                     }
-                    data.substances.forEach { substance ->
+                    data.substances.forEachIndexed { index, substance ->
                         tr {
                             td("min-width-5cm center") {
                                 colSpan = "6"
@@ -153,7 +155,7 @@ suspend fun createHtml(
                                 br
                                 +valueOrDash(substance.lethalDose, lethalDoseUnit)
                                 br
-                                +substance.wgk.label
+                                +wgk[index]
                             }
                             td("center") {
                                 colSpan = "4"

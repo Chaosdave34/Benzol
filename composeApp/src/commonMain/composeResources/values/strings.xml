@@ -146,4 +146,10 @@
     <string name="search_substances">Substanzen suchen</string>
 
     <string name="file_saved_success">Datei erfolgreich gespeichert</string>
+
+    <string name="wgk_1">WGK 1</string>
+    <string name="wgk_2">WGK 2</string>
+    <string name="wgk_3">WGK 3</string>
+
+    <string name="none_dash">-</string>
 </resources>

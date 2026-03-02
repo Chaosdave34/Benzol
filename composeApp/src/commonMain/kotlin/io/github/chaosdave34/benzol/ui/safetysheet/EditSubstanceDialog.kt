@@ -235,7 +235,7 @@ fun EditSubstanceDialog(
                         ) {
                             OutlinedTextField(
                                 modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
-                                value = wgk.label,
+                                value = stringResource(wgk.label),
                                 onValueChange = {},
                                 label = { Text(stringResource(Res.string.wgk), maxLines = 1, overflow = TextOverflow.Ellipsis) },
                                 readOnly = true,
@@ -250,7 +250,7 @@ fun EditSubstanceDialog(
                             ) {
                                 Wgk.entries.forEach {
                                     DropdownMenuItem(
-                                        text = { Text(it.label) },
+                                        text = { Text(stringResource(it.label)) },
                                         onClick = {
                                             wgkDropdownMenuExpanded = false
                                             wgk = it

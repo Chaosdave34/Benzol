@@ -145,7 +145,7 @@ fun Page1(modifier: Modifier = Modifier) {
                 SubstanceColumn(4f) {
                     CenteredText(valueOrDash(substance.mak, stringResource(Res.string.mak_unit)))
                     CenteredText(valueOrDash(substance.lethalDose, stringResource(Res.string.lethal_dose_unit)))
-                    CenteredText(substance.wgk.label)
+                    CenteredText(stringResource(substance.wgk.label))
                 }
                 SubstanceColumn(4f) {
                     CenteredText(if (substance.quantity.value.isNotBlank()) "${substance.quantity.value} ${substance.quantity.unit}" else "")
