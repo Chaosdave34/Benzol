@@ -1,6 +1,7 @@
 package io.github.chaosdave34.benzol.ui
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,7 +16,9 @@ fun CustomTextField(
     label: String,
     supportingText: @Composable (() -> Unit)? = null,
     suffix: @Composable (() -> Unit)? = null,
-    readOnly: Boolean = false
+    readOnly: Boolean = false,
+    isError: Boolean = false,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default
 ) {
     OutlinedTextField(
         modifier = modifier.fillMaxWidth(),
@@ -25,6 +28,8 @@ fun CustomTextField(
         singleLine = true,
         supportingText = supportingText,
         suffix = suffix,
-        readOnly = readOnly
+        readOnly = readOnly,
+        isError = isError,
+        keyboardOptions = keyboardOptions
     )
 }

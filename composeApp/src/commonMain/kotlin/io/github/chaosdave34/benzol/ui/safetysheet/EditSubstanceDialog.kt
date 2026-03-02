@@ -2,6 +2,7 @@ package io.github.chaosdave34.benzol.ui.safetysheet
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -9,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.data.GHSPictogram
@@ -182,7 +184,8 @@ fun EditSubstanceDialog(
                             label = stringResource(Res.string.molar_mass),
                             suffix = {
                                 Text(stringResource(Res.string.molar_mass_unit))
-                            }
+                            },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                         )
 
                         CustomTextField(
@@ -192,7 +195,8 @@ fun EditSubstanceDialog(
                             label = stringResource(Res.string.melting_point),
                             suffix = {
                                 Text(stringResource(Res.string.celsius_unit))
-                            }
+                            },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                         )
                         CustomTextField(
                             Modifier.weight(0.33f),
@@ -201,7 +205,8 @@ fun EditSubstanceDialog(
                             label = stringResource(Res.string.boiling_point),
                             suffix = {
                                 Text(stringResource(Res.string.celsius_unit))
-                            }
+                            },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                         )
                     }
                     Row(
@@ -214,7 +219,8 @@ fun EditSubstanceDialog(
                             label = stringResource(Res.string.mak),
                             suffix = {
                                 Text(stringResource(Res.string.mak_unit))
-                            }
+                            },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                         )
 
                         CustomTextField(
@@ -224,7 +230,8 @@ fun EditSubstanceDialog(
                             label = stringResource(Res.string.lethal_dose),
                             suffix = {
                                 Text(stringResource(Res.string.lethal_dose_unit))
-                            }
+                            },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                         )
 
                         CustomExposedDropdownMenu(
@@ -250,7 +257,8 @@ fun EditSubstanceDialog(
                             modifier = Modifier.weight(0.4f),
                             value = quantity,
                             onValueChange = { quantity = it },
-                            label = stringResource(Res.string.quantity)
+                            label = stringResource(Res.string.quantity),
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                         )
 
                         CustomTextField(
