@@ -14,7 +14,8 @@ fun CustomTextField(
     onValueChange: (String) -> Unit,
     label: String,
     supportingText: @Composable (() -> Unit)? = null,
-    suffix: @Composable (() -> Unit)? = null
+    suffix: @Composable (() -> Unit)? = null,
+    readOnly: Boolean = false
 ) {
     OutlinedTextField(
         modifier = modifier.fillMaxWidth(),
@@ -23,6 +24,7 @@ fun CustomTextField(
         label = { Text(label, maxLines = 1, overflow = TextOverflow.Ellipsis) },
         singleLine = true,
         supportingText = supportingText,
-        suffix = suffix
+        suffix = suffix,
+        readOnly = readOnly
     )
 }

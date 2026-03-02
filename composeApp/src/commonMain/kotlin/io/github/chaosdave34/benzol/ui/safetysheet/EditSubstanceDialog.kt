@@ -9,10 +9,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.data.GHSPictogram
 import io.github.chaosdave34.benzol.data.Substance
+import io.github.chaosdave34.benzol.data.Wgk
 import io.github.chaosdave34.benzol.ui.CustomCard
 import io.github.chaosdave34.benzol.ui.CustomScrollbar
 import io.github.chaosdave34.benzol.ui.CustomTextField
@@ -22,7 +24,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun EditSubstanceDialog(
     visible: Boolean,
@@ -81,7 +83,7 @@ fun EditSubstanceDialog(
                     casNumber.trim(),
                     molecularFormula.trim(),
                     formattedMolecularFormula.trim(),
-                    wgk.trim(),
+                    wgk,
                     signalWord.trim(),
                     molarMass.trim(),
                     lethalDose.trim(),
@@ -172,12 +174,41 @@ fun EditSubstanceDialog(
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        CustomTextField(
-                            Modifier.weight(0.5f),
-                            value = wgk,
-                            onValueChange = { wgk = it },
-                            label = stringResource(Res.string.wgk)
-                        )
+                        var wgkDropdownMenuExpanded by remember { mutableStateOf(false) }
+
+                        ExposedDropdownMenuBox(
+                            expanded = wgkDropdownMenuExpanded,
+                            onExpandedChange = { wgkDropdownMenuExpanded = it },
+                            modifier = Modifier.weight(0.5f)
+                        ) {
+                            OutlinedTextField(
+                                modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+                                value = wgk.label,
+                                onValueChange = {},
+                                label = { Text(stringResource(Res.string.wgk), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                                readOnly = true,
+                                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(wgkDropdownMenuExpanded) },
+                                colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
+                                singleLine = true
+                            )
+
+                            ExposedDropdownMenu(
+                                expanded = wgkDropdownMenuExpanded,
+                                onDismissRequest = { wgkDropdownMenuExpanded = false }
+                            ) {
+                                Wgk.entries.forEach {
+                                    DropdownMenuItem(
+                                        text = { Text(it.label) },
+                                        onClick = {
+                                            wgkDropdownMenuExpanded = false
+                                            wgk = it
+                                        },
+                                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                                    )
+                                }
+                            }
+                        }
+
                         CustomTextField(
                             Modifier.weight(0.5f),
                             value = signalWord,

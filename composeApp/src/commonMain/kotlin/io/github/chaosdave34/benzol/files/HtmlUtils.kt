@@ -153,7 +153,7 @@ suspend fun createHtml(
                                 br
                                 +valueOrDash(substance.lethalDose, lethalDoseUnit)
                                 br
-                                +valueOrDash(substance.wgk)
+                                +substance.wgk.label
                             }
                             td("center") {
                                 colSpan = "4"

@@ -3,6 +3,7 @@ package io.github.chaosdave34.benzol.search
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.data.GHSPictogram
 import io.github.chaosdave34.benzol.data.Substance
+import io.github.chaosdave34.benzol.data.Wgk
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
@@ -146,11 +147,11 @@ object Gestis {
             return match?.groups["formula"]?.value?.replace("<sub>", "<")?.replace("</sub>", ">") ?: ""
         }
 
-        private fun getWgk(): String {
+        private fun getWgk(): Wgk {
             val chapter = getChapter("1100", "1106").getContent()
 
             val match = "<td align=\"left\">(?<wgk>WGK [1-3]) {2}- {2}[a-z]+ wassergefährdend</td>".toRegex().find(chapter)
-            return match?.groups["wgk"]?.value ?: ""
+            return Wgk.fromLabel(match?.groups["wgk"]?.value ?: "")
         }
 
         private fun getSignalWorld(): String {
