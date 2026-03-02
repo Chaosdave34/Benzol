@@ -59,7 +59,7 @@ object Gestis {
         }
 
         return if (response.status == HttpStatusCode.OK) {
-            return response.body()
+            response.body()
         } else emptyList()
 
     }
