@@ -29,7 +29,7 @@ data class Substance(
         casNumber: String = "",
         molecularFormula: String = "",
         formattedMolecularFormula: String = "",
-        wgk: Wgk = Wgk.UNSPECIFIED,
+        wgk: Wgk = Wgk.NONE,
         signalWord: String = "",
         molarMass: String = "",
         lethalDose: String = "",

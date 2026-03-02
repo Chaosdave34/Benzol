@@ -127,7 +127,7 @@ object CaBr2File {
                     cas.toStringModifiable(),
                     molecularFormula.toStringModifiable(),
                     formattedMolecularFormula?.toStringModifiable() ?: Modifiable("", null),
-                    waterHazardClass.toModifiable(default = Wgk.UNSPECIFIED),
+                    waterHazardClass.toModifiable(default = Wgk.NONE),
                     signalWord.toStringModifiable(),
                     molarMass.toStringModifiable(),
                     lethalDose.toStringModifiable { replace(" mg/kg", "") },
