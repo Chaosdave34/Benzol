@@ -143,5 +143,8 @@
     <string name="search_substances">Search Substances</string>
 
     <string name="file_saved_success">File saved successfully</string>
+
+    <string name="warning">Warning</string>
+    <string name="danger">Danger</string>
 </resources>
 

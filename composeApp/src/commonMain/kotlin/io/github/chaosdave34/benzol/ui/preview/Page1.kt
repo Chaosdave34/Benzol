@@ -13,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.*
+import io.github.chaosdave34.benzol.data.SignalWord
 import io.github.chaosdave34.benzol.data.Substance
 import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 import io.github.chaosdave34.benzol.ui.safetysheet.FormattedMolecularFormula
@@ -135,7 +136,7 @@ fun Page1(modifier: Modifier = Modifier) {
                             }
                         }
                     }
-                    CenteredText(substance.signalWord)
+                    if (substance.signalWord != SignalWord.NONE) CenteredText(stringResource(substance.signalWord.label))
                 }
                 SubstanceColumn(6f) {
                     CenteredText(substance.hPhrases.joinToString("-") { it.first })

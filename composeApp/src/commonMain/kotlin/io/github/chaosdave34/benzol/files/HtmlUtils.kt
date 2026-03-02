@@ -2,6 +2,7 @@ package io.github.chaosdave34.benzol.files
 
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.data.SafetySheetInputState
+import io.github.chaosdave34.benzol.data.SignalWord
 import io.github.chaosdave34.benzol.data.Substance
 import kotlinx.html.*
 import kotlinx.html.stream.appendHTML
@@ -43,6 +44,7 @@ suspend fun createHtml(
     val signature2 = getString(resourceEnvironment, Res.string.signature_2)
 
     val wgk = data.substances.map { getString(it.wgk.label) }
+    val signalWord = data.substances.map { getString(it.signalWord.label) }
 
     val css = Res.readBytes("files/export.css").decodeToString()
 
@@ -136,9 +138,10 @@ suspend fun createHtml(
                                         alt = it.alt
                                     }
                                 }
-                                if (substance.signalWord.isNotBlank()) {
+
+                                if (substance.signalWord != SignalWord.NONE) {
                                     p("signalword") {
-                                        +substance.signalWord
+                                        +signalWord[index]
                                     }
                                 }
                             }

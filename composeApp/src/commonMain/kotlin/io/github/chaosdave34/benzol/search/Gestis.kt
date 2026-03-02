@@ -2,6 +2,7 @@ package io.github.chaosdave34.benzol.search
 
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.data.GHSPictogram
+import io.github.chaosdave34.benzol.data.SignalWord
 import io.github.chaosdave34.benzol.data.Substance
 import io.github.chaosdave34.benzol.data.Wgk
 import io.ktor.client.*
@@ -154,11 +155,16 @@ object Gestis {
             return Wgk.fromLabel(match?.groups["wgk"]?.value ?: "")
         }
 
-        private fun getSignalWorld(): String {
+        private fun getSignalWorld(): SignalWord {
             val chapter = getChapter("1100", "1303").getContent()
 
             val match = "<td class=\"vortext\" align=\"left\"><b>Signalwort:</b></td>\\n *<td>\"(?<word>[a-zA-Z]+)\"</td>".toRegex().find(chapter)
-            return match?.groups["word"]?.value ?: ""
+
+            return when (match?.groups["word"]?.value ?: "") {
+                "Achtung" -> SignalWord.WARNING
+                "Gefahr" -> SignalWord.DANGER
+                else -> SignalWord.NONE
+            }
         }
 
         private fun getMolarMass(): String {

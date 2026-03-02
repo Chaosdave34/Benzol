@@ -9,13 +9,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.data.GHSPictogram
+import io.github.chaosdave34.benzol.data.SignalWord
 import io.github.chaosdave34.benzol.data.Substance
 import io.github.chaosdave34.benzol.data.Wgk
 import io.github.chaosdave34.benzol.ui.CustomCard
+import io.github.chaosdave34.benzol.ui.CustomExposedDropdownMenu
 import io.github.chaosdave34.benzol.ui.CustomScrollbar
 import io.github.chaosdave34.benzol.ui.CustomTextField
 import io.github.chaosdave34.benzol.ui.adaptive.AdaptiveDialog
@@ -84,7 +85,7 @@ fun EditSubstanceDialog(
                     molecularFormula.trim(),
                     formattedMolecularFormula.trim(),
                     wgk,
-                    signalWord.trim(),
+                    signalWord,
                     molarMass.trim(),
                     lethalDose.trim(),
                     mak.trim(),
@@ -226,48 +227,22 @@ fun EditSubstanceDialog(
                             }
                         )
 
-                        var wgkDropdownMenuExpanded by remember { mutableStateOf(false) }
-
-                        ExposedDropdownMenuBox(
-                            expanded = wgkDropdownMenuExpanded,
-                            onExpandedChange = { wgkDropdownMenuExpanded = it },
-                            modifier = Modifier.weight(0.33f)
-                        ) {
-                            OutlinedTextField(
-                                modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
-                                value = stringResource(wgk.label),
-                                onValueChange = {},
-                                label = { Text(stringResource(Res.string.wgk), maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                                readOnly = true,
-                                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(wgkDropdownMenuExpanded) },
-                                colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
-                                singleLine = true
-                            )
-
-                            ExposedDropdownMenu(
-                                expanded = wgkDropdownMenuExpanded,
-                                onDismissRequest = { wgkDropdownMenuExpanded = false }
-                            ) {
-                                Wgk.entries.forEach {
-                                    DropdownMenuItem(
-                                        text = { Text(stringResource(it.label)) },
-                                        onClick = {
-                                            wgkDropdownMenuExpanded = false
-                                            wgk = it
-                                        },
-                                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
-                                    )
-                                }
-                            }
-                        }
+                        CustomExposedDropdownMenu(
+                            Modifier.weight(0.33f),
+                            label = stringResource(Res.string.wgk),
+                            entries = Wgk.entries,
+                            selected = wgk,
+                            onSelectedChange = { wgk = it }
+                        )
                     }
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        CustomTextField(
+                        CustomExposedDropdownMenu(
                             Modifier.weight(0.5f),
-                            value = signalWord,
-                            onValueChange = { signalWord = it },
+                            entries = SignalWord.entries,
+                            selected = signalWord,
+                            onSelectedChange = { signalWord = it },
                             label = stringResource(Res.string.signal_word)
                         )
 
