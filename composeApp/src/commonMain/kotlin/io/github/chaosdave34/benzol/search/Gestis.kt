@@ -1,10 +1,7 @@
 package io.github.chaosdave34.benzol.search
 
 import benzol.composeapp.generated.resources.*
-import io.github.chaosdave34.benzol.data.GHSPictogram
-import io.github.chaosdave34.benzol.data.SignalWord
-import io.github.chaosdave34.benzol.data.Substance
-import io.github.chaosdave34.benzol.data.Wgk
+import io.github.chaosdave34.benzol.data.*
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
@@ -79,7 +76,7 @@ object Gestis {
         } else null
     }
 
-    enum class SearchType(val label: StringResource, val parameterName: String) {
+    enum class SearchType(override val label: StringResource, val parameterName: String) : Labeled {
         ChemicalName(Res.string.chemical_name, "stoffname"),
         CasNumber(Res.string.number, "nummern"),
         MolecularFormula(Res.string.molecular_formula, "summenformel"),
