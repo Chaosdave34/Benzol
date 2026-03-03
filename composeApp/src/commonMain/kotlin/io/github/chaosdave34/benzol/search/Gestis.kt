@@ -224,9 +224,24 @@ object Gestis {
         private fun getHPhrases(): List<Pair<String, String>> {
             val chapter = getChapter("1100", "1303").getContent()
 
+            print(chapter)
+
             val matches = ">(?<number>H[0-9]{3}(?:\\+H[0-9]{3})*): (?<phrase>.+?\\.)(?=<br />|</td>)".toRegex().findAll(chapter)
 
-            return matches.map { Pair(it.groups["number"]?.value ?: "", it.groups["phrase"]?.value ?: "") }.toList()
+            val additionalInfo = "<verstecktercode>(?<number>H[0-9]{3}(?:\\+H[0-9]{3})*)</verstecktercode>-+? (?<info>.+?)(?=<br />|</td>)".toRegex()
+                .findAll(chapter)
+                .groupBy(
+                    keySelector = { it.groups["number"]?.value ?: "" },
+                    valueTransform = { it.groups["info"]?.value ?: "" }
+                )
+
+            return matches.map { it ->
+                val number = it.groups["number"]?.value ?: ""
+                val phrase = (it.groups["phrase"]?.value ?: "")
+
+                val additionalText = additionalInfo[number]?.let { info -> " ${info.joinToString()}" } ?: ""
+                Pair(number, phrase + additionalText)
+            }.toList()
         }
 
         private fun getPPhrases(): List<Pair<String, String>> {
