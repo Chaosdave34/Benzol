@@ -107,7 +107,7 @@
     <string name="delete">Delete</string>
     <string name="github">Github</string>
 
-    <string name="disclaimer">Benzol is an open-source project and therefore the use of the generated operating instructions is at your own risk. Neither the program nor the developers are responsible for the content and cannot be held liable for incorrect or incomplete information.</string>
+    <string name="disclaimer">%1$d is an open-source project and therefore the use of the generated operating instructions is at your own risk. Neither the program nor the developers are responsible for the content and cannot be held liable for incorrect or incomplete information.</string>
 
     <string name="important">Important!</string>
 

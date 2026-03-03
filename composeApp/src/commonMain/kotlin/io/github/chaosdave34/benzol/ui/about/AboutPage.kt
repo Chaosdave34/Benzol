@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import benzol.composeapp.generated.resources.Res
 import benzol.composeapp.generated.resources.disclaimer
 import benzol.composeapp.generated.resources.github
+import benzol.composeapp.generated.resources.title
 import io.github.chaosdave34.benzol.ui.AppPageBox
 import io.github.chaosdave34.benzol.ui.CustomCard
 import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
@@ -40,7 +41,7 @@ fun AboutPage() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = stringResource(Res.string.disclaimer)
+                    text = stringResource(Res.string.disclaimer, stringResource(Res.string.title))
                 )
             }
 
