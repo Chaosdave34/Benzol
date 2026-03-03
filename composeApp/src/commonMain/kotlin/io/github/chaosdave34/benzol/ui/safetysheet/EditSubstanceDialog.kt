@@ -55,6 +55,10 @@ fun EditSubstanceDialog(
         val pPhrases = remember { mutableStateListOf<Pair<String, String>>().also { it.addAll(substance.pPhrases) } }
         val ghsPictograms = remember { mutableStateListOf<GHSPictogram>().also { it.addAll(substance.ghsPictograms) } }
 
+        val numberRegex = "[0-9]+[,.]?[0-9]*".toRegex()
+        val negativeNumberRegex = "-?[0-9]+[,.]?[0-9]*".toRegex()
+        val casRegex = "([0-9]{2,8}-[0-9]{2}-[0-9])".toRegex()
+
         val onReset: () -> Unit = {
             name = substance.nameModifiable.original
             casNumber = substance.casNumberModifiable.original
@@ -141,7 +145,8 @@ fun EditSubstanceDialog(
                             Modifier.weight(0.5f),
                             value = casNumber,
                             onValueChange = { casNumber = it },
-                            label = stringResource(Res.string.cas_number)
+                            label = stringResource(Res.string.cas_number),
+                            isError = !casRegex.matches(casNumber) && casNumber.isNotEmpty()
                         )
                     }
                     Row(
@@ -185,7 +190,8 @@ fun EditSubstanceDialog(
                             suffix = {
                                 Text(stringResource(Res.string.molar_mass_unit))
                             },
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            isError = !numberRegex.matches(molarMass) && molarMass.isNotEmpty()
                         )
 
                         CustomTextField(
@@ -196,7 +202,8 @@ fun EditSubstanceDialog(
                             suffix = {
                                 Text(stringResource(Res.string.celsius_unit))
                             },
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            isError = !negativeNumberRegex.matches(meltingPoint) && meltingPoint.isNotEmpty()
                         )
                         CustomTextField(
                             Modifier.weight(0.33f),
@@ -206,7 +213,8 @@ fun EditSubstanceDialog(
                             suffix = {
                                 Text(stringResource(Res.string.celsius_unit))
                             },
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            isError = !negativeNumberRegex.matches(boilingPoint) && boilingPoint.isNotEmpty()
                         )
                     }
                     Row(
@@ -220,7 +228,8 @@ fun EditSubstanceDialog(
                             suffix = {
                                 Text(stringResource(Res.string.mak_unit))
                             },
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            isError = !numberRegex.matches(mak) && mak.isNotEmpty()
                         )
 
                         CustomTextField(
@@ -231,7 +240,8 @@ fun EditSubstanceDialog(
                             suffix = {
                                 Text(stringResource(Res.string.lethal_dose_unit))
                             },
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            isError = !numberRegex.matches(lethalDose) && lethalDose.isNotEmpty()
                         )
 
                         CustomExposedDropdownMenu(
@@ -258,7 +268,8 @@ fun EditSubstanceDialog(
                             value = quantity,
                             onValueChange = { quantity = it },
                             label = stringResource(Res.string.quantity),
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            isError = !numberRegex.matches(quantity) && quantity.isNotEmpty()
                         )
 
                         CustomTextField(
