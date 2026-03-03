@@ -369,6 +369,7 @@ private fun PhraseInput(
                         value = phrase.first,
                         singleLine = true,
                         onValueChange = { phrases[index] = phrase.copy(first = it) },
+                        isError = phrase.first !in phraseList.map { it.key }
                     )
 
                     ExposedDropdownMenu(
