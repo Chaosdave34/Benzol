@@ -3,7 +3,7 @@
 
     <string name="new_file">Neue Betriebsanweisung</string>
     <string name="open_file">Datei öffnen</string>
-    <string name="save_file">Datei Speichern</string>
+    <string name="save_file">Datei speichern</string>
     <string name="export_file">PDF exportieren</string>
 
     <string name="save">Speichern</string>
