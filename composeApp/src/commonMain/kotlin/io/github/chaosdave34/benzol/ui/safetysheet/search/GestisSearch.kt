@@ -5,7 +5,6 @@ import androidx.compose.material3.*
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
@@ -20,10 +19,7 @@ import io.github.chaosdave34.benzol.LocalSnackbarHostState
 import io.github.chaosdave34.benzol.data.Substance
 import io.github.chaosdave34.benzol.search.Gestis
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.getString
-import org.jetbrains.compose.resources.rememberResourceEnvironment
-import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.resources.vectorResource
+import org.jetbrains.compose.resources.*
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
@@ -157,17 +153,38 @@ fun GestisSearch(
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Button(
-                onClick = { onSearch(false) },
+            Row(
+                Modifier.weight(0.5f),
+                horizontalArrangement = Arrangement.End
             ) {
-                Text(stringResource(Res.string.do_search))
+                Button(
+                    onClick = { onSearch(false) },
+                ) {
+                    Text(stringResource(Res.string.do_search))
+                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                    Icon(
+                        painterResource(Res.drawable.search),
+                        contentDescription = stringResource(Res.string.search),
+                        modifier = Modifier.size(ButtonDefaults.IconSize)
+                    )
+                }
             }
-            Button(
-                onClick = { onSearch(true) }
+            Row(
+                Modifier.weight(0.5f),
             ) {
-                Text(stringResource(Res.string.exact_search))
+                Button(
+                    onClick = { onSearch(true) }
+                ) {
+                    Text(stringResource(Res.string.exact_search))
+                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                    Icon(
+                        painterResource(Res.drawable.search),
+                        contentDescription = stringResource(Res.string.search),
+                        modifier = Modifier.size(ButtonDefaults.IconSize)
+                    )
+                }
             }
         }
     }
