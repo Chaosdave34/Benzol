@@ -103,15 +103,11 @@ fun Page1(modifier: Modifier = Modifier) {
             ListRow {
                 SubstanceColumn(6f) {
                     CenteredText(substance.name)
-                    if (substance.formattedMolecularFormula.isNotBlank()) {
-                        FormattedMolecularFormula(
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center,
-                            formula = substance.formattedMolecularFormula
-                        )
-                    } else {
-                        CenteredText(substance.molecularFormula)
-                    }
+                    FormattedMolecularFormula(
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        formula = substance.molecularFormula
+                    )
                 }
                 SubstanceColumn(4f) {
                     CenteredText(valueOrDash(substance.molarMass))

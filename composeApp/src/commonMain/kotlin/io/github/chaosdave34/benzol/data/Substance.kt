@@ -10,7 +10,6 @@ data class Substance(
     val nameModifiable: Modifiable<String>,
     val casNumberModifiable: Modifiable<String>,
     val molecularFormulaModifiable: Modifiable<String>,
-    val formattedMolecularFormulaModifiable: Modifiable<String>,
     val wgkModifiable: Modifiable<Wgk>,
     val signalWordModifiable: Modifiable<SignalWord>,
     val molarMassModifiable: Modifiable<String>,
@@ -30,7 +29,6 @@ data class Substance(
         name: String = "",
         casNumber: String = "",
         molecularFormula: String = "",
-        formattedMolecularFormula: String = "",
         wgk: Wgk = Wgk.NONE,
         signalWord: SignalWord = SignalWord.NONE,
         molarMass: String = "",
@@ -46,7 +44,6 @@ data class Substance(
         nameModifiable = Modifiable(name),
         casNumberModifiable = Modifiable(casNumber),
         molecularFormulaModifiable = Modifiable(molecularFormula),
-        formattedMolecularFormulaModifiable = Modifiable(formattedMolecularFormula),
         wgkModifiable = Modifiable(wgk),
         signalWordModifiable = Modifiable(signalWord),
         molarMassModifiable = Modifiable(molarMass),
@@ -74,7 +71,6 @@ data class Substance(
     var name by ModifiableDelegate(nameModifiable)
     var casNumber by ModifiableDelegate(casNumberModifiable)
     var molecularFormula by ModifiableDelegate(molecularFormulaModifiable)
-    var formattedMolecularFormula by ModifiableDelegate(formattedMolecularFormulaModifiable)
     var wgk by ModifiableDelegate(wgkModifiable)
     var signalWord by ModifiableDelegate(signalWordModifiable)
 
@@ -103,7 +99,6 @@ data class Substance(
         name: String,
         casNumber: String,
         molecularFormula: String,
-        formattedMolecularFormula: String,
         wgk: Wgk,
         signalWord: SignalWord,
         molarMass: String,
@@ -120,7 +115,6 @@ data class Substance(
             nameModifiable = nameModifiable.copy(modified = name),
             casNumberModifiable = casNumberModifiable.copy(modified = casNumber),
             molecularFormulaModifiable = molecularFormulaModifiable.copy(modified = molecularFormula),
-            formattedMolecularFormulaModifiable = formattedMolecularFormulaModifiable.copy(modified = formattedMolecularFormula),
             wgkModifiable = wgkModifiable.copy(modified = wgk),
             signalWordModifiable = signalWordModifiable.copy(modified = signalWord),
             molarMassModifiable = molarMassModifiable.copy(modified = molarMass),

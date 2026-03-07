@@ -101,23 +101,12 @@ suspend fun createHtml(
                                 colSpan = "6"
                                 +substance.name
                                 br
-                                if (substance.formattedMolecularFormula.isNotBlank()) {
-                                    val formula = substance.formattedMolecularFormula
-
-                                    var sub = formula.startsWith("<")
-                                    val splits = formula.split("[<>]".toRegex())
-                                    splits.forEach {
-                                        if (sub) {
-                                            sub {
-                                                +it
-                                            }
-                                        } else {
-                                            +it
-                                        }
+                                with(substance.molecularFormula) {
+                                    var sub = this.startsWith("<")
+                                    this.split("[<>]".toRegex()).forEach {
+                                        if (sub) sub { +it } else +it
                                         sub = !sub
                                     }
-                                } else {
-                                    +substance.molecularFormula
                                 }
                             }
                             td("min-width-2cm value-with-unit center") {

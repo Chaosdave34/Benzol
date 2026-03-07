@@ -105,7 +105,6 @@ object Gestis {
             return Substance(
                 name,
                 getCas(),
-                getMolecularFormula(),
                 getFormatedMolecularFormula(),
                 getWgk(),
                 getSignalWorld(),

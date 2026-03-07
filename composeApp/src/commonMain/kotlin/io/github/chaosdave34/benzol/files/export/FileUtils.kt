@@ -47,7 +47,8 @@ object FileUtils {
         // Second check CaBr2 file
         try {
             return Json.decodeFromString<CaBr2File.CaBr2Data>(value)
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            println(e)
         }
 
         // Return null as no file matched

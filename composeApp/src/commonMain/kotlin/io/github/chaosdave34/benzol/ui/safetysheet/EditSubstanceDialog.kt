@@ -39,7 +39,6 @@ fun EditSubstanceDialog(
         var name by remember { mutableStateOf(substance.name) }
         var casNumber by remember { mutableStateOf(substance.casNumber) }
         var molecularFormula by remember { mutableStateOf(substance.molecularFormula) }
-        var formattedMolecularFormula by remember { mutableStateOf(substance.formattedMolecularFormula) }
         var wgk by remember { mutableStateOf(substance.wgk) }
         var signalWord by remember { mutableStateOf(substance.signalWord) }
 
@@ -63,7 +62,6 @@ fun EditSubstanceDialog(
             name = substance.nameModifiable.original
             casNumber = substance.casNumberModifiable.original
             molecularFormula = substance.molecularFormulaModifiable.original
-            formattedMolecularFormula = substance.formattedMolecularFormulaModifiable.original
             wgk = substance.wgkModifiable.original
             signalWord = substance.signalWordModifiable.original
 
@@ -89,7 +87,6 @@ fun EditSubstanceDialog(
                     name.trim(),
                     casNumber.trim(),
                     molecularFormula.trim(),
-                    formattedMolecularFormula.trim(),
                     wgk,
                     signalWord,
                     molarMass.trim(),
@@ -156,18 +153,12 @@ fun EditSubstanceDialog(
                             Modifier.weight(0.5f),
                             value = molecularFormula,
                             onValueChange = { molecularFormula = it },
-                            label = stringResource(Res.string.molecular_formula)
-                        )
-                        CustomTextField(
-                            Modifier.weight(0.5f),
-                            value = formattedMolecularFormula,
-                            onValueChange = { formattedMolecularFormula = it },
                             label = stringResource(Res.string.formatted_molecular_formula),
                             supportingText = {
-                                if (formattedMolecularFormula.isBlank()) {
+                                if (molecularFormula.isBlank()) {
                                     Text(stringResource(Res.string.formatted_molecular_formula_hint))
                                 } else {
-                                    FormattedMolecularFormula(formula = formattedMolecularFormula)
+                                    FormattedMolecularFormula(formula = molecularFormula)
                                 }
                             }
                         )

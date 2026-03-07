@@ -49,26 +49,23 @@ object CaBr2File {
             val source: Source,
             val checked: Boolean
         ) {
-            fun import(): Substance {
-                return Substance(
-                    name.toStringModifiable(),
-                    cas.toStringModifiable(),
-                    molecularFormula.toStringModifiable(),
-                    molecularFormula.toStringModifiable(),
-                    waterHazardClass.toModifiable(default = Wgk.NONE) { Wgk.fromLabel(this) },
-                    signalWord.toModifiable(default = SignalWord.NONE) { SignalWord.fromLabel(this) },
-                    molarMass.toStringModifiable(),
-                    lethalDose.toStringModifiable { replace(" mg/kg", "") },
-                    mak.toStringModifiable { replace(" mg/m³", "") },
-                    meltingPoint.toStringModifiable { replace(" °C", "") },
-                    boilingPoint.toStringModifiable { replace(" °C", "") },
-                    amount?.toQuantity() ?: Substance.Quantity(),
-                    hPhrases.toListModifiable { Pair(it.getOrElse(0) { "" }.trim(), it.getOrElse(1) { "" }.trim()) },
-                    pPhrases.toListModifiable { Pair(it.getOrElse(0) { "" }.trim(), it.getOrElse(1) { "" }.trim()) },
-                    symbols.toListModifiable { GHSPictogram.fromId(it) },
-                    Pair(source.getSource(), source.url.trim())
-                )
-            }
+            fun toSubstance() = Substance(
+                name.toStringModifiable(),
+                cas.toStringModifiable(),
+                molecularFormula.toStringModifiable(),
+                waterHazardClass.toModifiable(default = Wgk.NONE) { Wgk.fromLabel(this) },
+                signalWord.toModifiable(default = SignalWord.NONE) { SignalWord.fromLabel(this) },
+                molarMass.toStringModifiable(),
+                lethalDose.toStringModifiable { replace(" mg/kg", "") },
+                mak.toStringModifiable { replace(" mg/m³", "") },
+                meltingPoint.toStringModifiable { replace(" °C", "") },
+                boilingPoint.toStringModifiable { replace(" °C", "") },
+                amount?.toQuantity() ?: Substance.Quantity(),
+                hPhrases.toListModifiable { Pair(it.getOrElse(0) { "" }.trim(), it.getOrElse(1) { "" }.trim()) },
+                pPhrases.toListModifiable { Pair(it.getOrElse(0) { "" }.trim(), it.getOrElse(1) { "" }.trim()) },
+                symbols.toListModifiable { GHSPictogram.fromId(it) },
+                Pair(source.getSource(), source.url.trim())
+            )
         }
 
         @Serializable

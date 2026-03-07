@@ -254,7 +254,7 @@ class SafetySheetViewModel(
             place = header.place,
             assistant = header.assistant,
             preparation = header.preparation,
-            substances = data.substanceData.map { it.import() },
+            substances = data.substanceData.map { it.toSubstance() },
             humanAndEnvironmentDanger = data.humanAndEnvironmentDanger,
             rulesOfConduct = data.rulesOfConduct,
             inCaseOfDanger = data.inCaseOfDanger,

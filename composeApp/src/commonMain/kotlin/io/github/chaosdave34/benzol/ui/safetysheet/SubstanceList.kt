@@ -59,12 +59,7 @@ fun SubstanceList(
                             Text(substance.casNumber)
                         }
 
-                        val formula = substance.formattedMolecularFormula
-                        if (formula.isNotBlank()) {
-                            FormattedMolecularFormula(formula = formula)
-                        } else {
-                            Text(substance.molecularFormula)
-                        }
+                        FormattedMolecularFormula(formula = substance.molecularFormula)
                     }
                 },
                 trailingContent = {
