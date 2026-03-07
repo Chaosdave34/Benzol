@@ -61,7 +61,7 @@ data class Substance(
 
     companion object {
         fun formatPhrases(list: List<Substance>, transform: (Substance) -> List<Pair<String, String>>): List<Pair<String, String>> {
-            return list.map(transform).flatten().distinctBy { it.first }.sortedBy { it.first }
+            return list.flatMap(transform).distinctBy { it.first }.sortedBy { it.first }
         }
 
         fun sources(list: List<Substance>): List<Source> {
