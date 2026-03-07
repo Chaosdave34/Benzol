@@ -15,7 +15,7 @@ import org.jetbrains.compose.resources.StringResource
 
 private const val TOKEN = "dddiiasjhduuvnnasdkkwUUSHhjaPPKMasd" // don't ask, just leave it (https://gestis.dguv.de/search)
 
-object Gestis {
+object Gestis { // TODO add tests, improve h phrases regex (z.B. Betroffene Organe in https://gestis.dguv.de/data?name=011240#1100)
     private val client = HttpClient {
         install(ContentNegotiation) {
             json()
@@ -223,9 +223,12 @@ object Gestis {
         private fun getHPhrases(): List<Pair<String, String>> {
             val chapter = getChapter("1100", "1303").getContent()
 
-            val matches = ">(?<number>H[0-9]{3}(?:\\+H[0-9]{3})*): (?<phrase>.+?\\.)(?=<br />|</td>)".toRegex().findAll(chapter)
+            print(chapter)
 
-            val additionalInfo = "<verstecktercode>(?<number>H[0-9]{3}(?:\\+H[0-9]{3})*)</verstecktercode>-+? (?<info>.+?)(?=<br />|</td>)".toRegex()
+            val matches = ">(?<number>H[0-9]{3}[fFdDi]{0,2}(?:\\+H[0-9]{3}[fFdDi]{0,2})*): (?<phrase>.+?\\.)(?=<br />|</td>)".toRegex().findAll(chapter)
+
+            val additionalInfo =
+                "<verstecktercode>(?<number>H[0-9]{3}[fFdDi]{0,2}(?:\\+H[0-9]{3}[fFdDi]{0,2})*)</verstecktercode>-+? (?<info>.+?)(?=<br />|</td>)".toRegex()
                 .findAll(chapter)
                 .groupBy(
                     keySelector = { it.groups["number"]?.value ?: "" },
