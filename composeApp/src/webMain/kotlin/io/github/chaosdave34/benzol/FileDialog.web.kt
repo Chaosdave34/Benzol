@@ -24,7 +24,8 @@ private val client = HttpClient()
 private suspend fun saveFile(
     savable: Savable,
     filename: String,
-    resourceEnvironment: ResourceEnvironment
+    resourceEnvironment: ResourceEnvironment,
+    snackbarHostState: SnackbarHostState
 ) {
     val output = savable.encode()
 
@@ -32,12 +33,15 @@ private suspend fun saveFile(
         bytes = output.toByteArray(),
         fileName = filename.ifEmpty { getString(resourceEnvironment, Res.string.unnamed_file) } + ".${FileUtils.FILE_EXTENSION}"
     )
+
+    snackbarHostState.showSnackbar(getString(resourceEnvironment, Res.string.file_saved_success))
 }
 
 @Composable
 actual fun SaveFileIconButton(inputState: SafetySheetInputState) {
     val scope = rememberCoroutineScope()
     val resourceEnvironment = rememberResourceEnvironment()
+    val snackbarHostState = LocalSnackbarHostState.current
 
     IconButton(
         onClick = {
@@ -45,7 +49,8 @@ actual fun SaveFileIconButton(inputState: SafetySheetInputState) {
                 saveFile(
                     savable = inputState,
                     filename = inputState.filename,
-                    resourceEnvironment = resourceEnvironment
+                    resourceEnvironment = resourceEnvironment,
+                    snackbarHostState = snackbarHostState
                 )
             }
         }
@@ -62,6 +67,7 @@ actual fun FloatingActionButtonMenuScope.SaveFileFabButton(
 ) {
     val scope = rememberCoroutineScope()
     val resourceEnvironment = rememberResourceEnvironment()
+    val snackbarHostState = LocalSnackbarHostState.current
 
     FloatingActionButtonMenuItem(
         onClick = {
@@ -69,7 +75,8 @@ actual fun FloatingActionButtonMenuScope.SaveFileFabButton(
                 saveFile(
                     savable = inputState,
                     filename = inputState.filename,
-                    resourceEnvironment = resourceEnvironment
+                    resourceEnvironment = resourceEnvironment,
+                    snackbarHostState = snackbarHostState
                 )
             }
             onClick()

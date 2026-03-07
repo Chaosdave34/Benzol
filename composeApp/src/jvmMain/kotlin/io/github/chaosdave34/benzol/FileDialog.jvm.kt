@@ -24,11 +24,15 @@ private fun rememberFileSaver(
     savable: Savable
 ): SaverResultLauncher {
     val scope = rememberCoroutineScope()
+    val snackbarHostState = LocalSnackbarHostState.current
 
     return rememberFileSaverLauncher { file ->
         if (file != null) {
             val output = savable.encode()
-            scope.launch { file.writeString(output) }
+            scope.launch {
+                file.writeString(output)
+                snackbarHostState.showSnackbar(getString(Res.string.file_saved_success))
+            }
         }
     }
 }
