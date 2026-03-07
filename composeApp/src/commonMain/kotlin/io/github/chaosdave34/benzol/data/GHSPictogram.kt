@@ -17,7 +17,7 @@ enum class GHSPictogram(val drawableResource: DrawableResource) {
 
     var base64String: String = ""
 
-    val alt = name.lowercase().replace("_00", "")
+    val alt = name.lowercase().replace("_0", "")
 
     companion object {
         suspend fun setBase64() {
