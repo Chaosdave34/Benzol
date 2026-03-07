@@ -7,6 +7,7 @@ import io.github.chaosdave34.benzol.data.SafetySheetInputState
 import io.github.chaosdave34.benzol.data.SafetySheetUiState
 import io.github.chaosdave34.benzol.data.Substance
 import io.github.chaosdave34.benzol.files.CaBr2File
+import io.github.chaosdave34.benzol.files.export.Savable
 import io.github.chaosdave34.benzol.settings.Settings
 import io.github.chaosdave34.benzol.settings.Theme
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -233,7 +234,15 @@ class SafetySheetViewModel(
         }
     }
 
-    fun importCaBr2(fileName: String, data: CaBr2File.CaBr2Data) {
+    fun importSavable(fileName: String, savable: Savable) {
+        when (savable) {
+            is CaBr2File.CaBr2Data -> importCaBr2(fileName, savable)
+            is SafetySheetInputState -> _inputState.update { savable }
+            // TODO: add else -> error branch?
+        }
+    }
+
+    private fun importCaBr2(fileName: String, data: CaBr2File.CaBr2Data) {
         val header = data.header
 
         val inputState = SafetySheetInputState(

@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.data.SafetySheetInputState
-import io.github.chaosdave34.benzol.files.CaBr2File
+import io.github.chaosdave34.benzol.files.export.FileUtils
 import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 import io.github.vinceglb.filekit.dialogs.compose.PickerResultLauncher
 import io.github.vinceglb.filekit.dialogs.compose.rememberFilePickerLauncher
@@ -67,9 +67,9 @@ fun rememberFilePicker(): PickerResultLauncher {
     ) { file ->
         scope.launch {
             if (file != null) {
-                val caBr2File = CaBr2File.fromJson(file.readString())
-                if (caBr2File != null) {
-                    viewModel.importCaBr2(file.nameWithoutExtension, caBr2File)
+                val savable = FileUtils.decode(file.readString())
+                if (savable != null) {
+                    viewModel.importSavable(file.nameWithoutExtension, savable)
                 } else {
                     snackbarHostState.showSnackbar(getString(resourceEnvironment, Res.string.failed_to_load_file))
                 }

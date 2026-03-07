@@ -5,8 +5,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.data.SafetySheetInputState
-import io.github.chaosdave34.benzol.files.CaBr2File
 import io.github.chaosdave34.benzol.files.createHtml
+import io.github.chaosdave34.benzol.files.export.FileUtils
+import io.github.chaosdave34.benzol.files.export.FileUtils.encode
+import io.github.chaosdave34.benzol.files.export.Savable
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.download
 import io.ktor.client.*
@@ -20,14 +22,15 @@ import org.jetbrains.compose.resources.*
 private val client = HttpClient()
 
 private suspend fun saveFile(
-    inputState: SafetySheetInputState,
+    savable: Savable,
+    filename: String,
     resourceEnvironment: ResourceEnvironment
 ) {
-    val output = CaBr2File.exportInputState(inputState)
+    val output = savable.encode()
 
     FileKit.download(
         bytes = output.toByteArray(),
-        fileName = inputState.filename.ifEmpty { getString(resourceEnvironment, Res.string.unnamed_file) } + ".cb2"
+        fileName = filename.ifEmpty { getString(resourceEnvironment, Res.string.unnamed_file) } + FileUtils.FILE_EXTENSION
     )
 }
 
@@ -40,7 +43,8 @@ actual fun SaveFileIconButton(inputState: SafetySheetInputState) {
         onClick = {
             scope.launch {
                 saveFile(
-                    inputState = inputState,
+                    savable = inputState,
+                    filename = inputState.filename,
                     resourceEnvironment = resourceEnvironment
                 )
             }
@@ -63,7 +67,8 @@ actual fun FloatingActionButtonMenuScope.SaveFileFabButton(
         onClick = {
             scope.launch {
                 saveFile(
-                    inputState = inputState,
+                    savable = inputState,
+                    filename = inputState.filename,
                     resourceEnvironment = resourceEnvironment
                 )
             }

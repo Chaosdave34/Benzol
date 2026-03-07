@@ -1,52 +1,13 @@
 package io.github.chaosdave34.benzol.files
 
 import io.github.chaosdave34.benzol.data.*
-import io.github.chaosdave34.benzol.files.CaBr2File.CaBr2Data.Source.Companion.toProvider
 import io.github.chaosdave34.benzol.files.CaBr2File.CaBr2Data.ValuePair.Companion.toListModifiable
-import io.github.chaosdave34.benzol.files.CaBr2File.CaBr2Data.ValuePair.Companion.toListValuePair
 import io.github.chaosdave34.benzol.files.CaBr2File.CaBr2Data.ValuePair.Companion.toModifiable
 import io.github.chaosdave34.benzol.files.CaBr2File.CaBr2Data.ValuePair.Companion.toStringModifiable
-import io.github.chaosdave34.benzol.files.CaBr2File.CaBr2Data.ValuePair.Companion.toStringValuePair
-import io.github.chaosdave34.benzol.files.CaBr2File.CaBr2Data.ValuePair.Companion.toValuePair
+import io.github.chaosdave34.benzol.files.export.Savable
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
 
 object CaBr2File {
-
-    fun exportInputState(inputState: SafetySheetInputState): String {
-        val header = CaBr2Data.Header(
-            inputState.documentTitle.trim(),
-            inputState.organisation.trim(),
-            inputState.course.trim(),
-            inputState.name.trim(),
-            inputState.place.trim(),
-            inputState.assistant.trim(),
-            inputState.preparation.trim()
-        )
-
-        val content = CaBr2Data(
-            header,
-            inputState.substances.map { CaBr2Data.SubstanceData.export(it) },
-            inputState.humanAndEnvironmentDanger.map { it.trim() },
-            inputState.rulesOfConduct.map { it.trim() },
-            inputState.inCaseOfDanger.map { it.trim() },
-            inputState.disposal.map { it.trim() }
-        )
-
-        return toJson(content)
-    }
-
-    fun fromJson(value: String): CaBr2Data? {
-        return try {
-            Json.decodeFromString<CaBr2Data>(value)
-        } catch (_: Exception) {
-            null
-        }
-    }
-
-    fun toJson(value: CaBr2Data): String {
-        return Json.encodeToString(value)
-    }
 
     @Serializable
     data class CaBr2Data(
@@ -56,7 +17,7 @@ object CaBr2File {
         val rulesOfConduct: List<String>,
         val inCaseOfDanger: List<String>,
         val disposal: List<String>
-    ) {
+    ) : Savable {
         @Serializable
         data class Header(
             val documentTitle: String,
@@ -74,7 +35,6 @@ object CaBr2File {
             val alternativeNames: List<String>,
             val cas: ValuePair<String>,
             val molecularFormula: ValuePair<String>,
-            val formattedMolecularFormula: ValuePair<String>? = null, // Normally not in cb2 files
             val molarMass: ValuePair<String>,
             val meltingPoint: ValuePair<String>,
             val boilingPoint: ValuePair<String>,
@@ -89,44 +49,12 @@ object CaBr2File {
             val source: Source,
             val checked: Boolean
         ) {
-            companion object {
-                fun export(substance: Substance): SubstanceData {
-                    return SubstanceData(
-                        name = substance.nameModifiable.toStringValuePair(),
-                        alternativeNames = emptyList(),
-                        cas = substance.casNumberModifiable.toStringValuePair(),
-                        molecularFormula = substance.molecularFormulaModifiable.toStringValuePair(),
-                        formattedMolecularFormula = substance.formattedMolecularFormulaModifiable.toStringValuePair(),
-                        molarMass = substance.molarMassModifiable.toStringValuePair(),
-                        meltingPoint = substance.meltingPointModifiable.toStringValuePair { if (this.isNotBlank()) "$this °C" else this },
-                        boilingPoint = substance.boilingPointModifiable.toStringValuePair { if (this.isNotBlank()) "$this °C" else this },
-                        waterHazardClass = substance.wgkModifiable.toValuePair { this.internalLabel },
-                        hPhrases = substance.hPhrasesModifiable.toListValuePair { listOf(it.first, it.second) },
-                        pPhrases = substance.pPhrasesModifiable.toListValuePair { listOf(it.first, it.second) },
-                        signalWord = substance.signalWordModifiable.toValuePair { this.internalLabel },
-                        symbols = substance.ghsPictogramsModifiable.toListValuePair { ghsPictogramToSymbols(it) },
-                        lethalDose = substance.lethalDoseModifiable.toStringValuePair { if (this.isNotBlank()) "$this mg/kg" else this },
-                        mak = substance.makModifiable.toStringValuePair { if (this.isNotBlank()) "$this mg/m³" else this },
-                        amount = if (substance.quantity.value.isBlank()) null else Amount(
-                            substance.quantity.value,
-                            Amount.Unit("CUSTOM", substance.quantity.unit)
-                        ),
-                        source = Source(substance.source.first.toProvider(), substance.source.second, ""),
-                        checked = false
-                    )
-                }
-
-                fun ghsPictogramToSymbols(ghsPictogram: GHSPictogram): String {
-                    return ghsPictogram.alt
-                }
-            }
-
             fun import(): Substance {
                 return Substance(
                     name.toStringModifiable(),
                     cas.toStringModifiable(),
                     molecularFormula.toStringModifiable(),
-                    formattedMolecularFormula?.toStringModifiable() ?: Modifiable("", null),
+                    molecularFormula.toStringModifiable(),
                     waterHazardClass.toModifiable(default = Wgk.NONE) { Wgk.fromLabel(this) },
                     signalWord.toModifiable(default = SignalWord.NONE) { SignalWord.fromLabel(this) },
                     molarMass.toStringModifiable(),
@@ -149,16 +77,6 @@ object CaBr2File {
             val url: String,
             @Suppress("unused") val lastUpdated: String
         ) {
-            companion object {
-                fun io.github.chaosdave34.benzol.search.Source.toProvider(): String {
-                    return when (this) {
-                        io.github.chaosdave34.benzol.search.Source.Gestis -> "gestis"
-                        io.github.chaosdave34.benzol.search.Source.Custom -> "custom"
-                    }
-                }
-            }
-
-
             fun getSource(): io.github.chaosdave34.benzol.search.Source {
                 return when (provider) {
                     "gestis" -> io.github.chaosdave34.benzol.search.Source.Gestis
@@ -186,17 +104,6 @@ object CaBr2File {
                     return Modifiable(originalData?.mapNotNull(map) ?: emptyList(), modifiedData?.mapNotNull(map))
                 }
 
-                fun <T> Modifiable<T>.toValuePair(transformer: T.() -> String): ValuePair<String> {
-                    return ValuePair(this.original.run(transformer).trim(), this.modified?.run(transformer)?.trim())
-                }
-
-                fun Modifiable<String>.toStringValuePair(transformer: String.() -> String = { this }): ValuePair<String> {
-                    return ValuePair(this.original.run(transformer).trim(), this.modified?.run(transformer)?.trim())
-                }
-
-                fun <I, O> Modifiable<List<I>>.toListValuePair(map: (I) -> O): ValuePair<List<O>> {
-                    return ValuePair(this.original.map(map), this.modified?.map(map))
-                }
             }
 
             fun get(): T? {

@@ -1,9 +1,12 @@
 package io.github.chaosdave34.benzol.data
 
 import benzol.composeapp.generated.resources.*
+import io.github.chaosdave34.benzol.files.export.Savable
+import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.getStringArray
 
+@Serializable
 data class SafetySheetInputState(
     val filename: String = "",
     val documentTitle: String = "",
@@ -18,7 +21,7 @@ data class SafetySheetInputState(
     val inCaseOfDanger: List<String> = emptyList(),
     val rulesOfConduct: List<String> = emptyList(),
     val disposal: List<String> = emptyList()
-) {
+) : Savable {
     companion object {
         suspend fun default(): SafetySheetInputState {
             return SafetySheetInputState(

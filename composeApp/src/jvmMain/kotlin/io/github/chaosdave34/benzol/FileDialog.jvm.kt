@@ -5,8 +5,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.data.SafetySheetInputState
-import io.github.chaosdave34.benzol.files.CaBr2File
 import io.github.chaosdave34.benzol.files.createHtml
+import io.github.chaosdave34.benzol.files.export.FileUtils
+import io.github.chaosdave34.benzol.files.export.FileUtils.encode
+import io.github.chaosdave34.benzol.files.export.Savable
 import io.github.chaosdave34.benzol.files.htmlToPdf
 import io.github.vinceglb.filekit.dialogs.compose.SaverResultLauncher
 import io.github.vinceglb.filekit.dialogs.compose.rememberFileSaverLauncher
@@ -19,14 +21,13 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 private fun rememberFileSaver(
-    inputState: SafetySheetInputState
+    savable: Savable
 ): SaverResultLauncher {
     val scope = rememberCoroutineScope()
 
     return rememberFileSaverLauncher { file ->
         if (file != null) {
-            val output = CaBr2File.exportInputState(inputState)
-
+            val output = savable.encode()
             scope.launch { file.writeString(output) }
         }
     }
@@ -43,7 +44,7 @@ actual fun SaveFileIconButton(
         onClick = {
             launcher.launch(
                 suggestedName = inputState.filename.ifEmpty { unnamed },
-                extension = "cb2"
+                extension = FileUtils.FILE_EXTENSION
             )
         },
     ) {
@@ -64,7 +65,7 @@ actual fun FloatingActionButtonMenuScope.SaveFileFabButton(
         onClick = {
             launcher.launch(
                 suggestedName = inputState.filename.ifEmpty { unnamed },
-                extension = "cb2"
+                extension = FileUtils.FILE_EXTENSION
             )
             onClick()
         },

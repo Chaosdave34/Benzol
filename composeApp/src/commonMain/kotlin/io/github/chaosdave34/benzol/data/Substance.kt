@@ -1,9 +1,11 @@
 package io.github.chaosdave34.benzol.data
 
 import io.github.chaosdave34.benzol.search.Source
+import kotlinx.serialization.Serializable
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
+@Serializable
 data class Substance(
     val nameModifiable: Modifiable<String>,
     val casNumberModifiable: Modifiable<String>,
@@ -94,6 +96,7 @@ data class Substance(
         }
     }
 
+    @Serializable
     data class Quantity(val value: String = "", val unit: String = "g")
 
     fun copyAsModified(
