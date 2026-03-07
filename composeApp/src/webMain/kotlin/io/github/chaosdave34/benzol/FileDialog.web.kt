@@ -30,7 +30,7 @@ private suspend fun saveFile(
 
     FileKit.download(
         bytes = output.toByteArray(),
-        fileName = filename.ifEmpty { getString(resourceEnvironment, Res.string.unnamed_file) } + FileUtils.FILE_EXTENSION
+        fileName = filename.ifEmpty { getString(resourceEnvironment, Res.string.unnamed_file) } + ".${FileUtils.FILE_EXTENSION}"
     )
 }
 
