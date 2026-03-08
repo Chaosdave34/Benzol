@@ -69,17 +69,27 @@ compose.desktop {
         mainClass = "io.github.chaosdave34.benzol.MainKt"
 
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Exe, TargetFormat.AppImage)
+            targetFormats(TargetFormat.AppImage, TargetFormat.Exe)
+            fileAssociation("application/x-benzol+json", "benzol", "Benzol Betriebsanweisung")
+
             packageName = rootProject.name
             packageVersion = "2.2.0"
+            description = "Programm zur Erstellung von Betriebsanweisungen für Laboreinheiten nach EG Nr. 1272/2008"
+            licenseFile.set(rootProject.file("LICENSE"))
+
             linux {
+                menuGroup = "Utility"
                 iconFile.set(project.file("src/jvmMain/resources/logo.png"))
+
                 modules("jdk.security.auth")
             }
-            macOS {
-                iconFile.set(project.file("src/jvmMain/resources/logo.icns"))
-            }
+//            macOS {
+//                iconFile.set(project.file("src/jvmMain/resources/logo.icns"))
+//            }
             windows {
+                perUserInstall = true
+                shortcut = true
+                upgradeUuid = "2448B32F-0202-4792-A6E6-B425B4252B82"
                 iconFile.set(project.file("src/jvmMain/resources/logo.ico"))
             }
         }
