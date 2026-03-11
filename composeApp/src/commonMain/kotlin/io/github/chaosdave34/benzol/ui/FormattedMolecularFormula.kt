@@ -1,4 +1,4 @@
-package io.github.chaosdave34.benzol.ui.safetysheet
+package io.github.chaosdave34.benzol.ui
 
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text

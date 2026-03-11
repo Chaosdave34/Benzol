@@ -18,6 +18,7 @@ import androidx.compose.ui.zIndex
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.data.Substance
 import io.github.chaosdave34.benzol.search.Source
+import io.github.chaosdave34.benzol.ui.FormattedMolecularFormula
 import io.github.chaosdave34.benzol.ui.adaptive.AdaptiveButton
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource

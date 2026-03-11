@@ -17,10 +17,7 @@ import io.github.chaosdave34.benzol.data.GHSPictogram
 import io.github.chaosdave34.benzol.data.SignalWord
 import io.github.chaosdave34.benzol.data.Substance
 import io.github.chaosdave34.benzol.data.Wgk
-import io.github.chaosdave34.benzol.ui.CustomCard
-import io.github.chaosdave34.benzol.ui.CustomExposedDropdownMenu
-import io.github.chaosdave34.benzol.ui.CustomScrollbar
-import io.github.chaosdave34.benzol.ui.CustomTextField
+import io.github.chaosdave34.benzol.ui.*
 import io.github.chaosdave34.benzol.ui.adaptive.AdaptiveDialog
 import kotlinx.serialization.json.Json
 import org.jetbrains.compose.resources.painterResource

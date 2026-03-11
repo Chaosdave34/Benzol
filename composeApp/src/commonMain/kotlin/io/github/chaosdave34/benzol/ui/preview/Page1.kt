@@ -15,8 +15,8 @@ import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.data.SignalWord
 import io.github.chaosdave34.benzol.data.Substance
+import io.github.chaosdave34.benzol.ui.FormattedMolecularFormula
 import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
-import io.github.chaosdave34.benzol.ui.safetysheet.FormattedMolecularFormula
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
