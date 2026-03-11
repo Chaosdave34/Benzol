@@ -38,6 +38,8 @@ fun GestisSearch(
     var molecularFormula by rememberSaveable { mutableStateOf("") }
     var fullText by rememberSaveable { mutableStateOf("") }
 
+    val searchEnabled = chemicalName.isNotEmpty() || casNumber.isNotEmpty() || molecularFormula.isNotEmpty() || fullText.isNotEmpty()
+
     var searchResults by rememberSaveable { mutableStateOf(listOf<Gestis.SearchResult>()) }
 
     var resultsDialogVisible by rememberSaveable { mutableStateOf(false) }
@@ -161,6 +163,7 @@ fun GestisSearch(
             ) {
                 Button(
                     onClick = { onSearch(false) },
+                    enabled = searchEnabled
                 ) {
                     Text(stringResource(Res.string.do_search))
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
@@ -175,7 +178,8 @@ fun GestisSearch(
                 Modifier.weight(0.5f),
             ) {
                 Button(
-                    onClick = { onSearch(true) }
+                    onClick = { onSearch(true) },
+                    enabled = searchEnabled
                 ) {
                     Text(stringResource(Res.string.exact_search))
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
