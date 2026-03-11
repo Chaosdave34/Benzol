@@ -14,6 +14,7 @@ import io.github.vinceglb.filekit.dialogs.compose.SaverResultLauncher
 import io.github.vinceglb.filekit.dialogs.compose.rememberFileSaverLauncher
 import io.github.vinceglb.filekit.write
 import io.github.vinceglb.filekit.writeString
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.rememberResourceEnvironment
@@ -29,7 +30,7 @@ private fun rememberFileSaver(
     return rememberFileSaverLauncher { file ->
         if (file != null) {
             val output = savable.encode()
-            scope.launch {
+            scope.launch(context = Dispatchers.IO) {
                 file.writeString(output)
                 snackbarHostState.showSnackbar(getString(Res.string.file_saved_success))
             }
@@ -87,7 +88,7 @@ private fun rememberPdfExporter(
     val resourceEnvironment = rememberResourceEnvironment()
 
     return rememberFileSaverLauncher { file ->
-        scope.launch {
+        scope.launch(context = Dispatchers.IO) {
             if (file != null) {
                 val html = createHtml(inputState, resourceEnvironment)
                 file.write(htmlToPdf(html))
