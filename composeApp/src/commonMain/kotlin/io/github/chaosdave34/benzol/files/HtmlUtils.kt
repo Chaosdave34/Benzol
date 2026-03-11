@@ -23,7 +23,7 @@ suspend fun createHtml(
     val molarMassTitle = getString(resourceEnvironment, Res.string.molar_mass_with_unit)
     val temperaturesTitle = getString(resourceEnvironment, Res.string.temperatures)
     val ghsSymbolsTitle = getString(resourceEnvironment, Res.string.ghs_pictograms)
-    val hAndPPhrasesNumberTitle = getString(resourceEnvironment, Res.string.h_and_p_phrases_number)
+    val statementNumbersTitle = getString(resourceEnvironment, Res.string.statement_numbers)
     val makLd50WgkTitle = getString(resourceEnvironment, Res.string.mak_ld50_wgk)
 
     val quantityTitle = getString(resourceEnvironment, Res.string.quantity_required)
@@ -31,7 +31,7 @@ suspend fun createHtml(
     val lethalDoseUnit = getString(resourceEnvironment, Res.string.lethal_dose_unit)
     val celsiusUnit = getString(resourceEnvironment, Res.string.celsius_unit)
 
-    val hAndPPhrasesTitle = getString(resourceEnvironment, Res.string.title_h_and_p_phrases)
+    val statementsTitle = getString(resourceEnvironment, Res.string.title_statements)
     val sourcesTitle = getString(resourceEnvironment, Res.string.sources) + ":"
     val humanAndEnvironmentDangerTitle = getString(resourceEnvironment, Res.string.human_and_environment_danger) + ":"
     val rulesOfConductTitle = getString(resourceEnvironment, Res.string.rules_of_conduct) + ":"
@@ -91,7 +91,7 @@ suspend fun createHtml(
                         ingredientTitle(4, molarMassTitle)
                         ingredientTitle(4, temperaturesTitle)
                         ingredientTitle(6, ghsSymbolsTitle)
-                        ingredientTitle(6, hAndPPhrasesNumberTitle)
+                        ingredientTitle(6, statementNumbersTitle)
                         ingredientTitle(4, makLd50WgkTitle)
                         ingredientTitle(4, quantityTitle)
                     }
@@ -134,12 +134,12 @@ suspend fun createHtml(
                                     }
                                 }
                             }
-                            td("phrase-numbers center") {
+                            td("statement-numbers center") {
                                 colSpan = "6"
-                                +substance.hPhrases.joinToString("-") { it.first }
+                                +substance.hazardStatements.joinToString("-") { it.first }
                                 br
                                 br
-                                +substance.pPhrases.joinToString("-") { it.first }
+                                +substance.precautionaryStatements.joinToString("-") { it.first }
                             }
                             td("min-width-2cm value-with-unit center") {
                                 colSpan = "4"
@@ -164,12 +164,12 @@ suspend fun createHtml(
                     tr("no-break-after") {
                         td("center") {
                             colSpan = "34"
-                            +hAndPPhrasesTitle
+                            +statementsTitle
                         }
                     }
                     tr("no-break") {
-                        phrasesList(data.substances) { it.hPhrases }
-                        phrasesList(data.substances) { it.pPhrases }
+                        statementsList(data.substances) { it.hazardStatements }
+                        statementsList(data.substances) { it.precautionaryStatements }
                     }
                     tr {
                         td {
@@ -243,10 +243,10 @@ private fun TABLE.listWithTitle(title: String, list: List<String>) {
     }
 }
 
-private fun TR.phrasesList(substances: List<Substance>, transform: (Substance) -> List<Pair<String, String>>) {
-    td("top phrases") {
+private fun TR.statementsList(substances: List<Substance>, transform: (Substance) -> List<Pair<String, String>>) {
+    td("top statements") {
         colSpan = "17"
-        val iterator = Substance.formatPhrases(substances, transform).iterator()
+        val iterator = Substance.formatStatements(substances, transform).iterator()
         while (iterator.hasNext()) {
             val (number, content) = iterator.next()
             +number

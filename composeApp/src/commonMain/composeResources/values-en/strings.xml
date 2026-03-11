@@ -55,8 +55,8 @@
     <string name="in_case_of_danger">Behavior in case of danger, first aid measures (attach a copy of the relevant literature if necessary)</string>
     <string name="disposal">Disposal</string>
 
-    <string name="h_phrases">H-phrases</string>
-    <string name="p-phrases">P-phrases</string>
+    <string name="hazard_statements">H-phrases</string>
+    <string name="precautionary_statements">P-phrases</string>
 
     <string name="ghs_pictograms">GHS pictograms</string>
     <string name="ghs_pictograms_hint">Click on the symbol to add or remove.</string>
@@ -84,14 +84,14 @@
     <string name="used_substances">Substances\nand products used</string>
     <string name="molar_mass_with_unit">Molar mass\n[g/mol]</string>
     <string name="temperatures">Bp.\nMp.</string>
-    <string name="h_and_p_phrases_number">H/P-phrases\n(numbers)</string>
+    <string name="statement_numbers">H/P-phrases\n(numbers)</string>
     <string name="mak_ld50_wgk">MAK\nLD50\nWHC</string>
     <string name="quantity_required">Required for preparation</string>
 
     <string name="sources">Sources:</string>
     <string name="source">Source</string>
 
-    <string name="title_h_and_p_phrases">Wording of the main H and P phrases mentioned above</string>
+    <string name="title_statements">Wording of the main H- and P-phrases mentioned above</string>
 
     <string name="signature_1">I hereby undertake to carry out the experiment in accordance with the safety regulations listed in these operating instructions.</string>
     <string name="signature_2">Preparation for synthesis approved with the quantities of chemicals calculated on the front.</string>

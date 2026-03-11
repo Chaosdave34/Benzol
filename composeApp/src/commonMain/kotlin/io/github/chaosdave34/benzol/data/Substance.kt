@@ -19,8 +19,8 @@ data class Substance(
     val boilingPointModifiable: Modifiable<String>,
 
     var quantity: Quantity = Quantity(),
-    val hPhrasesModifiable: Modifiable<List<Pair<String, String>>>,
-    val pPhrasesModifiable: Modifiable<List<Pair<String, String>>>,
+    val hazardStatementsModifiable: Modifiable<List<Pair<String, String>>>,
+    val precautionaryStatementsModifiable: Modifiable<List<Pair<String, String>>>,
     val ghsPictogramsModifiable: Modifiable<List<GHSPictogram>>,
 
     var source: Pair<Source, String>
@@ -36,8 +36,8 @@ data class Substance(
         mak: String = "",
         meltingPoint: String = "",
         boilingPoint: String = "",
-        hPhrases: List<Pair<String, String>> = emptyList(),
-        pPhrases: List<Pair<String, String>> = emptyList(),
+        hazardStatements: List<Pair<String, String>> = emptyList(),
+        precautionaryStatements: List<Pair<String, String>> = emptyList(),
         ghsPictograms: List<GHSPictogram> = emptyList(),
         source: Pair<Source, String> = Pair(Source.Custom, "")
     ) : this(
@@ -52,14 +52,14 @@ data class Substance(
         meltingPointModifiable = Modifiable(meltingPoint),
         boilingPointModifiable = Modifiable(boilingPoint),
         quantity = Quantity(""),
-        hPhrasesModifiable = Modifiable(hPhrases),
-        pPhrasesModifiable = Modifiable(pPhrases),
+        hazardStatementsModifiable = Modifiable(hazardStatements),
+        precautionaryStatementsModifiable = Modifiable(precautionaryStatements),
         ghsPictogramsModifiable = Modifiable(ghsPictograms),
         source = source
     )
 
     companion object {
-        fun formatPhrases(list: List<Substance>, transform: (Substance) -> List<Pair<String, String>>): List<Pair<String, String>> {
+        fun formatStatements(list: List<Substance>, transform: (Substance) -> List<Pair<String, String>>): List<Pair<String, String>> {
             return list.flatMap(transform).distinctBy { it.first }.sortedBy { it.first }
         }
 
@@ -80,8 +80,8 @@ data class Substance(
     var meltingPoint by ModifiableDelegate(meltingPointModifiable)
     var boilingPoint by ModifiableDelegate(boilingPointModifiable)
 
-    var hPhrases by ModifiableDelegate(hPhrasesModifiable)
-    var pPhrases by ModifiableDelegate(pPhrasesModifiable)
+    var hazardStatements by ModifiableDelegate(hazardStatementsModifiable)
+    var precautionaryStatements by ModifiableDelegate(precautionaryStatementsModifiable)
     var ghsPictograms by ModifiableDelegate(ghsPictogramsModifiable)
 
     private class ModifiableDelegate<T>(val modifiable: Modifiable<T>) : ReadWriteProperty<Any?, T> {
@@ -107,8 +107,8 @@ data class Substance(
         meltingPoint: String,
         boilingPoint: String,
         quantity: Quantity,
-        hPhrases: List<Pair<String, String>>,
-        pPhrases: List<Pair<String, String>>,
+        hazardStatements: List<Pair<String, String>>,
+        precautionaryStatements: List<Pair<String, String>>,
         ghsPictograms: List<GHSPictogram>
     ): Substance {
         return copy(
@@ -123,8 +123,8 @@ data class Substance(
             meltingPointModifiable = meltingPointModifiable.copy(modified = meltingPoint),
             boilingPointModifiable = boilingPointModifiable.copy(modified = boilingPoint),
             quantity = quantity.copy(value = quantity.value, unit = quantity.unit),
-            hPhrasesModifiable = hPhrasesModifiable.copy(modified = hPhrases),
-            pPhrasesModifiable = pPhrasesModifiable.copy(modified = pPhrases),
+            hazardStatementsModifiable = hazardStatementsModifiable.copy(modified = hazardStatements),
+            precautionaryStatementsModifiable = precautionaryStatementsModifiable.copy(modified = precautionaryStatements),
             ghsPictogramsModifiable = ghsPictogramsModifiable.copy(modified = ghsPictograms)
         )
     }

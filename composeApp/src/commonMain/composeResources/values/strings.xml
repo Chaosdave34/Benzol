@@ -55,8 +55,8 @@
     <string name="in_case_of_danger">Verhalten im Gefahrenfall, Erste-Hilfe-Maßnahmen (gegebenenfalls Kopie der entsprechenden Literaturstelle beiheften)</string>
     <string name="disposal">Entsorgung</string>
 
-    <string name="h_phrases">H-Sätze</string>
-    <string name="p-phrases">P-Sätze</string>
+    <string name="hazard_statements">H-Sätze</string>
+    <string name="precautionary_statements">P-Sätze</string>
 
     <string name="ghs_pictograms">GHS-Symbole</string>
     <string name="ghs_pictograms_hint">Zum Entfernen oder Hinzufügen auf das Symbol klicken.</string>
@@ -84,14 +84,14 @@
     <string name="used_substances">Eingesetze Stoffe\nund Produkte</string>
     <string name="molar_mass_with_unit">MG\n[g/mol]</string>
     <string name="temperatures">Sdp.\nSmp.</string>
-    <string name="h_and_p_phrases_number">H/P-Sätze\n(Nummern)</string>
+    <string name="statement_numbers">H/P-Sätze\n(Nummern)</string>
     <string name="mak_ld50_wgk">Mak\nLD50\nWGK</string>
     <string name="quantity_required">Für Ansatz benötigt</string>
 
     <string name="sources">Quellen</string>
     <string name="source">Quelle</string>
 
-    <string name="title_h_and_p_phrases">Wortlaut der wesentlichen oben genannten H- und P-Sätze</string>
+    <string name="title_statements">Wortlaut der wesentlichen oben genannten H- und P-Sätze</string>
 
     <string name="signature_1">Hiermit verpflichte ich mich, den Versuch gemäß den in dieser Betriebsanweisung aufgeführten Sicherheitsvorschriften durchzuführen.</string>
     <string name="signature_2">Präparat zur Synthese mit den auf der Vorderseite berechneten Chemikalienmengen freigegeben.</string>

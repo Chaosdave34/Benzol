@@ -85,7 +85,7 @@ fun Page1(modifier: Modifier = Modifier) {
             )
             TextBlock(
                 weight = 6f,
-                title = Res.string.h_and_p_phrases_number,
+                title = Res.string.statement_numbers,
                 textAlign = TextAlign.Center
             )
             TextBlock(
@@ -135,9 +135,9 @@ fun Page1(modifier: Modifier = Modifier) {
                     if (substance.signalWord != SignalWord.NONE) CenteredText(stringResource(substance.signalWord.label))
                 }
                 SubstanceColumn(6f) {
-                    CenteredText(substance.hPhrases.joinToString("-") { it.first })
+                    CenteredText(substance.hazardStatements.joinToString("-") { it.first })
                     Text("")
-                    CenteredText(substance.pPhrases.joinToString("-") { it.first })
+                    CenteredText(substance.precautionaryStatements.joinToString("-") { it.first })
                 }
                 SubstanceColumn(4f) {
                     CenteredText(valueOrDash(substance.mak, stringResource(Res.string.mak_unit)))
@@ -151,19 +151,19 @@ fun Page1(modifier: Modifier = Modifier) {
         }
         Text(
             modifier = modifier,
-            text = stringResource(Res.string.title_h_and_p_phrases),
+            text = stringResource(Res.string.title_statements),
             textAlign = TextAlign.Center
         )
         ListRow {
-            PhraseList(
+            StatementList(
                 weight = 1f,
                 list = inputState.substances,
-                transform = { it.hPhrases }
+                transform = { it.hazardStatements }
             )
-            PhraseList(
+            StatementList(
                 weight = 1f,
                 list = inputState.substances,
-                transform = { it.pPhrases }
+                transform = { it.precautionaryStatements }
             )
         }
 
@@ -238,7 +238,7 @@ private fun RowScope.SubstanceColumn(weight: Float, content: @Composable (Column
 }
 
 @Composable
-private fun RowScope.PhraseList(
+private fun RowScope.StatementList(
     weight: Float,
     list: List<Substance>,
     transform: (Substance) -> List<Pair<String, String>>
@@ -250,7 +250,7 @@ private fun RowScope.PhraseList(
             .padding(10.dp)
             .weight(weight)
     ) {
-        Substance.formatPhrases(list, transform).iterator().forEach {
+        Substance.formatStatements(list, transform).iterator().forEach {
             Text("${it.first}: ${it.second}")
         }
     }

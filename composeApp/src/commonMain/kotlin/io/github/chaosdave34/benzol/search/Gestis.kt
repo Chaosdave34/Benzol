@@ -15,7 +15,7 @@ import org.jetbrains.compose.resources.StringResource
 
 private const val TOKEN = "dddiiasjhduuvnnasdkkwUUSHhjaPPKMasd" // don't ask, just leave it (https://gestis.dguv.de/search)
 
-object Gestis { // TODO add tests, improve h phrases regex (z.B. Betroffene Organe in https://gestis.dguv.de/data?name=011240#1100)
+object Gestis { // TODO add tests, improve hazard statements // regex (z.B. Betroffene Organe in https://gestis.dguv.de/data?name=011240#1100)
     private val client = HttpClient {
         install(ContentNegotiation) {
             json()
@@ -113,8 +113,8 @@ object Gestis { // TODO add tests, improve h phrases regex (z.B. Betroffene Orga
                 getMak(),
                 getMeltingPoint(),
                 getBoilingPoint(),
-                getHPhrases(),
-                getPPhrases(),
+                getHazardStatements(),
+                getPrecautionaryStatements(),
                 getGHSPictograms(),
                 Pair(Source.Gestis, "https://gestis.dguv.de/data?name=$zvgNumberWithZeros")
             )
@@ -220,10 +220,10 @@ object Gestis { // TODO add tests, improve h phrases regex (z.B. Betroffene Orga
             return match?.groups["point"]?.value ?: ""
         }
 
-        private fun getHPhrases(): List<Pair<String, String>> {
+        private fun getHazardStatements(): List<Pair<String, String>> {
             val chapter = getChapter("1100", "1303").getContent()
 
-            val matches = ">(?<number>H[0-9]{3}[fFdDi]{0,2}(?:\\+H[0-9]{3}[fFdDi]{0,2})*): (?<phrase>.+?\\.)(?=<br />|</td>)".toRegex().findAll(chapter)
+            val matches = ">(?<number>H[0-9]{3}[fFdDi]{0,2}(?:\\+H[0-9]{3}[fFdDi]{0,2})*): (?<statement>.+?\\.)(?=<br />|</td>)".toRegex().findAll(chapter)
 
             val additionalInfo =
                 "<verstecktercode>(?<number>H[0-9]{3}[fFdDi]{0,2}(?:\\+H[0-9]{3}[fFdDi]{0,2})*)</verstecktercode>-+? (?<info>.+?)(?=<br />|</td>)".toRegex()
@@ -235,19 +235,19 @@ object Gestis { // TODO add tests, improve h phrases regex (z.B. Betroffene Orga
 
             return matches.map {
                 val number = it.groups["number"]?.value ?: ""
-                val phrase = (it.groups["phrase"]?.value ?: "")
+                val statement = (it.groups["statement"]?.value ?: "")
 
                 val additionalText = additionalInfo[number]?.let { info -> " ${info.joinToString()}" } ?: ""
-                Pair(number, phrase + additionalText)
+                Pair(number, statement + additionalText)
             }.toList()
         }
 
-        private fun getPPhrases(): List<Pair<String, String>> {
+        private fun getPrecautionaryStatements(): List<Pair<String, String>> {
             val chapter = getChapter("1100", "1303").getContent()
 
-            val matches = ">(?<number>P[0-9]{3}(?:\\+P[0-9]{3})*): (?<phrase>.+?\\.)(?=<br />|</td>)".toRegex().findAll(chapter)
+            val matches = ">(?<number>P[0-9]{3}(?:\\+P[0-9]{3})*): (?<statement>.+?\\.)(?=<br />|</td>)".toRegex().findAll(chapter)
 
-            return matches.map { Pair(it.groups["number"]?.value ?: "", it.groups["phrase"]?.value ?: "") }.toList()
+            return matches.map { Pair(it.groups["number"]?.value ?: "", it.groups["statement"]?.value ?: "") }.toList()
         }
 
         private fun getGHSPictograms(): List<GHSPictogram> {

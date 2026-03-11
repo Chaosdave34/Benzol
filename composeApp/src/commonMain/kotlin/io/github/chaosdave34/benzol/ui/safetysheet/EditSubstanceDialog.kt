@@ -43,8 +43,8 @@ fun EditSubstanceDialog(
         var quantity by remember { mutableStateOf(substance.quantity.value) }
         var quantityUnit by remember { mutableStateOf(substance.quantity.unit) }
 
-        val hPhrases = remember { mutableStateListOf<Pair<String, String>>().also { it.addAll(substance.hPhrases) } }
-        val pPhrases = remember { mutableStateListOf<Pair<String, String>>().also { it.addAll(substance.pPhrases) } }
+        val hazardStatements = remember { mutableStateListOf<Pair<String, String>>().also { it.addAll(substance.hazardStatements) } }
+        val precautionaryStatements = remember { mutableStateListOf<Pair<String, String>>().also { it.addAll(substance.precautionaryStatements) } }
         val ghsPictograms = remember { mutableStateListOf<GHSPictogram>().also { it.addAll(substance.ghsPictograms) } }
 
         val numberRegex = "[0-9]+[,.]?[0-9]*".toRegex()
@@ -66,10 +66,10 @@ fun EditSubstanceDialog(
             quantity = Substance.Quantity().value
             quantityUnit = Substance.Quantity().unit
 
-            hPhrases.clear()
-            hPhrases.addAll(substance.hPhrasesModifiable.original)
-            pPhrases.clear()
-            pPhrases.addAll(substance.pPhrasesModifiable.original)
+            hazardStatements.clear()
+            hazardStatements.addAll(substance.hazardStatementsModifiable.original)
+            precautionaryStatements.clear()
+            precautionaryStatements.addAll(substance.precautionaryStatementsModifiable.original)
             ghsPictograms.clear()
             ghsPictograms.addAll(substance.ghsPictogramsModifiable.original)
         }
@@ -88,8 +88,8 @@ fun EditSubstanceDialog(
                     meltingPoint.trim(),
                     boilingPoint.trim(),
                     Substance.Quantity(quantity.trim(), quantityUnit.trim()),
-                    hPhrases.map { Pair(it.first.trim(), it.second.trim()) },
-                    pPhrases.map { Pair(it.first.trim(), it.second.trim()) },
+                    hazardStatements.map { Pair(it.first.trim(), it.second.trim()) },
+                    precautionaryStatements.map { Pair(it.first.trim(), it.second.trim()) },
                     ghsPictograms
                 )
             )
@@ -267,23 +267,23 @@ fun EditSubstanceDialog(
 
                 CustomCard(
                     headlineContent = {
-                        Text(stringResource(Res.string.h_phrases))
+                        Text(stringResource(Res.string.hazard_statements))
                     }
                 ) {
                     StatementInput(
                         statements = Statements.hStatements,
-                        selectedStatements = hPhrases
+                        selectedStatements = hazardStatements
                     )
                 }
 
                 CustomCard(
                     headlineContent = {
-                        Text(stringResource(Res.string.p_phrases))
+                        Text(stringResource(Res.string.precautionary_statements))
                     }
                 ) {
                     StatementInput(
                         statements = Statements.pStatements,
-                        selectedStatements = pPhrases
+                        selectedStatements = precautionaryStatements
                     )
                 }
 
@@ -325,7 +325,7 @@ private fun StatementInput(
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        selectedStatements.forEachIndexed { index, phrase ->
+        selectedStatements.forEachIndexed { index, statement ->
             var dropdownExpanded by remember { mutableStateOf(false) }
 
             Row(
@@ -339,10 +339,10 @@ private fun StatementInput(
                     OutlinedTextField(
                         modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable),
                         colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
-                        value = phrase.first,
+                        value = statement.first,
                         singleLine = true,
-                        onValueChange = { selectedStatements[index] = phrase.copy(first = it) },
-                        isError = phrase.first !in statements.keys && phrase.first.isNotEmpty(),
+                        onValueChange = { selectedStatements[index] = statement.copy(first = it) },
+                        isError = statement.first !in statements.keys && statement.first.isNotEmpty(),
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(dropdownExpanded) },
                     )
 
@@ -351,14 +351,14 @@ private fun StatementInput(
                         expanded = dropdownExpanded,
                         onDismissRequest = { dropdownExpanded = false }
                     ) {
-                        val filteredPhrases = remember(phrase.first) { statements.filterKeys { it.contains(phrase.first) } }
-                        filteredPhrases.forEach { (id, value) ->
+                        val filteredStatements = remember(statement.first) { statements.filterKeys { it.contains(statement.first) } }
+                        filteredStatements.forEach { (id, value) ->
                             DropdownMenuItem(
                                 text = {
                                     Text(id)
                                 },
                                 onClick = {
-                                    selectedStatements[index] = phrase.copy(first = id, second = value)
+                                    selectedStatements[index] = statement.copy(first = id, second = value)
                                     dropdownExpanded = false
                                 },
                                 contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
@@ -369,8 +369,8 @@ private fun StatementInput(
 
                 OutlinedTextField(
                     modifier = Modifier.weight(0.7f),
-                    value = phrase.second,
-                    onValueChange = { selectedStatements[index] = phrase.copy(second = it) },
+                    value = statement.second,
+                    onValueChange = { selectedStatements[index] = statement.copy(second = it) },
                     trailingIcon = {
                         IconButton(
                             onClick = { if (index >= 0 && index <= selectedStatements.lastIndex) selectedStatements.removeAt(index) },
