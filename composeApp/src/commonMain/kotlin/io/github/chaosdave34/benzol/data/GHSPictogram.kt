@@ -15,7 +15,7 @@ enum class GHSPictogram(val drawableResource: DrawableResource) {
     GHS_008(Res.drawable.ghs_008),
     GHS_009(Res.drawable.ghs_009);
 
-    var base64String: String = ""
+    lateinit var base64String: String
 
     val alt = name.lowercase().replace("_0", "")
 
