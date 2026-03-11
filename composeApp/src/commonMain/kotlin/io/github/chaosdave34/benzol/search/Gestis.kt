@@ -101,7 +101,6 @@ object Gestis { // TODO add tests, improve hazard statements // regex (z.B. Betr
         @SerialName("hauptkapitel") val mainChapter: List<MainChapter>
     ) {
         fun getSubstance(): Substance {
-
             return Substance(
                 name,
                 getCas(),
@@ -201,7 +200,7 @@ object Gestis { // TODO add tests, improve hazard statements // regex (z.B. Betr
             val table = "<table class=\"block\">(?:.*\\n)+? *</table>".toRegex().find(part)?.value ?: return ""
 
             // 4. Find value
-            val match = "<td align=\"left\"> (?<mak>[0-9,.]+) (?:mg/m³|ppm)</td>".toRegex().find(table)
+            val match = "<td align=\"left\"> (?<mak>[0-9,.]+) mg/m³</td>".toRegex().find(table)
 
             return match?.groups["mak"]?.value ?: ""
         }

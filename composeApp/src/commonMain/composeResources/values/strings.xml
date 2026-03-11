@@ -43,7 +43,7 @@
     <string name="lethal_dose">Letale Dosis</string>
     <string name="lethal_dose_unit">mg/kg</string>
     <string name="mak">MAK</string>
-    <string name="mak_unit">ppm</string>
+    <string name="mak_unit">mg/m³</string>
     <string name="melting_point">Schmelzpunkt</string>
     <string name="boiling_point">Siedepunkt</string>
     <string name="celsius_unit">°C</string>
