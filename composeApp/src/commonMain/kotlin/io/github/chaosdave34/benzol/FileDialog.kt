@@ -41,17 +41,14 @@ expect fun FloatingActionButtonMenuScope.SaveFileFabButton(
     onClick: () -> Unit
 )
 
+context(viewModel: SafetySheetViewModel)
 @Composable
-expect fun ExportFileIconButton(
-    inputState: SafetySheetInputState,
-    exportUrl: String
-)
+expect fun ExportFileIconButton()
 
+context(viewModel: SafetySheetViewModel)
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 expect fun FloatingActionButtonMenuScope.ExportFileFabButton(
-    inputState: SafetySheetInputState,
-    exportUrl: String,
     onClick: () -> Unit
 )
 

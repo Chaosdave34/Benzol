@@ -2,6 +2,8 @@ package io.github.chaosdave34.benzol
 
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.data.SafetySheetInputState
@@ -9,6 +11,7 @@ import io.github.chaosdave34.benzol.files.createHtml
 import io.github.chaosdave34.benzol.files.export.FileUtils
 import io.github.chaosdave34.benzol.files.export.FileUtils.encode
 import io.github.chaosdave34.benzol.files.export.Savable
+import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.download
 import io.ktor.client.*
@@ -90,7 +93,8 @@ private suspend fun exportPdf(
     exportUrl: String,
     inputState: SafetySheetInputState,
     resourceEnvironment: ResourceEnvironment,
-    snackbarHostState: SnackbarHostState
+    snackbarHostState: SnackbarHostState,
+    onLoadingChange: (Boolean) -> Unit
 ) {
     if (exportUrl.isEmpty()) {
         snackbarHostState.showSnackbar(
@@ -100,12 +104,14 @@ private suspend fun exportPdf(
         )
         return
     }
+    onLoadingChange(true)
 
     val response = try {
         client.post(exportUrl) {
             setBody(createHtml(inputState, resourceEnvironment))
         }
     } catch (_: Throwable) {
+        onLoadingChange(false)
         snackbarHostState.showSnackbar(getString(resourceEnvironment, Res.string.pdf_export_failed))
         return
     }
@@ -116,18 +122,20 @@ private suspend fun exportPdf(
             fileName = inputState.filename.ifEmpty { getString(resourceEnvironment, Res.string.unnamed_file) } + ".pdf"
         )
 
+        onLoadingChange(false)
         snackbarHostState.showSnackbar(getString(resourceEnvironment, Res.string.pdf_export_success))
-
     } else {
+        onLoadingChange(false)
         snackbarHostState.showSnackbar(getString(resourceEnvironment, Res.string.pdf_export_failed))
     }
 }
 
+context(viewModel: SafetySheetViewModel)
 @Composable
-actual fun ExportFileIconButton(
-    inputState: SafetySheetInputState,
-    exportUrl: String
-) {
+actual fun ExportFileIconButton() {
+    val inputState by viewModel.inputState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
+
     val scope = rememberCoroutineScope()
     val resourceEnvironment = rememberResourceEnvironment()
     val snackbarHostState = LocalSnackbarHostState.current
@@ -136,10 +144,11 @@ actual fun ExportFileIconButton(
         onClick = {
             scope.launch {
                 exportPdf(
-                    exportUrl = exportUrl,
+                    exportUrl = uiState.exportUrl,
                     inputState = inputState,
                     resourceEnvironment = resourceEnvironment,
-                    snackbarHostState = snackbarHostState
+                    snackbarHostState = snackbarHostState,
+                    onLoadingChange = viewModel::setLoading
                 )
             }
         }
@@ -148,13 +157,14 @@ actual fun ExportFileIconButton(
     }
 }
 
-@OptIn(markerClass = [ExperimentalMaterial3ExpressiveApi::class])
+context(viewModel: SafetySheetViewModel)
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 actual fun FloatingActionButtonMenuScope.ExportFileFabButton(
-    inputState: SafetySheetInputState,
-    exportUrl: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
+    val inputState by viewModel.inputState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
     val scope = rememberCoroutineScope()
     val resourceEnvironment = rememberResourceEnvironment()
     val snackbarHostState = LocalSnackbarHostState.current
@@ -163,10 +173,11 @@ actual fun FloatingActionButtonMenuScope.ExportFileFabButton(
         onClick = {
             scope.launch {
                 exportPdf(
-                    exportUrl = exportUrl,
+                    exportUrl = uiState.exportUrl,
                     inputState = inputState,
                     resourceEnvironment = resourceEnvironment,
-                    snackbarHostState = snackbarHostState
+                    snackbarHostState = snackbarHostState,
+                    onLoadingChange = viewModel::setLoading
                 )
             }
             onClick()

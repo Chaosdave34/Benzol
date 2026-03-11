@@ -79,8 +79,6 @@ fun FloatingActionButtonMenu() {
                 }
             )
             ExportFileFabButton(
-                inputState = inputState,
-                exportUrl = viewModel.settings.exportUrl,
                 onClick = {
                     expanded = false
                 }

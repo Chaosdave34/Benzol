@@ -60,7 +60,7 @@ fun BoxScope.Toolbar() {
             )
             ToolbarButton(
                 tooltip = stringResource(Res.string.export_file),
-                button = { ExportFileIconButton(inputState, viewModel.settings.exportUrl) }
+                button = { ExportFileIconButton() }
             )
         }
     }

@@ -2,6 +2,8 @@ package io.github.chaosdave34.benzol
 
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.data.SafetySheetInputState
@@ -10,6 +12,7 @@ import io.github.chaosdave34.benzol.files.export.FileUtils
 import io.github.chaosdave34.benzol.files.export.FileUtils.encode
 import io.github.chaosdave34.benzol.files.export.Savable
 import io.github.chaosdave34.benzol.files.htmlToPdf
+import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 import io.github.vinceglb.filekit.dialogs.compose.SaverResultLauncher
 import io.github.vinceglb.filekit.dialogs.compose.rememberFileSaverLauncher
 import io.github.vinceglb.filekit.write
@@ -79,32 +82,34 @@ actual fun FloatingActionButtonMenuScope.SaveFileFabButton(
     )
 }
 
+context(viewModel: SafetySheetViewModel)
 @Composable
-private fun rememberPdfExporter(
-    inputState: SafetySheetInputState
-): SaverResultLauncher {
+private fun rememberPdfExporter(): SaverResultLauncher {
+    val inputState by viewModel.inputState.collectAsState()
+
     val scope = rememberCoroutineScope()
     val snackbarHostState = LocalSnackbarHostState.current
     val resourceEnvironment = rememberResourceEnvironment()
 
     return rememberFileSaverLauncher { file ->
-        scope.launch(context = Dispatchers.IO) {
-            if (file != null) {
+        if (file != null) {
+            viewModel.setLoading(true)
+            scope.launch(context = Dispatchers.IO) {
                 val html = createHtml(inputState, resourceEnvironment)
                 file.write(htmlToPdf(html))
 
+                viewModel.setLoading(false)
                 snackbarHostState.showSnackbar(getString(resourceEnvironment, Res.string.pdf_export_success))
             }
         }
     }
 }
 
+context(viewModel: SafetySheetViewModel)
 @Composable
-actual fun ExportFileIconButton(
-    inputState: SafetySheetInputState,
-    exportUrl: String
-) {
-    val launcher = rememberPdfExporter(inputState)
+actual fun ExportFileIconButton() {
+    val inputState by viewModel.inputState.collectAsState()
+    val launcher = rememberPdfExporter()
     val unnamed = stringResource(Res.string.unnamed_file)
 
     IconButton(
@@ -119,14 +124,14 @@ actual fun ExportFileIconButton(
     }
 }
 
+context(viewModel: SafetySheetViewModel)
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 actual fun FloatingActionButtonMenuScope.ExportFileFabButton(
-    inputState: SafetySheetInputState,
-    exportUrl: String,
     onClick: () -> Unit
 ) {
-    val launcher = rememberPdfExporter(inputState)
+    val inputState by viewModel.inputState.collectAsState()
+    val launcher = rememberPdfExporter()
     val unnamed = stringResource(Res.string.unnamed_file)
 
     FloatingActionButtonMenuItem(

@@ -57,6 +57,10 @@ class SafetySheetViewModel(
         _uiState.update { it.copy(fabOrToolbarVisible = visible) }
     }
 
+    fun setLoading(loading: Boolean) {
+        _uiState.update { it.copy(loading = loading) }
+    }
+
     fun setFilename(value: String) {
         _inputState.update { it.copy(filename = value) }
     }

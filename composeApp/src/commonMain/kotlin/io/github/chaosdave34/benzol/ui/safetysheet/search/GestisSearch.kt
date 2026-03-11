@@ -11,18 +11,18 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.window.core.layout.WindowSizeClass
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.LocalSnackbarHostState
 import io.github.chaosdave34.benzol.data.Substance
 import io.github.chaosdave34.benzol.search.Gestis
+import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.*
 
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
+context(viewModel: SafetySheetViewModel)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GestisSearch(
     onResult: (Substance) -> Unit,
@@ -43,7 +43,6 @@ fun GestisSearch(
     var searchResults by rememberSaveable { mutableStateOf(listOf<Gestis.SearchResult>()) }
 
     var resultsDialogVisible by rememberSaveable { mutableStateOf(false) }
-    var loading by rememberSaveable { mutableStateOf(false) }
 
     val onSelectResult = fun(result: Gestis.SearchResult) {
         if (result.casNumber in currentCasNumbers) {
@@ -51,7 +50,7 @@ fun GestisSearch(
                 snackbarHostState.showSnackbar(getString(resourceEnvironment, Res.string.substance_exists))
             }
         } else {
-            loading = true
+            viewModel.setLoading(true)
             chemicalName = ""
             casNumber = ""
             molecularFormula = ""
@@ -60,13 +59,13 @@ fun GestisSearch(
                 Gestis.getSubstanceInformation(result)?.let {
                     onResult(it.getSubstance())
                 }
-                loading = false
+                viewModel.setLoading(false)
             }
         }
     }
 
     val onSearch = fun(exactSearch: Boolean) {
-        loading = true
+        viewModel.setLoading(true)
         scope.launch {
             val search = Gestis.search(
                 listOf(
@@ -77,7 +76,7 @@ fun GestisSearch(
                 ),
                 exactSearch
             )
-            loading = false
+            viewModel.setLoading(false)
 
             if (search == null) {
                 snackbarHostState.showSnackbar(getString(resourceEnvironment, Res.string.failed_search))
@@ -91,15 +90,6 @@ fun GestisSearch(
                     }
                 }
             }
-        }
-    }
-
-    if (loading) {
-        Dialog(
-            onDismissRequest = {},
-            properties = DialogProperties(usePlatformDefaultWidth = false)
-        ) {
-            LoadingIndicator(Modifier.size(100.dp))
         }
     }
 

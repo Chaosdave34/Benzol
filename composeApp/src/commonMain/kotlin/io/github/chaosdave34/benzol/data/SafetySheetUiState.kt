@@ -12,6 +12,7 @@ data class SafetySheetUiState(
     val language: SupportedLanguage,
     val exportUrl: String,
     val fabOrToolbarVisible: Boolean = false,
+    val loading: Boolean = false
 ) {
     constructor(
         startDestination: Destination,

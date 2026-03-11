@@ -8,8 +8,10 @@ import androidx.compose.runtime.*
 import benzol.composeapp.generated.resources.Res
 import benzol.composeapp.generated.resources.gestis
 import io.github.chaosdave34.benzol.data.Substance
+import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 import org.jetbrains.compose.resources.stringResource
 
+context(viewModel: SafetySheetViewModel)
 @Composable
 fun SubstanceSearch(
     onSearch: (Substance) -> Unit,

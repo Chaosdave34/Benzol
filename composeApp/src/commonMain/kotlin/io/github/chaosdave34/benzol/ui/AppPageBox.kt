@@ -37,6 +37,8 @@ fun AppPageBox(
         TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     }
 
+    LoadingDialog(uiState.loading)
+
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
