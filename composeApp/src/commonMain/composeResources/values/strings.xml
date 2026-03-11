@@ -22,7 +22,7 @@
     <string name="preparation">Herzustellendes Präparat</string>
 
     <string name="document_title_default">Betriebsanweisungen nach EG Nr. 1272/2008</string>
-    <string name="organisation_default">Für chemische Laboratorien der Universität Regensburg</string>
+    <string name="organisation_default">für chemische Laboratorien der Universität Regensburg</string>
     <string name="course_default">Praktikum anorganische Chemie</string>>
 
     <string name="gestis">GESTIS-Stoffdatenbank</string>
@@ -81,12 +81,12 @@
     <string name="preview">Vorschau</string>
     <string name="name_with_plural">Name(n)</string>
 
-    <string name="used_substances">Eingesetze Stoffe\nund Produkte</string>
+    <string name="used_substances">eingesetze Stoffe\nund Produkte</string>
     <string name="molar_mass_with_unit">MG\n[g/mol]</string>
     <string name="temperatures">Sdp.\nSmp.</string>
     <string name="statement_numbers">H/P-Sätze\n(Nummern)</string>
     <string name="mak_ld50_wgk">MAK\nLD50\nWGK</string>
-    <string name="quantity_required">Für Ansatz benötigt</string>
+    <string name="quantity_required">für Ansatz benötigt</string>
 
     <string name="sources">Quellen</string>
     <string name="source">Quelle</string>
