@@ -85,7 +85,7 @@
     <string name="molar_mass_with_unit">MG\n[g/mol]</string>
     <string name="temperatures">Sdp.\nSmp.</string>
     <string name="statement_numbers">H/P-Sätze\n(Nummern)</string>
-    <string name="mak_ld50_wgk">Mak\nLD50\nWGK</string>
+    <string name="mak_ld50_wgk">MAK\nLD50\nWGK</string>
     <string name="quantity_required">Für Ansatz benötigt</string>
 
     <string name="sources">Quellen</string>
