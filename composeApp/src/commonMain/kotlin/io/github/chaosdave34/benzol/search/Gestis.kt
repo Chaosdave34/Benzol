@@ -223,8 +223,6 @@ object Gestis { // TODO add tests, improve h phrases regex (z.B. Betroffene Orga
         private fun getHPhrases(): List<Pair<String, String>> {
             val chapter = getChapter("1100", "1303").getContent()
 
-            print(chapter)
-
             val matches = ">(?<number>H[0-9]{3}[fFdDi]{0,2}(?:\\+H[0-9]{3}[fFdDi]{0,2})*): (?<phrase>.+?\\.)(?=<br />|</td>)".toRegex().findAll(chapter)
 
             val additionalInfo =
