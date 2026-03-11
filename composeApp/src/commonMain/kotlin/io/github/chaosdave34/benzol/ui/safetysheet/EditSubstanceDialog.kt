@@ -13,13 +13,9 @@ import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import benzol.composeapp.generated.resources.*
-import io.github.chaosdave34.benzol.data.GHSPictogram
-import io.github.chaosdave34.benzol.data.SignalWord
-import io.github.chaosdave34.benzol.data.Substance
-import io.github.chaosdave34.benzol.data.Wgk
+import io.github.chaosdave34.benzol.data.*
 import io.github.chaosdave34.benzol.ui.*
 import io.github.chaosdave34.benzol.ui.adaptive.AdaptiveDialog
-import kotlinx.serialization.json.Json
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
@@ -274,9 +270,9 @@ fun EditSubstanceDialog(
                         Text(stringResource(Res.string.h_phrases))
                     }
                 ) {
-                    PhraseInput(
-                        phraseType = PhraseType.H,
-                        phrases = hPhrases
+                    StatementInput(
+                        statements = Statements.hStatements,
+                        selectedStatements = hPhrases
                     )
                 }
 
@@ -285,9 +281,9 @@ fun EditSubstanceDialog(
                         Text(stringResource(Res.string.p_phrases))
                     }
                 ) {
-                    PhraseInput(
-                        phraseType = PhraseType.P,
-                        phrases = pPhrases
+                    StatementInput(
+                        statements = Statements.pStatements,
+                        selectedStatements = pPhrases
                     )
                 }
 
@@ -320,27 +316,16 @@ fun EditSubstanceDialog(
     }
 }
 
-private enum class PhraseType {
-    H,
-    P
-}
-
 @OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
 @Composable
-private fun PhraseInput(
-    phraseType: PhraseType,
-    phrases: SnapshotStateList<Pair<String, String>>
+private fun StatementInput(
+    statements: Map<String, String>,
+    selectedStatements: SnapshotStateList<Pair<String, String>>
 ) {
-    var phraseList by remember { mutableStateOf(mapOf<String, String>()) }
-
-    LaunchedEffect(Unit) {
-        phraseList = Json.decodeFromString(Res.readBytes("files/phrases.json").decodeToString())
-    }
-
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        phrases.forEachIndexed { index, phrase ->
+        selectedStatements.forEachIndexed { index, phrase ->
             var dropdownExpanded by remember { mutableStateOf(false) }
 
             Row(
@@ -356,8 +341,9 @@ private fun PhraseInput(
                         colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
                         value = phrase.first,
                         singleLine = true,
-                        onValueChange = { phrases[index] = phrase.copy(first = it) },
-                        isError = phrase.first !in phraseList.map { it.key }
+                        onValueChange = { selectedStatements[index] = phrase.copy(first = it) },
+                        isError = phrase.first !in statements.keys && phrase.first.isNotEmpty(),
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(dropdownExpanded) },
                     )
 
                     ExposedDropdownMenu(
@@ -365,17 +351,17 @@ private fun PhraseInput(
                         expanded = dropdownExpanded,
                         onDismissRequest = { dropdownExpanded = false }
                     ) {
-                        val filteredPhrases = remember(phrase.first) { phraseList.filterKeys { it.startsWith(phrase.first) && it.startsWith(phraseType.name) } }
+                        val filteredPhrases = remember(phrase.first) { statements.filterKeys { it.contains(phrase.first) } }
                         filteredPhrases.forEach { (id, value) ->
                             DropdownMenuItem(
                                 text = {
                                     Text(id)
                                 },
                                 onClick = {
-                                    phrases[index] = phrase.copy(first = id, second = value)
+                                    selectedStatements[index] = phrase.copy(first = id, second = value)
                                     dropdownExpanded = false
                                 },
-                                contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                                contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
                             )
                         }
                     }
@@ -384,10 +370,10 @@ private fun PhraseInput(
                 OutlinedTextField(
                     modifier = Modifier.weight(0.7f),
                     value = phrase.second,
-                    onValueChange = { phrases[index] = phrase.copy(second = it) },
+                    onValueChange = { selectedStatements[index] = phrase.copy(second = it) },
                     trailingIcon = {
                         IconButton(
-                            onClick = { if (index >= 0 && index <= phrases.lastIndex) phrases.removeAt(index) },
+                            onClick = { if (index >= 0 && index <= selectedStatements.lastIndex) selectedStatements.removeAt(index) },
                         ) {
                             Icon(vectorResource(Res.drawable.delete_filled), stringResource(Res.string.delete))
                         }
@@ -396,7 +382,7 @@ private fun PhraseInput(
             }
         }
         FilledIconButton(
-            onClick = { phrases.add(Pair("", "")) },
+            onClick = { selectedStatements.add(Pair("", "")) },
         ) {
             Icon(vectorResource(Res.drawable.add), stringResource(Res.string.add))
         }

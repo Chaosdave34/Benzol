@@ -5,6 +5,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.chaosdave34.benzol.data.GHSPictogram
+import io.github.chaosdave34.benzol.data.Statements
 import io.github.chaosdave34.benzol.files.export.Savable
 import io.github.chaosdave34.benzol.settings.Theme
 import io.github.chaosdave34.benzol.ui.Destination
@@ -32,6 +33,7 @@ fun App(openedFile: Pair<String, Savable>? = null) {
                     if (openedFile == null) viewModel.resetInput()
                     else viewModel.importSavable(openedFile.first, openedFile.second)
                     GHSPictogram.setBase64()
+                    Statements.load()
                 }
 
                 val darkTheme = when (uiState.theme) {
