@@ -3,7 +3,7 @@ package io.github.chaosdave34.benzol.data
 import benzol.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.StringResource
 
-enum class Wgk(override val label: StringResource, val internalLabel: String) : Labeled {
+enum class Wgk(override val label: StringResource, private val internalLabel: String) : Labeled {
     NONE(Res.string.none_dash, ""),
     WGK_1(Res.string.wgk_1, "WGK 1"),
     WGK_2(Res.string.wgk_2, "WGK 2"),
