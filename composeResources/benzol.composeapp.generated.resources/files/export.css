@@ -88,7 +88,7 @@ li {
     height: 25pt;
 }
 
-.phrase-numbers {
+.statement-numbers {
     max-width: 4cm;
     font-size: 10px;
 }
@@ -97,7 +97,7 @@ li {
     font-size: small;
 }
 
-.phrases {
+.statements {
     font-size: 12px;
 }
 
