@@ -7,8 +7,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import benzol.composeapp.generated.resources.*
 import io.github.chaosdave34.benzol.data.SafetySheetInputState
+import io.github.chaosdave34.benzol.files.CaBr2File
 import io.github.chaosdave34.benzol.files.export.FileUtils
 import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
+import io.github.vinceglb.filekit.dialogs.FileKitType
 import io.github.vinceglb.filekit.dialogs.compose.PickerResultLauncher
 import io.github.vinceglb.filekit.dialogs.compose.rememberFilePickerLauncher
 import io.github.vinceglb.filekit.nameWithoutExtension
@@ -60,6 +62,7 @@ fun rememberFilePicker(): PickerResultLauncher {
     val resourceEnvironment = rememberResourceEnvironment()
 
     return rememberFilePickerLauncher(
+        type = FileKitType.File(extensions = listOf(FileUtils.FILE_EXTENSION, CaBr2File.EXTENSION)),
         title = stringResource(Res.string.open_file)
     ) { file ->
         scope.launch {

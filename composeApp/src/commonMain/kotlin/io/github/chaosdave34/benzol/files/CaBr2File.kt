@@ -8,6 +8,7 @@ import io.github.chaosdave34.benzol.files.export.Savable
 import kotlinx.serialization.Serializable
 
 object CaBr2File {
+    const val EXTENSION = "cb2"
 
     @Serializable
     data class CaBr2Data(
