@@ -60,7 +60,7 @@ fun AboutPage() {
             }
 
 
-            Text("Version 2.2.0")
+            Text("Version 2.3.0")
         }
     }
 }

@@ -77,7 +77,7 @@ compose.desktop {
             fileAssociation("application/x-benzol+json", "benzol", "Benzol Betriebsanweisung")
 
             packageName = rootProject.name
-            packageVersion = "2.2.0"
+            packageVersion = "2.3.0"
             description = "Programm zur Erstellung von Betriebsanweisungen für Laboreinheiten nach EG Nr. 1272/2008"
             licenseFile.set(rootProject.file("LICENSE"))
 
