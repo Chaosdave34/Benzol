@@ -1,5 +1,9 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import java.net.URI
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+import kotlin.io.path.createSymbolicLinkPointingTo
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -69,7 +73,7 @@ compose.desktop {
         mainClass = "io.github.chaosdave34.benzol.MainKt"
 
         nativeDistributions {
-            targetFormats(TargetFormat.AppImage, TargetFormat.Exe)
+            targetFormats(TargetFormat.AppImage, TargetFormat.Exe, TargetFormat.Deb, TargetFormat.Rpm)
             fileAssociation("application/x-benzol+json", "benzol", "Benzol Betriebsanweisung")
 
             packageName = rootProject.name
@@ -96,6 +100,155 @@ compose.desktop {
 
         buildTypes.release.proguard {
             configurationFiles.from(project.file("compose-desktop.pro"))
+        }
+    }
+}
+
+tasks {
+    register("printComposePackageInfo") {
+        group = "app-image"
+        val nativeDistribution = compose.desktop.application.nativeDistributions
+        val packageName = nativeDistribution.packageName
+        val packageVersion = nativeDistribution.packageVersion
+
+        doLast {
+            println("packageName = $packageName")
+            println("packageVersion = $packageVersion")
+        }
+    }
+
+    val downloadAppImageTool = project.tasks.register("downloadAppImageTool") {
+        group = "distribution"
+
+        val outputFile = project.layout.buildDirectory.file("appimagetool/appimagetool-x86_64.AppImage")
+
+        outputs.file(outputFile)
+
+        doLast {
+
+            val apiUrl = "https://api.github.com/repos/AppImage/AppImageTool/releases/latest"
+            val json = URI(apiUrl).toURL().readText()
+
+            val downloadUrl = Regex(
+                """"browser_download_url":\s*"([^"]*appimagetool-x86_64\.AppImage)""""
+            ).find(json)?.groupValues?.get(1)
+                ?: error("Could not find appimagetool in latest release")
+
+            println("Downloading from: $downloadUrl")
+
+            val outFile = outputFile.get().asFile
+            outFile.parentFile.mkdirs()
+
+            URI(downloadUrl).toURL().openStream().use {
+                Files.copy(it, outFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
+            }
+
+            outFile.setExecutable(true)
+        }
+    }
+
+    mapOf(
+        "" to "main",
+        "Release" to "main-release"
+    ).forEach { (name, buildDir) ->
+        val cleanTask = register("clean${name}BuildDir", Delete::class.java) {
+            group = "app-image"
+
+            delete(project.layout.buildDirectory.dir("app-image/$buildDir"))
+        }
+
+        val copyTask = project.tasks.register("copy${name}ComposeAppImage", Copy::class.java) {
+            group = "app-image"
+            dependsOn(cleanTask, "package${name}AppImage")
+            val packageName = compose.desktop.application.nativeDistributions.packageName
+
+            into(project.layout.buildDirectory.dir("app-image/$buildDir/AppDir"))
+
+            val baseSource = project.tasks.named("package${name}AppImage").get().outputs.files.asPath + "/$packageName"
+            from(project.layout.buildDirectory.dir(baseSource)) {
+                into("/usr")
+            }
+
+            from(project.layout.projectDirectory.dir("src/commonMain/composeResources/drawable/logo.svg")) {
+                into("/usr/share/icons/hicolor/scalable/apps/")
+                rename { "$packageName.svg" }
+            }
+
+            from(project.layout.buildDirectory.dir("$baseSource/lib/$packageName.png"))
+        }
+
+        val createAppDirTask = project.tasks.register("create${name}AppDir") {
+            group = "app-image"
+            dependsOn(copyTask)
+
+            val nativeDistributions = compose.desktop.application.nativeDistributions
+            val packageName = nativeDistributions.packageName
+            val menuGroup = nativeDistributions.linux.menuGroup
+            val description = nativeDistributions.description
+
+            val desktopFile = project.layout.buildDirectory.file("app-image/$buildDir/AppDir/usr/share/applications/$packageName.desktop")
+            val desktopLink = project.layout.buildDirectory.file("app-image/$buildDir/AppDir/$packageName.desktop")
+
+            val appRunTarget = project.layout.buildDirectory.file("app-image/$buildDir/AppDir/usr/bin/$packageName")
+            val appRunLink = project.layout.buildDirectory.file("app-image/$buildDir/AppDir/AppRun")
+
+            val mimeInfo = project.layout.buildDirectory.file("app-image/$buildDir/AppDir/usr/share/mime/packages/$packageName.xml")
+
+            outputs.files(desktopFile, appRunLink, desktopLink, mimeInfo)
+
+            doLast {
+                desktopFile.get().asFile.writeText(
+                    """
+                    #!/usr/bin/env xdg-open
+                    [Desktop Entry]
+                    Name=$packageName
+                    Comment=$description
+                    Exec=AppRun
+                    Icon=$packageName
+                    Terminal=false
+                    Type=Application
+                    Categories=$menuGroup
+                    MimeType=application/x-benzol
+                """.trimIndent()
+                )
+
+                mimeInfo.get().asFile.writeText(
+                    """
+                    <?xml version="1.0" ?>
+                    <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+                      <mime-type type="application/x-benzol">
+                        <comment>Benzol Betriebsanweisung</comment>
+                        <glob pattern="*.benzol"></glob>
+                      </mime-type>
+                    </mime-info>    
+                """.trimIndent()
+                )
+
+                desktopLink.get().asFile.toPath().createSymbolicLinkPointingTo(desktopFile.get().asFile.toPath())
+                appRunLink.get().asFile.toPath().createSymbolicLinkPointingTo(appRunTarget.get().asFile.toPath())
+            }
+        }
+
+        project.tasks.register("packageActual${name}AppImage", Exec::class.java) {
+            group = "app-image"
+            dependsOn(createAppDirTask, downloadAppImageTool)
+            val nativeDistribution = compose.desktop.application.nativeDistributions
+            val packageName = nativeDistribution.packageName
+            val packageVersion = nativeDistribution.packageVersion
+
+            onlyIf {
+                org.gradle.internal.os.OperatingSystem.current().isLinux
+            }
+
+            val output = project.layout.buildDirectory.file("app-image/$buildDir/${packageName}-${packageVersion}.AppImage")
+
+            outputs.file(output)
+
+            environment("VERSION", packageVersion as Any)
+            workingDir(project.layout.buildDirectory.dir("app-image/$buildDir/"))
+            standardOutput = System.out
+            executable = project.layout.buildDirectory.file("appimagetool/appimagetool-x86_64.AppImage").get().asFile.path
+            setArgs(listOf("--comp", "zstd", "-n", "AppDir", output.get().asFile.path))
         }
     }
 }
