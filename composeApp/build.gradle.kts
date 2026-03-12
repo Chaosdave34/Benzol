@@ -73,7 +73,7 @@ compose.desktop {
         mainClass = "io.github.chaosdave34.benzol.MainKt"
 
         nativeDistributions {
-            targetFormats(TargetFormat.AppImage, TargetFormat.Exe, TargetFormat.Deb, TargetFormat.Rpm)
+            targetFormats(TargetFormat.AppImage, TargetFormat.Exe)
             fileAssociation("application/x-benzol+json", "benzol", "Benzol Betriebsanweisung")
 
             packageName = rootProject.name
