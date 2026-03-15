@@ -249,14 +249,14 @@ object Gestis { // TODO add tests, improve hazard statements // regex (z.B. Betr
             return matches.map { Pair(it.groups["number"]?.value ?: "", it.groups["statement"]?.value ?: "") }.toList()
         }
 
-        private fun getGHSPictograms(): List<GHSPictogram> {
+        private fun getGHSPictograms(): Set<GHSPictogram> {
             val chapter = getChapter("1100", "1303").getContent()
 
             val matches =
                 "<img src=\"https://gestis-api\\.dguv\\.de/api/exactimage/GHS/(?<ghs>ghs0[1-9])\\.gif\" alt=\"ghs0[1-9]\" />".toRegex().findAll(chapter)
 
 
-            return matches.mapNotNull { GHSPictogram.fromId(it.groups["ghs"]?.value ?: "") }.toList()
+            return matches.mapNotNull { GHSPictogram.fromId(it.groups["ghs"]?.value ?: "") }.toSet()
         }
 
         private fun getChapter(main: String, sub: String): SubChapter? {

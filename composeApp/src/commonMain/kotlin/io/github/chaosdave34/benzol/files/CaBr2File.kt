@@ -3,6 +3,7 @@ package io.github.chaosdave34.benzol.files
 import io.github.chaosdave34.benzol.data.*
 import io.github.chaosdave34.benzol.files.CaBr2File.CaBr2Data.ValuePair.Companion.toListModifiable
 import io.github.chaosdave34.benzol.files.CaBr2File.CaBr2Data.ValuePair.Companion.toModifiable
+import io.github.chaosdave34.benzol.files.CaBr2File.CaBr2Data.ValuePair.Companion.toSetModifiable
 import io.github.chaosdave34.benzol.files.CaBr2File.CaBr2Data.ValuePair.Companion.toStringModifiable
 import io.github.chaosdave34.benzol.files.export.Savable
 import kotlinx.serialization.Serializable
@@ -64,7 +65,7 @@ object CaBr2File {
                 amount?.toQuantity() ?: Substance.Quantity(),
                 hPhrases.toListModifiable { Pair(it.getOrElse(0) { "" }.trim(), it.getOrElse(1) { "" }.trim()) },
                 pPhrases.toListModifiable { Pair(it.getOrElse(0) { "" }.trim(), it.getOrElse(1) { "" }.trim()) },
-                symbols.toListModifiable { GHSPictogram.fromId(it) },
+                symbols.toSetModifiable { GHSPictogram.fromId(it) },
                 Pair(source.getSource(), source.url.trim())
             )
         }
@@ -100,6 +101,10 @@ object CaBr2File {
 
                 fun <I, O> ValuePair<List<I>>.toListModifiable(map: (I) -> O?): Modifiable<List<O>> {
                     return Modifiable(originalData?.mapNotNull(map) ?: emptyList(), modifiedData?.mapNotNull(map))
+                }
+
+                fun <I, O> ValuePair<List<I>>.toSetModifiable(map: (I) -> O?): Modifiable<Set<O>> {
+                    return Modifiable(originalData?.mapNotNull(map)?.toSet() ?: emptySet(), modifiedData?.mapNotNull(map)?.toSet())
                 }
 
             }

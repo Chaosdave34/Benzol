@@ -21,7 +21,7 @@ data class Substance(
     var quantity: Quantity = Quantity(),
     val hazardStatementsModifiable: Modifiable<List<Pair<String, String>>>,
     val precautionaryStatementsModifiable: Modifiable<List<Pair<String, String>>>,
-    val ghsPictogramsModifiable: Modifiable<List<GHSPictogram>>,
+    val ghsPictogramsModifiable: Modifiable<Set<GHSPictogram>>,
 
     var source: Pair<Source, String>
 ) {
@@ -38,7 +38,7 @@ data class Substance(
         boilingPoint: String = "",
         hazardStatements: List<Pair<String, String>> = emptyList(),
         precautionaryStatements: List<Pair<String, String>> = emptyList(),
-        ghsPictograms: List<GHSPictogram> = emptyList(),
+        ghsPictograms: Set<GHSPictogram> = emptySet(),
         source: Pair<Source, String> = Pair(Source.Custom, "")
     ) : this(
         nameModifiable = Modifiable(name),
