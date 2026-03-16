@@ -64,6 +64,7 @@ kotlin {
 
             implementation(libs.ktor.clientCio)
             implementation(libs.bundles.openhtmltopdf.common)
+            implementation(libs.logback)
         }
     }
 }
