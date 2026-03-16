@@ -95,37 +95,20 @@ data class Substance(
     @Serializable
     data class Quantity(val value: String = "", val unit: String = "g")
 
-    fun copyAsModified(
-        name: String,
-        casNumber: String,
-        molecularFormula: String,
-        wgk: Wgk,
-        signalWord: SignalWord,
-        molarMass: String,
-        lethalDose: String,
-        mak: String,
-        meltingPoint: String,
-        boilingPoint: String,
-        quantity: Quantity,
-        hazardStatements: List<Pair<String, String>>,
-        precautionaryStatements: List<Pair<String, String>>,
-        ghsPictograms: List<GHSPictogram>
-    ): Substance {
-        return copy(
-            nameModifiable = nameModifiable.copy(modified = name),
-            casNumberModifiable = casNumberModifiable.copy(modified = casNumber),
-            molecularFormulaModifiable = molecularFormulaModifiable.copy(modified = molecularFormula),
-            wgkModifiable = wgkModifiable.copy(modified = wgk),
-            signalWordModifiable = signalWordModifiable.copy(modified = signalWord),
-            molarMassModifiable = molarMassModifiable.copy(modified = molarMass),
-            lethalDoseModifiable = lethalDoseModifiable.copy(modified = lethalDose),
-            makModifiable = makModifiable.copy(modified = mak),
-            meltingPointModifiable = meltingPointModifiable.copy(modified = meltingPoint),
-            boilingPointModifiable = boilingPointModifiable.copy(modified = boilingPoint),
-            quantity = quantity.copy(value = quantity.value, unit = quantity.unit),
-            hazardStatementsModifiable = hazardStatementsModifiable.copy(modified = hazardStatements),
-            precautionaryStatementsModifiable = precautionaryStatementsModifiable.copy(modified = precautionaryStatements),
-            ghsPictogramsModifiable = ghsPictogramsModifiable.copy(modified = ghsPictograms)
-        )
-    }
+    fun copyOriginal() = copy(
+        nameModifiable = nameModifiable.copy(modified = null),
+        casNumberModifiable = casNumberModifiable.copy(modified = null),
+        molecularFormulaModifiable = molecularFormulaModifiable.copy(modified = null),
+        wgkModifiable = wgkModifiable.copy(modified = null),
+        signalWordModifiable = signalWordModifiable.copy(modified = null),
+        molarMassModifiable = molarMassModifiable.copy(modified = null),
+        lethalDoseModifiable = lethalDoseModifiable.copy(modified = null),
+        makModifiable = makModifiable.copy(modified = null),
+        meltingPointModifiable = meltingPointModifiable.copy(modified = null),
+        boilingPointModifiable = boilingPointModifiable.copy(modified = null),
+        quantity = Quantity(),
+        hazardStatementsModifiable = hazardStatementsModifiable.copy(modified = null),
+        precautionaryStatementsModifiable = precautionaryStatementsModifiable.copy(modified = null),
+        ghsPictogramsModifiable = ghsPictogramsModifiable.copy(modified = null),
+    )
 }

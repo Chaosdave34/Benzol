@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -24,88 +24,32 @@ import org.jetbrains.compose.resources.vectorResource
 @Composable
 fun EditSubstanceDialog(
     visible: Boolean,
-    substance: Substance?,
+    substance: Substance,
     onDismissRequest: () -> Unit,
     onEdit: (Substance) -> Unit,
 ) {
-    if (substance != null && visible) {
-        var name by remember { mutableStateOf(substance.name) }
-        var casNumber by remember { mutableStateOf(substance.casNumber) }
-        var molecularFormula by remember { mutableStateOf(substance.molecularFormula) }
-        var wgk by remember { mutableStateOf(substance.wgk) }
-        var signalWord by remember { mutableStateOf(substance.signalWord) }
+    var localSubstance by rememberSaveable { mutableStateOf(substance) }
 
-        var molarMass by remember { mutableStateOf(substance.molarMass) }
-        var lethalDose by remember { mutableStateOf(substance.lethalDose) }
-        var mak by remember { mutableStateOf(substance.mak) }
-        var meltingPoint by remember { mutableStateOf(substance.meltingPoint) }
-        var boilingPoint by remember { mutableStateOf(substance.boilingPoint) }
-        var quantity by remember { mutableStateOf(substance.quantity.value) }
-        var quantityUnit by remember { mutableStateOf(substance.quantity.unit) }
-
-        val hazardStatements = remember { mutableStateListOf<Pair<String, String>>().also { it.addAll(substance.hazardStatements) } }
-        val precautionaryStatements = remember { mutableStateListOf<Pair<String, String>>().also { it.addAll(substance.precautionaryStatements) } }
-        val ghsPictograms = remember { mutableStateListOf<GHSPictogram>().also { it.addAll(substance.ghsPictograms) } }
-
+    if (visible) {
         val numberRegex = "[0-9]+[,.]?[0-9]*".toRegex()
         val negativeNumberRegex = "-?[0-9]+[,.]?[0-9]*".toRegex()
         val casRegex = "([0-9]{2,8}-[0-9]{2}-[0-9])".toRegex()
-
-        val onReset: () -> Unit = {
-            name = substance.nameModifiable.original
-            casNumber = substance.casNumberModifiable.original
-            molecularFormula = substance.molecularFormulaModifiable.original
-            wgk = substance.wgkModifiable.original
-            signalWord = substance.signalWordModifiable.original
-
-            molarMass = substance.molarMassModifiable.original
-            lethalDose = substance.lethalDoseModifiable.original
-            mak = substance.makModifiable.original
-            meltingPoint = substance.meltingPointModifiable.original
-            boilingPoint = substance.boilingPointModifiable.original
-            quantity = Substance.Quantity().value
-            quantityUnit = Substance.Quantity().unit
-
-            hazardStatements.clear()
-            hazardStatements.addAll(substance.hazardStatementsModifiable.original)
-            precautionaryStatements.clear()
-            precautionaryStatements.addAll(substance.precautionaryStatementsModifiable.original)
-            ghsPictograms.clear()
-            ghsPictograms.addAll(substance.ghsPictogramsModifiable.original)
-        }
-
-        val onSave: () -> Unit = {
-            onEdit(
-                substance.copyAsModified(
-                    name.trim(),
-                    casNumber.trim(),
-                    molecularFormula.trim(),
-                    wgk,
-                    signalWord,
-                    molarMass.trim(),
-                    lethalDose.trim(),
-                    mak.trim(),
-                    meltingPoint.trim(),
-                    boilingPoint.trim(),
-                    Substance.Quantity(quantity.trim(), quantityUnit.trim()),
-                    hazardStatements.map { Pair(it.first.trim(), it.second.trim()) },
-                    precautionaryStatements.map { Pair(it.first.trim(), it.second.trim()) },
-                    ghsPictograms
-                )
-            )
-        }
 
         AdaptiveDialog(
             title = stringResource(Res.string.edit_substance_dialog),
             onDismissRequest = onDismissRequest,
             actions = {
                 TextButton(
-                    onClick = onReset
+                    onClick = {
+                        localSubstance = localSubstance.copyOriginal()
+                    }
                 ) {
                     Text(stringResource(Res.string.reset))
                 }
                 TextButton(
-                    onClick = onSave
+                    onClick = {
+                        onEdit(localSubstance)
+                    }
                 ) {
                     Text(stringResource(Res.string.save))
                 }
@@ -127,16 +71,18 @@ fun EditSubstanceDialog(
                     ) {
                         CustomTextField(
                             Modifier.weight(0.5f),
-                            value = name,
-                            onValueChange = { name = it },
+                            value = localSubstance.name,
+                            onValueChange = { localSubstance = localSubstance.copy(nameModifiable = localSubstance.nameModifiable.copy(modified = it)) },
                             label = stringResource(Res.string.name)
                         )
                         CustomTextField(
                             Modifier.weight(0.5f),
-                            value = casNumber,
-                            onValueChange = { casNumber = it },
+                            value = localSubstance.casNumber,
+                            onValueChange = {
+                                localSubstance = localSubstance.copy(casNumberModifiable = localSubstance.casNumberModifiable.copy(modified = it))
+                            },
                             label = stringResource(Res.string.cas_number),
-                            isError = !casRegex.matches(casNumber) && casNumber.isNotEmpty()
+                            isError = !casRegex.matches(localSubstance.casNumber) && localSubstance.casNumber.isNotEmpty()
                         )
                     }
                     Row(
@@ -144,14 +90,16 @@ fun EditSubstanceDialog(
                     ) {
                         CustomTextField(
                             Modifier.weight(0.5f),
-                            value = molecularFormula,
-                            onValueChange = { molecularFormula = it },
+                            value = localSubstance.molecularFormula,
+                            onValueChange = {
+                                localSubstance = localSubstance.copy(molecularFormulaModifiable = localSubstance.molecularFormulaModifiable.copy(modified = it))
+                            },
                             label = stringResource(Res.string.formatted_molecular_formula),
                             supportingText = {
-                                if (molecularFormula.isBlank()) {
+                                if (localSubstance.molecularFormula.isBlank()) {
                                     Text(stringResource(Res.string.formatted_molecular_formula_hint))
                                 } else {
-                                    FormattedMolecularFormula(formula = molecularFormula)
+                                    FormattedMolecularFormula(formula = localSubstance.molecularFormula)
                                 }
                             }
                         )
@@ -168,37 +116,43 @@ fun EditSubstanceDialog(
                     ) {
                         CustomTextField(
                             Modifier.weight(0.33f),
-                            value = molarMass,
-                            onValueChange = { molarMass = it },
+                            value = localSubstance.molarMass,
+                            onValueChange = {
+                                localSubstance = localSubstance.copy(molarMassModifiable = localSubstance.molarMassModifiable.copy(modified = it))
+                            },
                             label = stringResource(Res.string.molar_mass),
                             suffix = {
                                 Text(stringResource(Res.string.molar_mass_unit))
                             },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            isError = !numberRegex.matches(molarMass) && molarMass.isNotEmpty()
+                            isError = !numberRegex.matches(localSubstance.molarMass) && localSubstance.molarMass.isNotEmpty()
                         )
 
                         CustomTextField(
                             Modifier.weight(0.33f),
-                            value = meltingPoint,
-                            onValueChange = { meltingPoint = it },
+                            value = localSubstance.meltingPoint,
+                            onValueChange = {
+                                localSubstance = localSubstance.copy(meltingPointModifiable = localSubstance.meltingPointModifiable.copy(modified = it))
+                            },
                             label = stringResource(Res.string.melting_point),
                             suffix = {
                                 Text(stringResource(Res.string.celsius_unit))
                             },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            isError = !negativeNumberRegex.matches(meltingPoint) && meltingPoint.isNotEmpty()
+                            isError = !negativeNumberRegex.matches(localSubstance.meltingPoint) && localSubstance.meltingPoint.isNotEmpty()
                         )
                         CustomTextField(
                             Modifier.weight(0.33f),
-                            value = boilingPoint,
-                            onValueChange = { boilingPoint = it },
+                            value = localSubstance.boilingPoint,
+                            onValueChange = {
+                                localSubstance = localSubstance.copy(boilingPointModifiable = localSubstance.boilingPointModifiable.copy(modified = it))
+                            },
                             label = stringResource(Res.string.boiling_point),
                             suffix = {
                                 Text(stringResource(Res.string.celsius_unit))
                             },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            isError = !negativeNumberRegex.matches(boilingPoint) && boilingPoint.isNotEmpty()
+                            isError = !negativeNumberRegex.matches(localSubstance.boilingPoint) && localSubstance.boilingPoint.isNotEmpty()
                         )
                     }
                     Row(
@@ -206,34 +160,36 @@ fun EditSubstanceDialog(
                     ) {
                         CustomTextField(
                             Modifier.weight(0.33f),
-                            value = mak,
-                            onValueChange = { mak = it },
+                            value = localSubstance.mak,
+                            onValueChange = { localSubstance = localSubstance.copy(makModifiable = localSubstance.makModifiable.copy(modified = it)) },
                             label = stringResource(Res.string.mak),
                             suffix = {
                                 Text(stringResource(Res.string.mak_unit))
                             },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            isError = !numberRegex.matches(mak) && mak.isNotEmpty()
+                            isError = !numberRegex.matches(localSubstance.mak) && localSubstance.mak.isNotEmpty()
                         )
 
                         CustomTextField(
                             Modifier.weight(0.33f),
-                            value = lethalDose,
-                            onValueChange = { lethalDose = it },
+                            value = localSubstance.lethalDose,
+                            onValueChange = {
+                                localSubstance = localSubstance.copy(lethalDoseModifiable = localSubstance.lethalDoseModifiable.copy(modified = it))
+                            },
                             label = stringResource(Res.string.lethal_dose),
                             suffix = {
                                 Text(stringResource(Res.string.lethal_dose_unit))
                             },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            isError = !numberRegex.matches(lethalDose) && lethalDose.isNotEmpty()
+                            isError = !numberRegex.matches(localSubstance.lethalDose) && localSubstance.lethalDose.isNotEmpty()
                         )
 
                         CustomExposedDropdownMenu(
                             Modifier.weight(0.33f),
                             label = stringResource(Res.string.wgk),
                             entries = Wgk.entries,
-                            selected = wgk,
-                            onSelectedChange = { wgk = it }
+                            selected = localSubstance.wgk,
+                            onSelectedChange = { localSubstance = localSubstance.copy(wgkModifiable = localSubstance.wgkModifiable.copy(modified = it)) }
                         )
                     }
                     Row(
@@ -242,24 +198,26 @@ fun EditSubstanceDialog(
                         CustomExposedDropdownMenu(
                             Modifier.weight(0.5f),
                             entries = SignalWord.entries,
-                            selected = signalWord,
-                            onSelectedChange = { signalWord = it },
+                            selected = localSubstance.signalWord,
+                            onSelectedChange = {
+                                localSubstance = localSubstance.copy(signalWordModifiable = localSubstance.signalWordModifiable.copy(modified = it))
+                            },
                             label = stringResource(Res.string.signal_word)
                         )
 
                         CustomTextField(
                             modifier = Modifier.weight(0.4f),
-                            value = quantity,
-                            onValueChange = { quantity = it },
+                            value = localSubstance.quantity.value,
+                            onValueChange = { localSubstance = localSubstance.copy(quantity = localSubstance.quantity.copy(value = it)) },
                             label = stringResource(Res.string.quantity),
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            isError = !numberRegex.matches(quantity) && quantity.isNotEmpty()
+                            isError = !numberRegex.matches(localSubstance.quantity.value) && localSubstance.quantity.value.isNotEmpty()
                         )
 
                         CustomTextField(
                             modifier = Modifier.weight(0.2f),
-                            value = quantityUnit,
-                            onValueChange = { quantityUnit = it },
+                            value = localSubstance.quantity.unit,
+                            onValueChange = { localSubstance = localSubstance.copy(quantity = localSubstance.quantity.copy(unit = it)) },
                             label = stringResource(Res.string.unit)
                         )
                     }
@@ -272,7 +230,10 @@ fun EditSubstanceDialog(
                 ) {
                     StatementInput(
                         statements = Statements.hStatements,
-                        selectedStatements = hazardStatements
+                        selectedStatements = localSubstance.hazardStatements,
+                        onEdit = {
+                            localSubstance = localSubstance.copy(hazardStatementsModifiable = localSubstance.hazardStatementsModifiable.copy(modified = it))
+                        }
                     )
                 }
 
@@ -283,7 +244,11 @@ fun EditSubstanceDialog(
                 ) {
                     StatementInput(
                         statements = Statements.pStatements,
-                        selectedStatements = precautionaryStatements
+                        selectedStatements = localSubstance.precautionaryStatements,
+                        onEdit = {
+                            localSubstance =
+                                localSubstance.copy(precautionaryStatementsModifiable = localSubstance.precautionaryStatementsModifiable.copy(modified = it))
+                        }
                     )
                 }
 
@@ -299,11 +264,22 @@ fun EditSubstanceDialog(
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
-                            list.forEach {
+                            list.forEach { pictogram ->
                                 GHSPictogram(
                                     modifier = Modifier.weight(0.3f),
-                                    pictogram = it,
-                                    selected = ghsPictograms
+                                    pictogram = pictogram,
+                                    checked = pictogram in localSubstance.ghsPictograms,
+                                    onCheckedChange = { checked ->
+                                        localSubstance = if (checked) {
+                                            val set = localSubstance.ghsPictograms.toMutableSet()
+                                            set.add(pictogram)
+                                            localSubstance.copy(ghsPictogramsModifiable = localSubstance.ghsPictogramsModifiable.copy(modified = set))
+                                        } else {
+                                            val set = localSubstance.ghsPictograms.toMutableSet()
+                                            set.remove(pictogram)
+                                            localSubstance.copy(ghsPictogramsModifiable = localSubstance.ghsPictogramsModifiable.copy(modified = set))
+                                        }
+                                    }
                                 )
                             }
                         }
@@ -320,12 +296,16 @@ fun EditSubstanceDialog(
 @Composable
 private fun StatementInput(
     statements: Map<String, String>,
-    selectedStatements: SnapshotStateList<Pair<String, String>>
+    selectedStatements: List<Pair<String, String>>,
+    onEdit: (List<Pair<String, String>>) -> Unit
 ) {
+    val localStatements = rememberSaveable(selectedStatements) { selectedStatements.toMutableStateList() }
+
+
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        selectedStatements.forEachIndexed { index, statement ->
+        localStatements.forEachIndexed { index, statement ->
             var dropdownExpanded by remember { mutableStateOf(false) }
 
             Row(
@@ -341,7 +321,10 @@ private fun StatementInput(
                         colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
                         value = statement.first,
                         singleLine = true,
-                        onValueChange = { selectedStatements[index] = statement.copy(first = it) },
+                        onValueChange = {
+                            localStatements[index] = statement.copy(first = it)
+                            onEdit(localStatements)
+                        },
                         isError = statement.first !in statements.keys && statement.first.isNotEmpty(),
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(dropdownExpanded) },
                     )
@@ -358,8 +341,9 @@ private fun StatementInput(
                                     Text(id)
                                 },
                                 onClick = {
-                                    selectedStatements[index] = statement.copy(first = id, second = value)
+                                    localStatements[index] = statement.copy(first = id, second = value)
                                     dropdownExpanded = false
+                                    onEdit(localStatements)
                                 },
                                 contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
                             )
@@ -370,10 +354,16 @@ private fun StatementInput(
                 OutlinedTextField(
                     modifier = Modifier.weight(0.7f),
                     value = statement.second,
-                    onValueChange = { selectedStatements[index] = statement.copy(second = it) },
+                    onValueChange = {
+                        localStatements[index] = statement.copy(second = it)
+                        onEdit(localStatements)
+                    },
                     trailingIcon = {
                         IconButton(
-                            onClick = { if (index >= 0 && index <= selectedStatements.lastIndex) selectedStatements.removeAt(index) },
+                            onClick = {
+                                if (index >= 0 && index <= localStatements.lastIndex) localStatements.removeAt(index)
+                                onEdit(localStatements)
+                            },
                         ) {
                             Icon(vectorResource(Res.drawable.delete_filled), stringResource(Res.string.delete))
                         }
@@ -382,7 +372,10 @@ private fun StatementInput(
             }
         }
         FilledIconButton(
-            onClick = { selectedStatements.add(Pair("", "")) },
+            onClick = {
+                localStatements.add(Pair("", ""))
+                onEdit(localStatements)
+            },
         ) {
             Icon(vectorResource(Res.drawable.add), stringResource(Res.string.add))
         }
@@ -393,22 +386,20 @@ private fun StatementInput(
 private fun GHSPictogram(
     modifier: Modifier = Modifier,
     pictogram: GHSPictogram,
-    selected: SnapshotStateList<GHSPictogram>
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit
 ) {
-    val isSelected by remember { derivedStateOf { selected.contains(pictogram) } }
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
         Image(
             modifier = Modifier
-                .clickable(
-                    onClick = { if (isSelected) selected.remove(pictogram) else selected.add(pictogram) },
-                )
+                .clickable(onClick = { onCheckedChange(!checked) })
                 .fillMaxSize(0.6f),
             painter = painterResource(pictogram.drawableResource),
             contentDescription = pictogram.alt,
-            colorFilter = if (!isSelected) ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) }) else null
+            colorFilter = if (!checked) ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) }) else null
         )
     }
 }

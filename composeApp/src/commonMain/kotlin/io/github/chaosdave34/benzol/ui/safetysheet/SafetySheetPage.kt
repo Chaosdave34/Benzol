@@ -27,18 +27,19 @@ context(viewModel: SafetySheetViewModel)
 fun SafetySheetPage() {
     val inputState by viewModel.inputState.collectAsState()
 
-    var editSubstanceDialogVisible by rememberSaveable { mutableStateOf(false) }
-    var selectedSubstance by remember { mutableIntStateOf(0) }
+    var selectedSubstance by rememberSaveable { mutableIntStateOf(-1) }
 
-    EditSubstanceDialog(
-        visible = editSubstanceDialogVisible,
-        substance = inputState.substances.getOrNull(selectedSubstance),
-        onDismissRequest = { editSubstanceDialogVisible = false },
-        onEdit = {
-            viewModel.updateSubstance(selectedSubstance, it)
-            editSubstanceDialogVisible = false
-        }
-    )
+    inputState.substances.forEachIndexed { index, substance ->
+        EditSubstanceDialog(
+            visible = index == selectedSubstance,
+            substance = substance,
+            onDismissRequest = { selectedSubstance = -1 },
+            onEdit = {
+                viewModel.updateSubstance(selectedSubstance, it)
+                selectedSubstance = -1
+            }
+        )
+    }
 
     AppPageBox(
         Modifier
@@ -136,7 +137,6 @@ fun SafetySheetPage() {
                 SubstanceList(
                     substances = inputState.substances,
                     onSubstanceClick = {
-                        editSubstanceDialogVisible = true
                         selectedSubstance = it
                     },
                     onRemove = viewModel::removeSubstance,
