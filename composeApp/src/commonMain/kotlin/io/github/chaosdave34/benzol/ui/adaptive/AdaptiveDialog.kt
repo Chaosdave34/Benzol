@@ -20,15 +20,16 @@ import org.jetbrains.compose.resources.vectorResource
 fun AdaptiveDialog(
     title: String,
     onDismissRequest: () -> Unit,
+    dismissOnClickOutside: Boolean = true,
     actions: @Composable RowScope.() -> Unit = {},
-    content: @Composable BoxScope.() -> Unit,
+    content: @Composable BoxScope.() -> Unit
 ) {
     val adaptiveInfo = currentWindowAdaptiveInfo()
     val fullscreen = !adaptiveInfo.windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND)
 
     Dialog(
         onDismissRequest = onDismissRequest,
-        properties = DialogProperties(usePlatformDefaultWidth = !fullscreen)
+        properties = DialogProperties(usePlatformDefaultWidth = !fullscreen, dismissOnClickOutside = dismissOnClickOutside)
     ) {
         if (fullscreen) {
             Surface {

@@ -38,6 +38,7 @@ fun EditSubstanceDialog(
         AdaptiveDialog(
             title = stringResource(Res.string.edit_substance_dialog),
             onDismissRequest = onDismissRequest,
+            dismissOnClickOutside = false,
             actions = {
                 TextButton(
                     onClick = {
