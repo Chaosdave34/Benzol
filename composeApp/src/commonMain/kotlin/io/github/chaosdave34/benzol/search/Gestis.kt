@@ -1,7 +1,9 @@
 package io.github.chaosdave34.benzol.search
 
 import benzol.composeapp.generated.resources.*
+import com.fleeksoft.ksoup.Ksoup
 import io.github.chaosdave34.benzol.data.*
+import io.github.chaosdave34.benzol.data.Wgk.*
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
@@ -15,7 +17,7 @@ import org.jetbrains.compose.resources.StringResource
 
 private const val TOKEN = "dddiiasjhduuvnnasdkkwUUSHhjaPPKMasd" // don't ask, just leave it (https://gestis.dguv.de/search)
 
-object Gestis { // TODO add tests, improve hazard statements // regex (z.B. Betroffene Organe in https://gestis.dguv.de/data?name=011240#1100)
+object Gestis { // TODO add tests
     private val client = HttpClient {
         install(ContentNegotiation) {
             json()
@@ -103,8 +105,8 @@ object Gestis { // TODO add tests, improve hazard statements // regex (z.B. Betr
         fun getSubstance(): Substance {
             return Substance(
                 name,
-                getCas(),
-                getFormatedMolecularFormula(),
+                getCasNumber(),
+                getMolecularFormula(),
                 getWgk(),
                 getSignalWorld(),
                 getMolarMass(),
@@ -119,43 +121,50 @@ object Gestis { // TODO add tests, improve hazard statements // regex (z.B. Betr
             )
         }
 
-        private fun getCas(): String {
-            val chapter = getChapter("0100", "0100").getContent()
+        private fun getCasNumber(): String {
+            val chapter = getChapter("0100", "0100")
 
-            // Filter for first regex match
-            val match = "<casnr>(?<cas>[0-9-]+)</casnr>".toRegex().find(chapter)
-            return match?.groups["cas"]?.value ?: ""
+            val casNumber = Ksoup.parseXml(chapter).selectFirst("casnr")?.text() ?: ""
+            return casNumber.trim()
         }
 
         private fun getMolecularFormula(): String {
-            val chapter = getChapter("0400", "0400").getContent()
+            val chapter = getChapter("0400", "0400")
 
-            val match = "<summenformel>(?<formula>[0-9A-Za-z()* ]+?)(?:<br />[0-9A-Za-z()* ]+?)*</summenformel>".toRegex().find(chapter)
-            return match?.groups["formula"]?.value ?: ""
-        }
+            val molecularFormula = Ksoup.parseXml(chapter).selectFirst("summenformel")?.html() ?: ""
 
-        private fun getFormatedMolecularFormula(): String {
-            val chapter = getChapter("0400", "0400").getContent()
-
-            val pattern = getMolecularFormula().map { Regex.escape(it.toString()) + "(?:<sub>|</sub>)?" }.joinToString("")
-
+            val pattern = molecularFormula
+                .split("<br />")
+                .first()
+                .map { Regex.escape(it.toString()) + "(?:<sub>|</sub>)?" }
+                .joinToString("")
             val match = "<td align=\"left\">(?<formula>$pattern)(?:<br />.*?)*?</td>".toRegex().find(chapter)
+
             return match?.groups["formula"]?.value?.replace("<sub>", "<")?.replace("</sub>", ">") ?: ""
+
         }
 
         private fun getWgk(): Wgk {
-            val chapter = getChapter("1100", "1106").getContent()
+            val chapter = getChapter("1100", "1106")
 
-            val match = "<td align=\"left\">(?<wgk>WGK [1-3]) {2}- {2}[a-z]+ wassergefährdend</td>".toRegex().find(chapter)
-            return Wgk.fromLabel(match?.groups["wgk"]?.value ?: "")
+            val wgk = Ksoup.parseXml(chapter).selectFirst("td:matches(WGK [1-3])")?.text() ?: ""
+            val match = "WGK (?<number>[1-3])".toRegex().find(wgk)
+            val number = match?.groups["number"]?.value?.toIntOrNull()
+
+            return when (number) {
+                1 -> WGK_1
+                2 -> WGK_2
+                3 -> WGK_3
+                else -> NONE
+            }
         }
 
         private fun getSignalWorld(): SignalWord {
-            val chapter = getChapter("1100", "1303").getContent()
+            val chapter = getChapter("1100", "1303")
 
-            val match = "<td class=\"vortext\" align=\"left\"><b>Signalwort:</b></td>\\n *<td>\"(?<word>[a-zA-Z]+)\"</td>".toRegex().find(chapter)
+            val signalWord = Ksoup.parseXml(chapter).selectFirst("td:has(b:contains(Signalwort)) + td")?.text() ?: ""
 
-            return when (match?.groups["word"]?.value ?: "") {
+            return when (signalWord.replace("\"", "").trim()) {
                 "Achtung" -> SignalWord.WARNING
                 "Gefahr" -> SignalWord.DANGER
                 else -> SignalWord.NONE
@@ -163,112 +172,126 @@ object Gestis { // TODO add tests, improve hazard statements // regex (z.B. Betr
         }
 
         private fun getMolarMass(): String {
-            val chapter = getChapter("0400", "0400").getContent()
+            val chapter = getChapter("0400", "0400")
 
-            val match = "<b>Molare Masse:</b></td>\\n *<td> ?(?<molarMass>[0-9,]+) ?g/mol</td>".toRegex().find(chapter)
-            return match?.groups["molarMass"]?.value ?: ""
+            val molarMass = Ksoup.parseXml(chapter).selectFirst("td:has(b:contains(Molare Masse)) + td")?.text() ?: ""
+
+            return molarMass.removeSuffix("g/mol").trim()
         }
 
-        private fun getLethalDose(): String {
-            val chapter = getChapter("0500", "0501").getContent()
+        private fun getLethalDose(): String { // TODO limited to LD50 oral Ratte with unit mg/kg
+            val chapter = getChapter("0500", "0501")
 
-            // 1. Check if exist
-            if (!chapter.contains("LD50 oral Ratte")) return ""
+            val lethalDose = Ksoup.parseXml(chapter).selectFirst("table:has(tr > td:contains(LD50 oral Ratte)) + table > tr > td:matches(\\d)")?.text() ?: ""
 
-            // 2. Split at title
-            val part = chapter.split("LD50 oral Ratte").last()
-
-            // 3. Get first table
-            val table = "<table class=\"block\">(?:.*\\n)+? *</table>".toRegex().find(part)?.value ?: return ""
-
-            // 4. Find value
-            val match = "<td align=\"left\"> (?<ld50>[0-9,]+) mg/kg</td>".toRegex().find(table)
-
-            return match?.groups["ld50"]?.value ?: ""
+            return lethalDose.removeSuffix("mg/kg").trim()
         }
 
-        private fun getMak(): String {
-            val chapter = getChapter("1100", "1203").getContent()
+        private fun getMak(): String { // Todo currently only returns one value
+            val chapter = getChapter("1100", "1203")
 
-            // 1. Check if exist
-            if (!chapter.contains("Die Angaben sind wissenschaftliche Empfehlungen und kein geltendes Recht.")) return ""
+            val makValues = Ksoup.parseXml(chapter)
+                .select("table:has(tr:has(td:contains(Die Angaben sind wissenschaftliche Empfehlungen und kein geltendes Recht.))) + table + table td:matches(\\d)")
+                .eachText()
 
-            // 2. Split at title
-            val part = chapter.split("Die Angaben sind wissenschaftliche Empfehlungen und kein geltendes Recht.").last()
-
-            // 3. Get first table
-            val table = "<table class=\"block\">(?:.*\\n)+? *</table>".toRegex().find(part)?.value ?: return ""
-
-            // 4. Find value
-            val match = "<td align=\"left\"> (?<mak>[0-9,.]+) mg/m³</td>".toRegex().find(table)
-
-            return match?.groups["mak"]?.value ?: ""
+            return makValues.firstOrNull()
+                ?.replace("m[gl]/m³".toRegex(), "")
+                ?.trim()
+                ?: ""
         }
 
         private fun getMeltingPoint(): String { // °C can be C° sometimes, see https://gestis.dguv.de/data?name=520030&lang=de
-            val chapter = getChapter("0600", "0602").getContent()
+            val chapter = getChapter("0600", "0602")
 
-            val match = "<td class=\"vortext\" align=\"left\">Schmelzpunkt:</td>\\n *<td>(?<point>[0-9,-]+) (?:°C|C°)</td>".toRegex().find(chapter)
-            return match?.groups["point"]?.value ?: ""
+            val meltingPoint = Ksoup.parseXml(chapter).selectFirst("td:contains(Schmelzpunkt) + td")?.text() ?: ""
+
+            return meltingPoint.replace("°C|C°".toRegex(), "").trim()
         }
 
         private fun getBoilingPoint(): String { // °C can be C° sometimes, see https://gestis.dguv.de/data?name=520030&lang=de
-            val chapter = getChapter("0600", "0603").getContent()
+            val chapter = getChapter("0600", "0603")
 
-            val match = "<td class=\"vortext\" align=\"left\">Siedepunkt:</td>\\n *<td>(?<point>[0-9,-]+) (?:°C|C°)</td>".toRegex().find(chapter)
-            return match?.groups["point"]?.value ?: ""
+            val meltingPoint = Ksoup.parseXml(chapter).selectFirst("td:contains(Siedepunkt) + td")?.text() ?: ""
+
+            return meltingPoint.replace("°C|C°".toRegex(), "").trim()
         }
 
         private fun getHazardStatements(): List<Pair<String, String>> {
-            val chapter = getChapter("1100", "1303").getContent()
+            val chapter = getChapter("1100", "1303")
 
-            val matches = ">(?<number>H[0-9]{3}[fFdDi]{0,2}(?:\\+H[0-9]{3}[fFdDi]{0,2})*): (?<statement>.+?\\.)(?=<br />|</td>)".toRegex().findAll(chapter)
+            val hazardStatements = Ksoup.parseXml(chapter).selectFirst("tr:has(b:matches(\\bH-Sätze)) + tr > td")?.html() ?: ""
 
-            val additionalInfo =
-                "<verstecktercode>(?<number>H[0-9]{3}[fFdDi]{0,2}(?:\\+H[0-9]{3}[fFdDi]{0,2})*)</verstecktercode>-+? (?<info>.+?)(?=<br />|</td>)".toRegex()
-                .findAll(chapter)
-                .groupBy(
-                    keySelector = { it.groups["number"]?.value ?: "" },
-                    valueTransform = { it.groups["info"]?.value ?: "" }
-                )
+            val regex = "(?:^|(?<=</verstecktercode>|<br />))(?<number>H\\d{3}.*?): (?<statement>.+?)(?=<br />(?!-| +<verstecktercode>)|\\z)".toRegex()
+            val additionalInfoRegex = "<verstecktercode>(?<number>H\\d{3}.*?)</verstecktercode>-+ (?<info>.+?)(?:<br />|$)".toRegex()
 
-            return matches.map {
-                val number = it.groups["number"]?.value ?: ""
-                val statement = (it.groups["statement"]?.value ?: "")
+            val additionalInfoText = hazardStatements.replace(regex, "").trim()
+            val additionalInfo = additionalInfoRegex.findAll(additionalInfoText).groupBy(
+                keySelector = { it.groups["number"]?.value ?: "" },
+                valueTransform = { it.groups["info"]?.value ?: "" }
+            ).mapValues { it.value.joinToString(" ", transform = String::trim, prefix = " ") }
 
-                val additionalText = additionalInfo[number]?.let { info -> " ${info.joinToString()}" } ?: ""
-                Pair(number, statement + additionalText)
-            }.toList()
+            return regex.findAll(hazardStatements)
+                .map {
+                    val number = it.groups["number"]?.value ?: ""
+                    val statement = it.groups["statement"]?.value ?: ""
+
+                    Pair(
+                        number,
+                        statement.replace("<br />(?: *<verstecktercode>.+?</verstecktercode>)?-+".toRegex(), "").trim() +
+                                additionalInfo.getOrElse(number) { "" }
+                    )
+                }.toList()
         }
 
         private fun getPrecautionaryStatements(): List<Pair<String, String>> {
-            val chapter = getChapter("1100", "1303").getContent()
+            val chapter = getChapter("1100", "1303")
 
-            val matches = ">(?<number>P[0-9]{3}(?:\\+P[0-9]{3})*): (?<statement>.+?\\.)(?=<br />|</td>)".toRegex().findAll(chapter)
+            val precautionaryStatements = Ksoup.parseXml(chapter).selectFirst("tr:has(b:matches(P-Sätze)) + tr > td")?.html() ?: ""
 
-            return matches.map { Pair(it.groups["number"]?.value ?: "", it.groups["statement"]?.value ?: "") }.toList()
+            val regex = "(?<number>P\\d.*?): (?<statement>.+)".toRegex()
+            return precautionaryStatements
+                .split("<br />")
+                .mapNotNull(regex::find)
+                .map {
+                    val number = it.groups["number"]?.value ?: ""
+                    val statement = it.groups["statement"]?.value ?: ""
+
+                    Pair(number, statement)
+                }
         }
 
         private fun getGHSPictograms(): Set<GHSPictogram> {
-            val chapter = getChapter("1100", "1303").getContent()
+            val chapter = getChapter("1100", "1303")
 
-            val matches =
-                "<img src=\"https://gestis-api\\.dguv\\.de/api/exactimage/GHS/(?<ghs>ghs0[1-9])\\.gif\" alt=\"ghs0[1-9]\" />".toRegex().findAll(chapter)
+            val ghsPictograms = Ksoup.parseXml(chapter).select("td > img[alt~=ghs]").eachAttr("src")
 
-
-            return matches.mapNotNull { GHSPictogram.fromId(it.groups["ghs"]?.value ?: "") }.toSet()
+            return ghsPictograms
+                .map { "ghs0(?<number>[1-9])".toRegex().find(it)?.groups["number"]?.value?.toIntOrNull() }
+                .mapNotNull {
+                    when (it) {
+                        1 -> GHSPictogram.GHS_001
+                        2 -> GHSPictogram.GHS_002
+                        3 -> GHSPictogram.GHS_003
+                        4 -> GHSPictogram.GHS_004
+                        5 -> GHSPictogram.GHS_005
+                        6 -> GHSPictogram.GHS_006
+                        7 -> GHSPictogram.GHS_007
+                        8 -> GHSPictogram.GHS_008
+                        9 -> GHSPictogram.GHS_009
+                        else -> null
+                    }
+                }.toSet()
         }
 
-        private fun getChapter(main: String, sub: String): SubChapter? {
-            val mainChapter = mainChapter.firstOrNull { it.drnr == main } ?: return null
-            return mainChapter.subChapter.firstOrNull { it.drnr == sub }
+        private fun getChapter(main: String, sub: String): String {
+            return mainChapter
+                .firstOrNull { it.drnr == main }
+                ?.subChapter
+                ?.firstOrNull { it.drnr == sub }
+                ?.text
+                ?: ""
         }
 
-        private fun SubChapter?.getContent(): String {
-            val content = this?.text ?: return ""
-            content.replace("\n", "")
-            return content
-        }
     }
 
     @Serializable

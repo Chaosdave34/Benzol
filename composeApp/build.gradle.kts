@@ -54,6 +54,7 @@ kotlin {
             implementation(libs.compose.material3AdaptiveNavigationSuite)
 
             implementation(libs.bundles.filekit.common)
+            implementation(libs.ksoup)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
