@@ -7,6 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.isAltPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.style.TextOverflow
@@ -118,28 +119,28 @@ fun GestisSearch(
                 searchType = Gestis.SearchType.ChemicalName,
                 value = chemicalName,
                 onValueChange = { chemicalName = it },
-                onSearch = { onSearch(false) }
+                onSearch = { onSearch(it) }
             )
             SearchBar(
                 modifier = Modifier.weight(0.5f),
                 searchType = Gestis.SearchType.CasNumber,
                 value = casNumber,
                 onValueChange = { casNumber = it },
-                onSearch = { onSearch(false) }
+                onSearch = { onSearch(it) }
             )
             SearchBar(
                 modifier = Modifier.weight(0.5f),
                 searchType = Gestis.SearchType.MolecularFormula,
                 value = molecularFormula,
                 onValueChange = { molecularFormula = it },
-                onSearch = { onSearch(false) }
+                onSearch = { onSearch(it) }
             )
             SearchBar(
                 modifier = Modifier.weight(0.5f),
                 searchType = Gestis.SearchType.FullText,
                 value = fullText,
                 onValueChange = { fullText = it },
-                onSearch = { onSearch(false) }
+                onSearch = { onSearch(it) }
             )
         }
 
@@ -191,7 +192,7 @@ private fun SearchBar(
     searchType: Gestis.SearchType,
     value: String,
     onValueChange: (String) -> Unit,
-    onSearch: () -> Unit
+    onSearch: (Boolean) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
     var suggestions by remember { mutableStateOf(emptyList<String>()) }
@@ -211,11 +212,10 @@ private fun SearchBar(
                 .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
                 .onKeyEvent { event ->
                     if (event.key == Key.Enter) {
-                        onSearch()
+                        onSearch(event.isAltPressed)
                         expanded = false
-                        return@onKeyEvent true
-                    }
-                    false
+                        true
+                    } else false
                 },
             value = value,
             onValueChange = onValueChange,
