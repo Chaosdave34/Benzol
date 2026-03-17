@@ -4,7 +4,7 @@ import io.github.chaosdave34.benzol.SupportedLanguage
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
-class Settings() {
+class Settings {
     private val themeKey = "theme"
     private val languageKey = "language"
     private val disclaimerConfirmedKey = "disclaimer_confirmed"
