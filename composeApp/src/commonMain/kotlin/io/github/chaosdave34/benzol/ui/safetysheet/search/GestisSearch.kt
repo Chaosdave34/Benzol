@@ -119,28 +119,32 @@ fun GestisSearch(
                 searchType = Gestis.SearchType.ChemicalName,
                 value = chemicalName,
                 onValueChange = { chemicalName = it },
-                onSearch = { onSearch(it) }
+                onSearch = { onSearch(it) },
+                searchEnabled = searchEnabled
             )
             SearchBar(
                 modifier = Modifier.weight(0.5f),
                 searchType = Gestis.SearchType.CasNumber,
                 value = casNumber,
                 onValueChange = { casNumber = it },
-                onSearch = { onSearch(it) }
+                onSearch = { onSearch(it) },
+                searchEnabled = searchEnabled
             )
             SearchBar(
                 modifier = Modifier.weight(0.5f),
                 searchType = Gestis.SearchType.MolecularFormula,
                 value = molecularFormula,
                 onValueChange = { molecularFormula = it },
-                onSearch = { onSearch(it) }
+                onSearch = { onSearch(it) },
+                searchEnabled = searchEnabled
             )
             SearchBar(
                 modifier = Modifier.weight(0.5f),
                 searchType = Gestis.SearchType.FullText,
                 value = fullText,
                 onValueChange = { fullText = it },
-                onSearch = { onSearch(it) }
+                onSearch = { onSearch(it) },
+                searchEnabled = searchEnabled
             )
         }
 
@@ -192,7 +196,8 @@ private fun SearchBar(
     searchType: Gestis.SearchType,
     value: String,
     onValueChange: (String) -> Unit,
-    onSearch: (Boolean) -> Unit
+    onSearch: (Boolean) -> Unit,
+    searchEnabled: Boolean
 ) {
     var expanded by remember { mutableStateOf(false) }
     var suggestions by remember { mutableStateOf(emptyList<String>()) }
@@ -211,7 +216,7 @@ private fun SearchBar(
                 .fillMaxWidth()
                 .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
                 .onKeyEvent { event ->
-                    if (event.key == Key.Enter) {
+                    if (event.key == Key.Enter && searchEnabled) {
                         onSearch(event.isAltPressed)
                         expanded = false
                         true
