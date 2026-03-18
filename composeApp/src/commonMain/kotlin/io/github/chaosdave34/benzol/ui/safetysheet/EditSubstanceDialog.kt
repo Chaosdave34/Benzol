@@ -2,6 +2,8 @@ package io.github.chaosdave34.benzol.ui.safetysheet
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -110,7 +112,7 @@ fun EditSubstanceDialog(
                 CustomCard(
                     headlineContent = {
                         Text(stringResource(Res.string.properties))
-                    }
+                    },
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -206,21 +208,35 @@ fun EditSubstanceDialog(
                             label = stringResource(Res.string.signal_word)
                         )
 
-                        CustomTextField(
-                            modifier = Modifier.weight(0.4f),
-                            value = localSubstance.quantity.value,
-                            onValueChange = { localSubstance = localSubstance.copy(quantity = localSubstance.quantity.copy(value = it)) },
-                            label = stringResource(Res.string.quantity),
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            isError = !numberRegex.matches(localSubstance.quantity.value) && localSubstance.quantity.value.isNotEmpty()
-                        )
+                        Row(Modifier.weight(0.6f)) {
+                            CustomTextField(
+                                modifier = Modifier.weight(0.66f),
+                                value = localSubstance.quantity.value,
+                                onValueChange = { localSubstance = localSubstance.copy(quantity = localSubstance.quantity.copy(value = it)) },
+                                label = stringResource(Res.string.quantity),
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                isError = !numberRegex.matches(localSubstance.quantity.value) && localSubstance.quantity.value.isNotEmpty(),
+                                shape = RoundedCornerShape(
+                                    topStart = ShapeDefaults.ExtraSmall.topStart,
+                                    bottomStart = ShapeDefaults.ExtraSmall.bottomStart,
+                                    topEnd = CornerSize(0.dp),
+                                    bottomEnd = CornerSize(0.dp)
+                                ),
+                            )
 
-                        CustomTextField(
-                            modifier = Modifier.weight(0.2f),
-                            value = localSubstance.quantity.unit,
-                            onValueChange = { localSubstance = localSubstance.copy(quantity = localSubstance.quantity.copy(unit = it)) },
-                            label = stringResource(Res.string.unit)
-                        )
+                            CustomTextField(
+                                modifier = Modifier.weight(0.33f),
+                                value = localSubstance.quantity.unit,
+                                onValueChange = { localSubstance = localSubstance.copy(quantity = localSubstance.quantity.copy(unit = it)) },
+                                label = stringResource(Res.string.unit),
+                                shape = RoundedCornerShape(
+                                    topStart = CornerSize(0.dp),
+                                    bottomStart = CornerSize(0.dp),
+                                    topEnd = ShapeDefaults.ExtraSmall.topEnd,
+                                    bottomEnd = ShapeDefaults.ExtraSmall.bottomEnd
+                                )
+                            )
+                        }
                     }
                 }
 

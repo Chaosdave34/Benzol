@@ -3,7 +3,6 @@ package io.github.chaosdave34.benzol.ui
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextOverflow
 import io.github.chaosdave34.benzol.data.Labeled
 import org.jetbrains.compose.resources.stringResource
 
@@ -24,15 +23,14 @@ fun <T : Labeled> CustomExposedDropdownMenu(
         onExpandedChange = { expanded = it },
         modifier = modifier
     ) {
-        OutlinedTextField(
+        CustomTextField(
             modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
             value = stringResource(selected.label),
             onValueChange = {},
-            label = { Text(label, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+            label = label,
             readOnly = true,
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
             colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
-            singleLine = true
         )
 
         ExposedDropdownMenu(

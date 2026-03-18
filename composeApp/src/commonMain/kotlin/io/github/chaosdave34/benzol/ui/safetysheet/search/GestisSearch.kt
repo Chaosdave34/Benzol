@@ -223,8 +223,7 @@ private fun SearchBar(
                     } else false
                 },
             value = value,
-            onValueChange = onValueChange,
-            singleLine = true,
+            onValueChange = { onValueChange(it.replace("\n", "")) }, // todo: trick to have single line text field without height change on content
             label = { Text(stringResource(searchType.label), maxLines = 1, overflow = TextOverflow.Ellipsis) },
             leadingIcon = { Icon(vectorResource(Res.drawable.search), null) },
             trailingIcon = {
