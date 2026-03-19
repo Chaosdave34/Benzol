@@ -13,6 +13,7 @@ import io.github.chaosdave34.benzol.files.export.FileUtils.encode
 import io.github.chaosdave34.benzol.files.export.Savable
 import io.github.chaosdave34.benzol.files.htmlToPdf
 import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
+import io.github.vinceglb.filekit.dialogs.FileKitDialogSettings
 import io.github.vinceglb.filekit.dialogs.compose.SaverResultLauncher
 import io.github.vinceglb.filekit.dialogs.compose.rememberFileSaverLauncher
 import io.github.vinceglb.filekit.write
@@ -30,7 +31,9 @@ private fun rememberFileSaver(
     val scope = rememberCoroutineScope()
     val snackbarHostState = LocalSnackbarHostState.current
 
-    return rememberFileSaverLauncher { file ->
+    return rememberFileSaverLauncher(
+        dialogSettings = FileKitDialogSettings(title = stringResource(Res.string.open_file))
+    ) { file ->
         if (file != null) {
             val output = savable.encode()
             scope.launch(context = Dispatchers.IO) {
@@ -91,7 +94,9 @@ private fun rememberPdfExporter(): SaverResultLauncher {
     val snackbarHostState = LocalSnackbarHostState.current
     val resourceEnvironment = rememberResourceEnvironment()
 
-    return rememberFileSaverLauncher { file ->
+    return rememberFileSaverLauncher(
+        dialogSettings = FileKitDialogSettings(title = stringResource(Res.string.export_file))
+    ) { file ->
         if (file != null) {
             viewModel.setLoading(true)
             scope.launch(context = Dispatchers.IO) {
@@ -146,3 +151,7 @@ actual fun FloatingActionButtonMenuScope.ExportFileFabButton(
         text = { Text(stringResource(Res.string.export_file)) }
     )
 }
+
+actual val filePickerDialogSettings: FileKitDialogSettings
+    @Composable
+    get() = FileKitDialogSettings(title = stringResource(Res.string.open_file))

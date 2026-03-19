@@ -10,6 +10,7 @@ import io.github.chaosdave34.benzol.data.SafetySheetInputState
 import io.github.chaosdave34.benzol.files.CaBr2File
 import io.github.chaosdave34.benzol.files.export.FileUtils
 import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
+import io.github.vinceglb.filekit.dialogs.FileKitDialogSettings
 import io.github.vinceglb.filekit.dialogs.FileKitType
 import io.github.vinceglb.filekit.dialogs.compose.PickerResultLauncher
 import io.github.vinceglb.filekit.dialogs.compose.rememberFilePickerLauncher
@@ -63,7 +64,7 @@ fun rememberFilePicker(): PickerResultLauncher {
 
     return rememberFilePickerLauncher(
         type = FileKitType.File(extensions = listOf(FileUtils.FILE_EXTENSION, CaBr2File.EXTENSION)),
-        title = stringResource(Res.string.open_file)
+        dialogSettings = filePickerDialogSettings
     ) { file ->
         scope.launch {
             if (file != null) {
@@ -77,3 +78,5 @@ fun rememberFilePicker(): PickerResultLauncher {
         }
     }
 }
+
+expect val filePickerDialogSettings: FileKitDialogSettings

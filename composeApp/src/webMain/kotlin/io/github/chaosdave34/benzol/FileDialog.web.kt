@@ -13,6 +13,7 @@ import io.github.chaosdave34.benzol.files.export.FileUtils.encode
 import io.github.chaosdave34.benzol.files.export.Savable
 import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
 import io.github.vinceglb.filekit.FileKit
+import io.github.vinceglb.filekit.dialogs.FileKitDialogSettings
 import io.github.vinceglb.filekit.download
 import io.ktor.client.*
 import io.ktor.client.request.*
@@ -186,3 +187,6 @@ actual fun FloatingActionButtonMenuScope.ExportFileFabButton(
         text = { Text(stringResource(Res.string.export_file)) }
     )
 }
+
+actual val filePickerDialogSettings: FileKitDialogSettings
+    get() = FileKitDialogSettings.createDefault()
