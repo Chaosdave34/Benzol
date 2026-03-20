@@ -114,6 +114,7 @@ object Gestis { // TODO add tests
                 getMak(),
                 getMeltingPoint(),
                 getBoilingPoint(),
+                getDecompositionTemperature(),
                 getHazardStatements(),
                 getPrecautionaryStatements(),
                 getGHSPictograms(),
@@ -214,6 +215,14 @@ object Gestis { // TODO add tests
             val meltingPoint = Ksoup.parseXml(chapter).selectFirst("td:contains(Siedepunkt) + td")?.text() ?: ""
 
             return meltingPoint.replace("°C|C°".toRegex(), "").trim()
+        }
+
+        private fun getDecompositionTemperature(): String {
+            val chapter = getChapter("0600", "0619")
+
+            val decompositionTemperature = Ksoup.parseXml(chapter).selectFirst("td:contains(Zersetzungstemperatur) + td")?.text() ?: ""
+
+            return decompositionTemperature.replace("°C|C°".toRegex(), "").trim()
         }
 
         private fun getHazardStatements(): List<Pair<String, String>> {

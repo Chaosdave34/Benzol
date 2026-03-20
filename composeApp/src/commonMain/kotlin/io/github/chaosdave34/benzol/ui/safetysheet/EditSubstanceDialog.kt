@@ -33,8 +33,8 @@ fun EditSubstanceDialog(
     var localSubstance by rememberSaveable { mutableStateOf(substance) }
 
     if (visible) {
-        val numberRegex = "[0-9]+[,.]?[0-9]*".toRegex()
-        val negativeNumberRegex = "-?[0-9]+[,.]?[0-9]*".toRegex()
+        val temperatureRegex = "(?:(?:ca\\.|>) )?-?\\d+[,.]?\\d*(?: ... -?\\d+[,.]?\\d*)?$".toRegex()
+        val numberRegex = "(?:(?:ca\\.|>) )?[0-9]+[,.]?[0-9]*".toRegex()
         val casRegex = "([0-9]{2,8}-[0-9]{2}-[0-9])".toRegex()
 
         AdaptiveDialog(
@@ -106,19 +106,8 @@ fun EditSubstanceDialog(
                                 }
                             }
                         )
-                    }
-                }
-
-                CustomCard(
-                    headlineContent = {
-                        Text(stringResource(Res.string.properties))
-                    },
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
                         CustomTextField(
-                            Modifier.weight(0.33f),
+                            Modifier.weight(0.5f),
                             value = localSubstance.molarMass,
                             onValueChange = {
                                 localSubstance = localSubstance.copy(molarMassModifiable = localSubstance.molarMassModifiable.copy(modified = it))
@@ -130,7 +119,17 @@ fun EditSubstanceDialog(
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                             isError = !numberRegex.matches(localSubstance.molarMass) && localSubstance.molarMass.isNotEmpty()
                         )
+                    }
+                }
 
+                CustomCard(
+                    headlineContent = {
+                        Text(stringResource(Res.string.properties_and_regulations))
+                    },
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
                         CustomTextField(
                             Modifier.weight(0.33f),
                             value = localSubstance.meltingPoint,
@@ -142,7 +141,7 @@ fun EditSubstanceDialog(
                                 Text(stringResource(Res.string.celsius_unit))
                             },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            isError = !negativeNumberRegex.matches(localSubstance.meltingPoint) && localSubstance.meltingPoint.isNotEmpty()
+                            isError = !temperatureRegex.matches(localSubstance.meltingPoint) && localSubstance.meltingPoint.isNotEmpty()
                         )
                         CustomTextField(
                             Modifier.weight(0.33f),
@@ -155,9 +154,24 @@ fun EditSubstanceDialog(
                                 Text(stringResource(Res.string.celsius_unit))
                             },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            isError = !negativeNumberRegex.matches(localSubstance.boilingPoint) && localSubstance.boilingPoint.isNotEmpty()
+                            isError = !temperatureRegex.matches(localSubstance.boilingPoint) && localSubstance.boilingPoint.isNotEmpty()
+                        )
+                        CustomTextField(
+                            Modifier.weight(0.33f),
+                            value = localSubstance.decompositionTemperature,
+                            onValueChange = {
+                                localSubstance =
+                                    localSubstance.copy(decompositionTemperatureModifiable = localSubstance.decompositionTemperatureModifiable.copy(modified = it))
+                            },
+                            label = stringResource(Res.string.decomposition_temperature),
+                            suffix = {
+                                Text(stringResource(Res.string.celsius_unit))
+                            },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            isError = !temperatureRegex.matches(localSubstance.decompositionTemperature) && localSubstance.decompositionTemperature.isNotEmpty()
                         )
                     }
+
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {

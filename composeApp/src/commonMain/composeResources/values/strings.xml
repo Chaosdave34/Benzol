@@ -8,7 +8,7 @@
 
     <string name="save">Speichern</string>
     <string name="general">Allgemein</string>
-    <string name="properties">Eigenschaften</string>
+    <string name="properties_and_regulations">Eigenschaften und Vorschriften</string>
 
     <string name="settings">Einstellungen</string>
 
@@ -46,6 +46,7 @@
     <string name="mak_unit">mg/m³</string>
     <string name="melting_point">Schmelzpunkt</string>
     <string name="boiling_point">Siedepunkt</string>
+    <string name="decomposition_temperature">Zersetzungstemperatur</string>
     <string name="celsius_unit">°C</string>
     <string name="quantity">Menge</string>
     <string name="unit">Einheit</string>
@@ -155,4 +156,6 @@
     <string name="wgk_3">WGK 3</string>
 
     <string name="none_dash">-</string>
+
+    <string name="decomposition_at">Zersetzung bei %1$d&#160;°C</string>
 </resources>

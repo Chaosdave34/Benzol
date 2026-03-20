@@ -46,6 +46,7 @@
     <string name="mak_unit">mg/m³</string>
     <string name="melting_point">Melting point</string>
     <string name="boiling_point">Boiling point</string>
+    <string name="decomposition_temperature">Decomposition temperature</string>
     <string name="celsius_unit">°C</string>
     <string name="quantity">Quantity</string>
     <string name="unit">Unit</string>
@@ -146,5 +147,7 @@
 
     <string name="warning">Warning</string>
     <string name="danger">Danger</string>
+
+    <string name="decomposition_at">Decomp. at %1$d&#160;°C</string>
 </resources>
 

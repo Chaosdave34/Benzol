@@ -52,21 +52,21 @@ object CaBr2File {
             val checked: Boolean
         ) {
             fun toSubstance() = Substance(
-                name.toStringModifiable(),
-                cas.toStringModifiable(),
-                molecularFormula.toStringModifiable(),
-                waterHazardClass.toModifiable(default = Wgk.NONE) { Wgk.fromLabel(this) },
-                signalWord.toModifiable(default = SignalWord.NONE) { SignalWord.fromLabel(this) },
-                molarMass.toStringModifiable(),
-                lethalDose.toStringModifiable { replace(" mg/kg", "") },
-                mak.toStringModifiable { replace(" mg/m³", "") },
-                meltingPoint.toStringModifiable { replace(" °C", "") },
-                boilingPoint.toStringModifiable { replace(" °C", "") },
-                amount?.toQuantity() ?: Substance.Quantity(),
-                hPhrases.toListModifiable { Pair(it.getOrElse(0) { "" }.trim(), it.getOrElse(1) { "" }.trim()) },
-                pPhrases.toListModifiable { Pair(it.getOrElse(0) { "" }.trim(), it.getOrElse(1) { "" }.trim()) },
-                symbols.toSetModifiable { GHSPictogram.fromId(it) },
-                Pair(source.getSource(), source.url.trim())
+                nameModifiable = name.toStringModifiable(),
+                casNumberModifiable = cas.toStringModifiable(),
+                molecularFormulaModifiable = molecularFormula.toStringModifiable(),
+                wgkModifiable = waterHazardClass.toModifiable(default = Wgk.NONE) { Wgk.fromLabel(this) },
+                signalWordModifiable = signalWord.toModifiable(default = SignalWord.NONE) { SignalWord.fromLabel(this) },
+                molarMassModifiable = molarMass.toStringModifiable(),
+                lethalDoseModifiable = lethalDose.toStringModifiable { replace(" mg/kg", "") },
+                makModifiable = mak.toStringModifiable { replace(" mg/m³", "") },
+                meltingPointModifiable = meltingPoint.toStringModifiable { replace(" °C", "") },
+                boilingPointModifiable = boilingPoint.toStringModifiable { replace(" °C", "") },
+                quantity = amount?.toQuantity() ?: Substance.Quantity(),
+                hazardStatementsModifiable = hPhrases.toListModifiable { Pair(it.getOrElse(0) { "" }.trim(), it.getOrElse(1) { "" }.trim()) },
+                precautionaryStatementsModifiable = pPhrases.toListModifiable { Pair(it.getOrElse(0) { "" }.trim(), it.getOrElse(1) { "" }.trim()) },
+                ghsPictogramsModifiable = symbols.toSetModifiable { GHSPictogram.fromId(it) },
+                source = Pair(source.getSource(), source.url.trim())
             )
         }
 

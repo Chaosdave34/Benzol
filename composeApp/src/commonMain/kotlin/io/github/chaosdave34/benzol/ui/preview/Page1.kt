@@ -113,8 +113,12 @@ fun Page1(modifier: Modifier = Modifier) {
                     CenteredText(valueOrDash(substance.molarMass))
                 }
                 SubstanceColumn(4f) {
-                    CenteredText(valueOrDash(substance.boilingPoint, stringResource(Res.string.celsius_unit)))
-                    CenteredText(valueOrDash(substance.meltingPoint, stringResource(Res.string.celsius_unit)))
+                    if (substance.decompositionTemperature.isNotEmpty()) {
+                        CenteredText(stringResource(Res.string.decomposition_at, substance.decompositionTemperature))
+                    } else {
+                        CenteredText(valueOrDash(substance.boilingPoint, stringResource(Res.string.celsius_unit)))
+                        CenteredText(valueOrDash(substance.meltingPoint, stringResource(Res.string.celsius_unit)))
+                    }
                 }
                 SubstanceColumn(6f) {
                     Row(

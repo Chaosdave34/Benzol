@@ -45,6 +45,7 @@ suspend fun createHtml(
 
     val wgk = data.substances.map { getString(it.wgk.label) }
     val signalWord = data.substances.map { getString(it.signalWord.label) }
+    val decompositionAt = data.substances.map { getString(resourceEnvironment, Res.string.decomposition_at, it.decompositionTemperature) }
 
     val css = Res.readBytes("files/export.css").decodeToString()
 
@@ -115,9 +116,13 @@ suspend fun createHtml(
                             }
                             td("min-width-2cm value-with-unit center") {
                                 colSpan = "4"
-                                +valueOrDash(substance.boilingPoint, celsiusUnit)
-                                br
-                                +valueOrDash(substance.meltingPoint, celsiusUnit)
+                                if (substance.decompositionTemperature.isNotEmpty()) {
+                                    +decompositionAt[index]
+                                } else {
+                                    +valueOrDash(substance.boilingPoint, celsiusUnit)
+                                    br
+                                    +valueOrDash(substance.meltingPoint, celsiusUnit).trimStart()
+                                }
                             }
                             td("min-width-ghs-symbols center") {
                                 colSpan = "6"

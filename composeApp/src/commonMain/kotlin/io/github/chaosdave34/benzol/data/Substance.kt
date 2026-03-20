@@ -17,6 +17,7 @@ data class Substance(
     val makModifiable: Modifiable<String> = Modifiable(""),
     val meltingPointModifiable: Modifiable<String> = Modifiable(""),
     val boilingPointModifiable: Modifiable<String> = Modifiable(""),
+    val decompositionTemperatureModifiable: Modifiable<String> = Modifiable(""),
 
     var quantity: Quantity = Quantity(),
     val hazardStatementsModifiable: Modifiable<List<Pair<String, String>>> = Modifiable(emptyList()),
@@ -36,6 +37,7 @@ data class Substance(
         mak: String,
         meltingPoint: String,
         boilingPoint: String,
+        decompositionTemperature: String,
         hazardStatements: List<Pair<String, String>>,
         precautionaryStatements: List<Pair<String, String>>,
         ghsPictograms: Set<GHSPictogram>,
@@ -51,6 +53,7 @@ data class Substance(
         makModifiable = Modifiable(mak),
         meltingPointModifiable = Modifiable(meltingPoint),
         boilingPointModifiable = Modifiable(boilingPoint),
+        decompositionTemperatureModifiable = Modifiable(decompositionTemperature),
         quantity = Quantity(""),
         hazardStatementsModifiable = Modifiable(hazardStatements),
         precautionaryStatementsModifiable = Modifiable(precautionaryStatements),
