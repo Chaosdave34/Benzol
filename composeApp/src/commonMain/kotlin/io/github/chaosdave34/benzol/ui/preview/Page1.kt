@@ -144,7 +144,7 @@ fun Page1(modifier: Modifier = Modifier) {
                     CenteredText(substance.precautionaryStatements.joinToString("-") { it.first })
                 }
                 SubstanceColumn(4f) {
-                    CenteredText(valueOrDash(substance.mak, stringResource(Res.string.mak_unit)))
+                    CenteredText(valueOrDash(substance.mak, stringResource(substance.makUnit.label)))
                     CenteredText(valueOrDash(substance.lethalDose, stringResource(Res.string.lethal_dose_unit)))
                     CenteredText(stringResource(substance.wgk.label))
                 }

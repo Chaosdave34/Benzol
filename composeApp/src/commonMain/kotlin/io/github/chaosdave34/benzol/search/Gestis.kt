@@ -112,6 +112,7 @@ object Gestis { // TODO add tests
                 getMolarMass(),
                 getLethalDose(),
                 getMak(),
+                getMakUnit(),
                 getMeltingPoint(),
                 getBoilingPoint(),
                 getDecompositionTemperature(),
@@ -188,7 +189,7 @@ object Gestis { // TODO add tests
             return lethalDose.removeSuffix("mg/kg").trim()
         }
 
-        private fun getMak(): String { // Todo currently only returns one value
+        private fun getMak(): String {
             val chapter = getChapter("1100", "1203")
 
             val makValues = Ksoup.parseXml(chapter)
@@ -199,6 +200,16 @@ object Gestis { // TODO add tests
                 ?.replace("m[gl]/m³".toRegex(), "")
                 ?.trim()
                 ?: ""
+        }
+
+        private fun getMakUnit(): Substance.MakUnit {// todo eventually join with getMak to a single getter
+            val chapter = getChapter("1100", "1203")
+
+            val makValue = Ksoup.parseXml(chapter)
+                .selectFirst("table:has(tr:has(td:contains(Die Angaben sind wissenschaftliche Empfehlungen und kein geltendes Recht.))) + table + table td:matches(\\d)")
+                ?.text() ?: ""
+
+            return if (makValue.contains("ml/m³")) Substance.MakUnit.MILLI_LITRE_PER_CUBIC_METRE else Substance.MakUnit.MILLI_GRAM_PER_CUBIC_METRE
         }
 
         private fun getMeltingPoint(): String { // °C can be C° sometimes, see https://gestis.dguv.de/data?name=520030&lang=de

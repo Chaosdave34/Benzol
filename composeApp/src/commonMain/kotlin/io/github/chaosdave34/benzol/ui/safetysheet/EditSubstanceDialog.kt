@@ -175,17 +175,48 @@ fun EditSubstanceDialog(
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        CustomTextField(
-                            Modifier.weight(0.33f),
-                            value = localSubstance.mak,
-                            onValueChange = { localSubstance = localSubstance.copy(makModifiable = localSubstance.makModifiable.copy(modified = it)) },
-                            label = stringResource(Res.string.mak),
-                            suffix = {
-                                Text(stringResource(Res.string.mak_unit))
-                            },
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            isError = !numberRegex.matches(localSubstance.mak) && localSubstance.mak.isNotEmpty()
-                        )
+                        var makUnitExpanded by remember { mutableStateOf(false) }
+
+                        ExposedDropdownMenuBox(
+                            modifier = Modifier.weight(0.33f),
+                            expanded = makUnitExpanded,
+                            onExpandedChange = { makUnitExpanded = it }
+                        ) {
+                            CustomTextField(
+                                Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable, enabled = false),
+                                value = localSubstance.mak,
+                                onValueChange = { localSubstance = localSubstance.copy(makModifiable = localSubstance.makModifiable.copy(modified = it)) },
+                                label = stringResource(Res.string.mak),
+                                suffix = {
+                                    Text(stringResource(localSubstance.makUnit.label))
+                                },
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                isError = !numberRegex.matches(localSubstance.mak) && localSubstance.mak.isNotEmpty(),
+                                trailingIcon = {
+                                    ExposedDropdownMenuDefaults.TrailingIcon(
+                                        makUnitExpanded,
+                                        modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.SecondaryEditable)
+                                    )
+                                }
+                            )
+
+                            ExposedDropdownMenu(
+                                matchAnchorWidth = false,
+                                expanded = makUnitExpanded,
+                                onDismissRequest = { makUnitExpanded = false },
+                            ) {
+                                Substance.MakUnit.entries.forEach {
+                                    DropdownMenuItem(
+                                        text = { Text(stringResource(it.label)) },
+                                        onClick = {
+                                            makUnitExpanded = false
+                                            localSubstance = localSubstance.copy(makUnitModifiable = localSubstance.makUnitModifiable.copy(modified = it))
+                                        },
+                                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                                    )
+                                }
+                            }
+                        }
 
                         CustomTextField(
                             Modifier.weight(0.33f),
@@ -235,7 +266,7 @@ fun EditSubstanceDialog(
                                     bottomStart = ShapeDefaults.ExtraSmall.bottomStart,
                                     topEnd = CornerSize(0.dp),
                                     bottomEnd = CornerSize(0.dp)
-                                ),
+                                )
                             )
 
                             CustomTextField(

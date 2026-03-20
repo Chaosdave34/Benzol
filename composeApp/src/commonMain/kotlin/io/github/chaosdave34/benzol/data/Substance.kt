@@ -1,7 +1,11 @@
 package io.github.chaosdave34.benzol.data
 
+import benzol.composeapp.generated.resources.Res
+import benzol.composeapp.generated.resources.milli_gram_per_cubic_metre
+import benzol.composeapp.generated.resources.milli_litre_per_cubic_metre
 import io.github.chaosdave34.benzol.search.Source
 import kotlinx.serialization.Serializable
+import org.jetbrains.compose.resources.StringResource
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
@@ -15,6 +19,7 @@ data class Substance(
     val molarMassModifiable: Modifiable<String> = Modifiable(""),
     val lethalDoseModifiable: Modifiable<String> = Modifiable(""),
     val makModifiable: Modifiable<String> = Modifiable(""),
+    val makUnitModifiable: Modifiable<MakUnit> = Modifiable(MakUnit.MILLI_GRAM_PER_CUBIC_METRE), // Todo different value so no new export file format needed
     val meltingPointModifiable: Modifiable<String> = Modifiable(""),
     val boilingPointModifiable: Modifiable<String> = Modifiable(""),
     val decompositionTemperatureModifiable: Modifiable<String> = Modifiable(""),
@@ -35,6 +40,7 @@ data class Substance(
         molarMass: String,
         lethalDose: String,
         mak: String,
+        makUnit: MakUnit,
         meltingPoint: String,
         boilingPoint: String,
         decompositionTemperature: String,
@@ -51,6 +57,7 @@ data class Substance(
         molarMassModifiable = Modifiable(molarMass),
         lethalDoseModifiable = Modifiable(lethalDose),
         makModifiable = Modifiable(mak),
+        makUnitModifiable = Modifiable(makUnit),
         meltingPointModifiable = Modifiable(meltingPoint),
         boilingPointModifiable = Modifiable(boilingPoint),
         decompositionTemperatureModifiable = Modifiable(decompositionTemperature),
@@ -80,6 +87,7 @@ data class Substance(
     val molarMass by ModifiableDelegate(molarMassModifiable)
     val lethalDose by ModifiableDelegate(lethalDoseModifiable)
     val mak by ModifiableDelegate(makModifiable)
+    val makUnit by ModifiableDelegate(makUnitModifiable)
     val meltingPoint by ModifiableDelegate(meltingPointModifiable)
     val boilingPoint by ModifiableDelegate(boilingPointModifiable)
     val decompositionTemperature by ModifiableDelegate(decompositionTemperatureModifiable)
@@ -94,6 +102,11 @@ data class Substance(
 
     @Serializable
     data class Quantity(val value: String = "", val unit: String = "g")
+
+    enum class MakUnit(override val label: StringResource) : Labeled {
+        MILLI_GRAM_PER_CUBIC_METRE(Res.string.milli_gram_per_cubic_metre),
+        MILLI_LITRE_PER_CUBIC_METRE(Res.string.milli_litre_per_cubic_metre)
+    }
 
     fun copyOriginal() = copy(
         nameModifiable = nameModifiable.copy(modified = null),

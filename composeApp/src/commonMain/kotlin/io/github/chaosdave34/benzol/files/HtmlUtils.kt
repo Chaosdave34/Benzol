@@ -27,7 +27,6 @@ suspend fun createHtml(
     val makLd50WgkTitle = getString(resourceEnvironment, Res.string.mak_ld50_wgk)
 
     val quantityTitle = getString(resourceEnvironment, Res.string.quantity_required)
-    val makUnit = getString(resourceEnvironment, Res.string.mak_unit)
     val lethalDoseUnit = getString(resourceEnvironment, Res.string.lethal_dose_unit)
     val celsiusUnit = getString(resourceEnvironment, Res.string.celsius_unit)
 
@@ -43,9 +42,10 @@ suspend fun createHtml(
     val signature1 = getString(resourceEnvironment, Res.string.signature_1)
     val signature2 = getString(resourceEnvironment, Res.string.signature_2)
 
-    val wgk = data.substances.map { getString(it.wgk.label) }
-    val signalWord = data.substances.map { getString(it.signalWord.label) }
+    val wgk = data.substances.map { getString(resourceEnvironment, it.wgk.label) }
+    val signalWord = data.substances.map { getString(resourceEnvironment, it.signalWord.label) }
     val decompositionAt = data.substances.map { getString(resourceEnvironment, Res.string.decomposition_at, it.decompositionTemperature) }
+    val makUnits = data.substances.map { getString(resourceEnvironment, it.makUnit.label) }
 
     val css = Res.readBytes("files/export.css").decodeToString()
 
@@ -148,7 +148,7 @@ suspend fun createHtml(
                             }
                             td("min-width-2cm value-with-unit center") {
                                 colSpan = "4"
-                                +valueOrDash(substance.mak, makUnit)
+                                +valueOrDash(substance.mak, makUnits[index])
                                 br
                                 +valueOrDash(substance.lethalDose, lethalDoseUnit)
                                 br
