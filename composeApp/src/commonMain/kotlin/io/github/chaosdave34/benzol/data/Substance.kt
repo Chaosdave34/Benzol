@@ -2,7 +2,7 @@ package io.github.chaosdave34.benzol.data
 
 import io.github.chaosdave34.benzol.search.Source
 import kotlinx.serialization.Serializable
-import kotlin.properties.ReadWriteProperty
+import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
 @Serializable
@@ -68,28 +68,25 @@ data class Substance(
         }
     }
 
-    var name by ModifiableDelegate(nameModifiable)
-    var casNumber by ModifiableDelegate(casNumberModifiable)
-    var molecularFormula by ModifiableDelegate(molecularFormulaModifiable)
-    var wgk by ModifiableDelegate(wgkModifiable)
-    var signalWord by ModifiableDelegate(signalWordModifiable)
+    val name by ModifiableDelegate(nameModifiable)
+    val casNumber by ModifiableDelegate(casNumberModifiable)
+    val molecularFormula by ModifiableDelegate(molecularFormulaModifiable)
+    val wgk by ModifiableDelegate(wgkModifiable)
+    val signalWord by ModifiableDelegate(signalWordModifiable)
 
-    var molarMass by ModifiableDelegate(molarMassModifiable)
-    var lethalDose by ModifiableDelegate(lethalDoseModifiable)
-    var mak by ModifiableDelegate(makModifiable)
-    var meltingPoint by ModifiableDelegate(meltingPointModifiable)
-    var boilingPoint by ModifiableDelegate(boilingPointModifiable)
+    val molarMass by ModifiableDelegate(molarMassModifiable)
+    val lethalDose by ModifiableDelegate(lethalDoseModifiable)
+    val mak by ModifiableDelegate(makModifiable)
+    val meltingPoint by ModifiableDelegate(meltingPointModifiable)
+    val boilingPoint by ModifiableDelegate(boilingPointModifiable)
+    val decompositionTemperature by ModifiableDelegate(decompositionTemperatureModifiable)
 
-    var hazardStatements by ModifiableDelegate(hazardStatementsModifiable)
-    var precautionaryStatements by ModifiableDelegate(precautionaryStatementsModifiable)
-    var ghsPictograms by ModifiableDelegate(ghsPictogramsModifiable)
+    val hazardStatements by ModifiableDelegate(hazardStatementsModifiable)
+    val precautionaryStatements by ModifiableDelegate(precautionaryStatementsModifiable)
+    val ghsPictograms by ModifiableDelegate(ghsPictogramsModifiable)
 
-    private class ModifiableDelegate<T>(val modifiable: Modifiable<T>) : ReadWriteProperty<Any?, T> {
+    private class ModifiableDelegate<T>(val modifiable: Modifiable<T>) : ReadOnlyProperty<Any?, T> {
         override fun getValue(thisRef: Any?, property: KProperty<*>): T = modifiable.current
-
-        override fun setValue(thisRef: Any?, property: KProperty<*>, value: T) {
-            modifiable.modified = value
-        }
     }
 
     @Serializable
