@@ -23,7 +23,11 @@ object FileUtils {
             subclass(SafetySheetInputState::class)
         }
     }
-    private val format = Json { serializersModule = module }
+
+    private val format = Json {
+        serializersModule = module
+        ignoreUnknownKeys = true
+    }
 
     @Serializable(with = FileSerializer::class)
     data class File(
@@ -41,7 +45,8 @@ object FileUtils {
         // First check benzol file
         try {
             return format.decodeFromString<File>(value).content
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            println(e)
         }
 
         // Second check CaBr2 file
