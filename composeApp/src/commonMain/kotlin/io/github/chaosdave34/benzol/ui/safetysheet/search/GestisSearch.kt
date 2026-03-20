@@ -1,6 +1,7 @@
 package io.github.chaosdave34.benzol.ui.safetysheet.search
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.*
@@ -10,6 +11,7 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.isAltPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.window.core.layout.WindowSizeClass
@@ -223,7 +225,8 @@ private fun SearchBar(
                     } else false
                 },
             value = value,
-            onValueChange = { onValueChange(it.replace("\n", "")) }, // todo: trick to have single line text field without height change on content
+            onValueChange = onValueChange,
+            singleLine = true,
             label = { Text(stringResource(searchType.label), maxLines = 1, overflow = TextOverflow.Ellipsis) },
             leadingIcon = { Icon(vectorResource(Res.drawable.search), null) },
             trailingIcon = {
@@ -235,6 +238,7 @@ private fun SearchBar(
                 }
             },
             colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search)
         )
 
         ExposedDropdownMenu(
