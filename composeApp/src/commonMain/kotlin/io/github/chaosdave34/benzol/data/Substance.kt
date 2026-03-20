@@ -7,39 +7,39 @@ import kotlin.reflect.KProperty
 
 @Serializable
 data class Substance(
-    val nameModifiable: Modifiable<String>,
-    val casNumberModifiable: Modifiable<String>,
-    val molecularFormulaModifiable: Modifiable<String>,
-    val wgkModifiable: Modifiable<Wgk>,
-    val signalWordModifiable: Modifiable<SignalWord>,
-    val molarMassModifiable: Modifiable<String>,
-    val lethalDoseModifiable: Modifiable<String>,
-    val makModifiable: Modifiable<String>,
-    val meltingPointModifiable: Modifiable<String>,
-    val boilingPointModifiable: Modifiable<String>,
+    val nameModifiable: Modifiable<String> = Modifiable(""),
+    val casNumberModifiable: Modifiable<String> = Modifiable(""),
+    val molecularFormulaModifiable: Modifiable<String> = Modifiable(""),
+    val wgkModifiable: Modifiable<Wgk> = Modifiable(Wgk.NONE),
+    val signalWordModifiable: Modifiable<SignalWord> = Modifiable(SignalWord.NONE),
+    val molarMassModifiable: Modifiable<String> = Modifiable(""),
+    val lethalDoseModifiable: Modifiable<String> = Modifiable(""),
+    val makModifiable: Modifiable<String> = Modifiable(""),
+    val meltingPointModifiable: Modifiable<String> = Modifiable(""),
+    val boilingPointModifiable: Modifiable<String> = Modifiable(""),
 
     var quantity: Quantity = Quantity(),
-    val hazardStatementsModifiable: Modifiable<List<Pair<String, String>>>,
-    val precautionaryStatementsModifiable: Modifiable<List<Pair<String, String>>>,
-    val ghsPictogramsModifiable: Modifiable<Set<GHSPictogram>>,
+    val hazardStatementsModifiable: Modifiable<List<Pair<String, String>>> = Modifiable(emptyList()),
+    val precautionaryStatementsModifiable: Modifiable<List<Pair<String, String>>> = Modifiable(emptyList()),
+    val ghsPictogramsModifiable: Modifiable<Set<GHSPictogram>> = Modifiable(emptySet()),
 
-    var source: Pair<Source, String>
+    var source: Pair<Source, String> = Pair(Source.Custom, "")
 ) {
     constructor(
-        name: String = "",
-        casNumber: String = "",
-        molecularFormula: String = "",
-        wgk: Wgk = Wgk.NONE,
-        signalWord: SignalWord = SignalWord.NONE,
-        molarMass: String = "",
-        lethalDose: String = "",
-        mak: String = "",
-        meltingPoint: String = "",
-        boilingPoint: String = "",
-        hazardStatements: List<Pair<String, String>> = emptyList(),
-        precautionaryStatements: List<Pair<String, String>> = emptyList(),
-        ghsPictograms: Set<GHSPictogram> = emptySet(),
-        source: Pair<Source, String> = Pair(Source.Custom, "")
+        name: String,
+        casNumber: String,
+        molecularFormula: String,
+        wgk: Wgk,
+        signalWord: SignalWord,
+        molarMass: String,
+        lethalDose: String,
+        mak: String,
+        meltingPoint: String,
+        boilingPoint: String,
+        hazardStatements: List<Pair<String, String>>,
+        precautionaryStatements: List<Pair<String, String>>,
+        ghsPictograms: Set<GHSPictogram>,
+        source: Pair<Source, String>
     ) : this(
         nameModifiable = Modifiable(name),
         casNumberModifiable = Modifiable(casNumber),
