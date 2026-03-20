@@ -8,7 +8,7 @@ import org.jetbrains.compose.resources.StringResource
 
 enum class SignalWord(override val label: StringResource, val internalLabel: String) : Labeled {
     NONE(Res.string.none_dash, ""),
-    WARNING(Res.string.warning, "Achunt"),
+    WARNING(Res.string.warning, "Achtung"),
     DANGER(Res.string.danger, "Gefahr");
 
     companion object {
