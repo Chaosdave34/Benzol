@@ -80,7 +80,7 @@ suspend fun createHtml(
                             +preparationTitle
                             br
                             b {
-                                +data.preparation.trim()
+                                +data.preparation.trim().ifEmpty { nbsp.toString() }
                             }
                         }
                     }
@@ -258,14 +258,12 @@ private fun TR.statementsList(substances: List<Substance>, transform: (Substance
     }
 }
 
-private fun TR.textBlock(weight: Int, title: String, content: String? = null) {
+private fun TR.textBlock(weight: Int, title: String, content: String) {
     td {
         colSpan = weight.toString()
         +title
-        if (content != null) {
-            br
-            +content
-        }
+        br
+        +content.ifEmpty { nbsp.toString() }
     }
 }
 
