@@ -16,7 +16,7 @@ fun main(args: Array<String>) {
     setupLogging()
     FileKit.init(appId = "Benzol")
 
-    val openedFile = args.getOrNull(0)?.let { path ->
+    val openedFile = args.lastOrNull()?.let { path ->
         val file = File(path)
         FileUtils.decode(file.readText())?.let { Pair(file.nameWithoutExtension, it) }
     }
