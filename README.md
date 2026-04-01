@@ -1,3 +1,1 @@
-# Benzol
-
-Kotlin Multiplatform App to create safety sheets 
+Development continues on codeberg: https://codeberg.org/NeoSpark/Benzol
