@@ -1,37 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Benzol</title>
-    <link type="text/css" rel="stylesheet" href="styles.css">
-    <link rel="icon" type="image/x-icon"
-          href="composeResources/benzol.composeapp.generated.resources/drawable/logo.svg">
-    <script>
-        const currentLanguagesImplementation = Object.getOwnPropertyDescriptor(Navigator.prototype, "languages");
-        const newLanguagesImplementation = Object.assign({}, currentLanguagesImplementation, {
-            get: function () {
-                if (window.__customLocale) {
-                    return [window.__customLocale];
-                } else {
-                    return currentLanguagesImplementation.get.apply(this);
-                }
-            }
-        });
-
-        Object.defineProperty(Navigator.prototype, "languages", newLanguagesImplementation)
-    </script>
-</head>
-<body style="text-align: center; align-content: center; background-color: #141218">
-<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 50 50" role="presentation">
-    <circle cx="25" cy="25" r="20" stroke=#1D1B20" stroke-width="4" fill="none"/>
-    <circle cx="25" cy="25" r="20" stroke="#E4DFE7" stroke-width="4" fill="none" stroke-linecap="round"
-            stroke-dasharray="90 125">
-        <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="1s"
-                          repeatCount="indefinite"/>
-    </circle>
-</svg>
-<!--suppress HtmlUnknownTarget -->
-<script type="application/javascript" src="composeApp.js"></script>
-</body>
+<!DOCTYPE HTML>
+<html lang="en-US">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="refresh" content="0; url=https://neospark.codeberg.page/benzol/">
+        <script type="text/javascript">
+            window.location.href = "https://neospark.codeberg.page/benzol/"
+        </script>
+        <title>Benzol</title>
+    </head>
+    <body>
+        <!-- Note: don't tell people to `click` the link, just tell them that it is a link. -->
+        Diese Website ist dauerhaft umgezogen.
+        Falls Sie nicht automatisch weitergeleitet werden, folgen Sie bitte diesem <a href='https://neospark.codeberg.page/benzol/'>Link.</a>.
+    </body>
 </html>
