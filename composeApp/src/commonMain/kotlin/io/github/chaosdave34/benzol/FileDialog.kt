@@ -1,0 +1,82 @@
+package io.github.chaosdave34.benzol
+
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.FloatingActionButtonMenuScope
+import androidx.compose.material3.Icon
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
+import benzol.composeapp.generated.resources.*
+import io.github.chaosdave34.benzol.data.SafetySheetInputState
+import io.github.chaosdave34.benzol.files.CaBr2File
+import io.github.chaosdave34.benzol.files.export.FileUtils
+import io.github.chaosdave34.benzol.ui.SafetySheetViewModel
+import io.github.vinceglb.filekit.dialogs.FileKitDialogSettings
+import io.github.vinceglb.filekit.dialogs.FileKitType
+import io.github.vinceglb.filekit.dialogs.compose.PickerResultLauncher
+import io.github.vinceglb.filekit.dialogs.compose.rememberFilePickerLauncher
+import io.github.vinceglb.filekit.nameWithoutExtension
+import io.github.vinceglb.filekit.readString
+import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.rememberResourceEnvironment
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
+
+@Composable
+fun SaveIcon() {
+    Icon(vectorResource(Res.drawable.save_filled), contentDescription = stringResource(Res.string.save_file))
+}
+
+@Composable
+fun ExportFileIcon() {
+    Icon(vectorResource(Res.drawable.picture_as_pdf_filled), contentDescription = stringResource(Res.string.export_file))
+}
+
+@Composable
+expect fun SaveFileIconButton(
+    inputState: SafetySheetInputState
+)
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+expect fun FloatingActionButtonMenuScope.SaveFileFabButton(
+    inputState: SafetySheetInputState,
+    onClick: () -> Unit
+)
+
+context(viewModel: SafetySheetViewModel)
+@Composable
+expect fun ExportFileIconButton()
+
+context(viewModel: SafetySheetViewModel)
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+expect fun FloatingActionButtonMenuScope.ExportFileFabButton(
+    onClick: () -> Unit
+)
+
+context(viewModel: SafetySheetViewModel)
+@Composable
+fun rememberFilePicker(): PickerResultLauncher {
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = LocalSnackbarHostState.current
+    val resourceEnvironment = rememberResourceEnvironment()
+
+    return rememberFilePickerLauncher(
+        type = FileKitType.File(extensions = listOf(FileUtils.FILE_EXTENSION, CaBr2File.EXTENSION)),
+        dialogSettings = filePickerDialogSettings
+    ) { file ->
+        scope.launch {
+            if (file != null) {
+                val savable = FileUtils.decode(file.readString())
+                if (savable != null) {
+                    viewModel.importSavable(file.nameWithoutExtension, savable)
+                } else {
+                    snackbarHostState.showSnackbar(getString(resourceEnvironment, Res.string.failed_to_load_file))
+                }
+            }
+        }
+    }
+}
+
+expect val filePickerDialogSettings: FileKitDialogSettings

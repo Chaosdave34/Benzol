@@ -1,0 +1,162 @@
+<resources>
+    <string name="title">Benzol</string>
+
+    <string name="new_file">Neue Betriebsanweisung</string>
+    <string name="open_file">Datei öffnen</string>
+    <string name="save_file">Datei speichern</string>
+    <string name="export_file">PDF exportieren</string>
+
+    <string name="save">Speichern</string>
+    <string name="general">Allgemein</string>
+    <string name="properties_and_regulations">Eigenschaften und Vorschriften</string>
+
+    <string name="settings">Einstellungen</string>
+
+    <string name="filename">Dateiname</string>
+    <string name="document_title">Dokument Titel</string>
+    <string name="organisation">Organisation</string>
+    <string name="course">Kurs/Lab</string>
+    <string name="place">Platz</string>
+    <string name="name">Name</string>
+    <string name="assistant">Assistent/in</string>
+    <string name="preparation">Herzustellendes Präparat</string>
+
+    <string name="document_title_default">Betriebsanweisungen nach EG Nr. 1272/2008</string>
+    <string name="organisation_default">für chemische Laboratorien der Universität Regensburg</string>
+    <string name="course_default">Praktikum anorganische Chemie</string>>
+
+    <string name="gestis">GESTIS-Stoffdatenbank</string>
+    <string name="custom_source">Selbst erstellt</string>
+
+    <string name="edit_substance">Zum Bearbeiten auf Substanz klicken.</string>
+    <string name="molecular_formula">Summenformel</string>
+    <string name="cas_number">CAS Nummer</string>
+    <string name="edit_substance_dialog">Substanz bearbeiten</string>
+
+    <string name="formatted_molecular_formula">Formatierte Summenformel</string>
+    <string name="formatted_molecular_formula-hint">verwende &lt;*&gt; für Indizes</string>
+    <string name="wgk">Wassergefährdungsklasse</string>
+    <string name="signal_word">Signalwort</string>
+
+    <string name="molar_mass">Molare Masse</string>
+    <string name="molar_mass_unit">g/mol</string>
+    <string name="lethal_dose">Letale Dosis</string>
+    <string name="lethal_dose_unit">mg/kg</string>
+    <string name="mak">MAK</string>
+    <string name="milli_gram_per_cubic_metre">mg/m³</string>
+    <string name="milli_litre_per_cubic_metre">ml/m³</string>
+    <string name="melting_point">Schmelzpunkt</string>
+    <string name="boiling_point">Siedepunkt</string>
+    <string name="decomposition_temperature">Zersetzungstemperatur</string>
+    <string name="celsius_unit">°C</string>
+    <string name="quantity">Menge</string>
+    <string name="unit">Einheit</string>
+
+    <string name="human_and_environment_danger">Gefahren für Mensch und Umwelt, die von den Ausgangsmaterialien bzw. den Produkten ausgehen, soweit sie nicht durch genannte Angaben abgedeckt sind (z.B. krebserregend, fruchtschädigend, hautresorptiv)</string>
+    <string name="rules_of_conduct">Schutzmaßnahmen und Verhaltensregeln</string>
+    <string name="in_case_of_danger">Verhalten im Gefahrenfall, Erste-Hilfe-Maßnahmen (gegebenenfalls Kopie der entsprechenden Literaturstelle beiheften)</string>
+    <string name="disposal">Entsorgung</string>
+
+    <string name="hazard_statements">H-Sätze</string>
+    <string name="precautionary_statements">P-Sätze</string>
+
+    <string name="ghs_pictograms">GHS-Symbole</string>
+    <string name="ghs_pictograms_hint">Zum Entfernen oder Hinzufügen auf das Symbol klicken.</string>
+
+    <string name="cancel">Abbrechen</string>
+
+    <string name="gestis_hint">Gestis bietet nur selten Daten zu Versuchsprodukten.</string>
+    <string name="search_option">Suchoption</string>
+    <string name="search">Suche</string>
+    <string name="do_search">Suchen</string>
+    <string name="exact_search">Exakte Suche</string>
+    <string name="failed_search">Es ist ein Fehler bei der Suche aufgetreten.</string>
+    <string name="no_search_results">Keine Ergebnisse gefunden</string>
+
+    <string name="theme">Farbschema</string>
+    <string name="follow_system">System</string>
+    <string name="dark_theme">Dunkel</string>
+    <string name="light_theme">Hell</string>
+
+    <string name="language">Sprache</string>
+
+    <string name="preview">Vorschau</string>
+    <string name="name_with_plural">Name(n)</string>
+
+    <string name="used_substances">eingesetze Stoffe\nund Produkte</string>
+    <string name="molar_mass_with_unit">MG\n[g/mol]</string>
+    <string name="temperatures">Sdp.\nSmp.</string>
+    <string name="statement_numbers">H/P-Sätze\n(Nummern)</string>
+    <string name="mak_ld50_wgk">MAK\nLD50\nWGK</string>
+    <string name="quantity_required">für Ansatz benötigt</string>
+
+    <string name="sources">Quellen</string>
+    <string name="source">Quelle</string>
+
+    <string name="title_statements">Wortlaut der wesentlichen oben genannten H- und P-Sätze</string>
+
+    <string name="signature_1">Hiermit verpflichte ich mich, den Versuch gemäß den in dieser Betriebsanweisung aufgeführten Sicherheitsvorschriften durchzuführen.</string>
+    <string name="signature_2">Präparat zur Synthese mit den auf der Vorderseite berechneten Chemikalienmengen freigegeben.</string>
+    <string name="signature">Unterschrift</string>
+    <string name="location_and_date">(Ort, Datum)</string>
+
+    <string name="close">Schließen</string>
+    <string name="reset">Zurücksetzen</string>
+    <string name="accept">Bestätigen</string>
+    <string name="open_settings">Einstellungen öffnen</string>
+    <string name="edit">Bearbeiten</string>
+    <string name="add">Hinzufügen</string>
+    <string name="delete">Entfernen</string>
+    <string name="github">Github Repository</string>
+
+    <string name="disclaimer">Bei %1$d handelt es sich um ein Open-Source-Projekt und daher basiert die Verwendung der generierten Betriebsanweisungen auf Eigenverantwortung.\nWeder das Programm, noch die Entwickler sind für den Inhalt verantwortlich und können für unkorrekte oder unvollständige Informationen zur Rechenschaft gezogen werden.</string>
+
+    <string name="important">Wichtig!</string>
+
+    <string name="up">Hoch</string>
+    <string name="down">Runter</string>
+
+    <string name="german">Deutsch</string>
+    <string name="english">English</string>
+
+    <string name="chemical_name">Stoffname</string>
+    <string name="number">Nummer</string>
+    <string name="full_text">Volltext</string>
+
+    <string name="pdf_export_success">PDF-Datei wurde erfolgreich erstellt</string>
+    <string name="pdf_export_failed">Es trat ein Fehler beim Erstellen der PDF-Datei auf</string>
+    <string name="unnamed_file">Unbenannt</string>
+
+    <string name="sheet">Datenblatt</string>
+
+    <string name="search_results">Suchergebnisse</string>
+
+    <string name="collapse_rail">Menu einklappen</string>
+    <string name="expand_rail">Menu ausklappen</string>
+
+    <string name="failed_to_load_file">Fehler beim Laden der Datei!</string>
+    <string name="about">Information</string>
+
+    <string name="export_url">Export URL</string>
+
+    <string name="substance_exists">Eine Substanz mit dieser CAS-Nummer existiert bereits.</string>
+
+    <string name="no_pdf_export_url_provided">Keine PDF Export URL angegeben!</string>
+
+    <string name="clear">Leeren</string>
+
+    <string name="search_substances">Substanzen suchen</string>
+
+    <string name="file_saved_success">Datei erfolgreich gespeichert</string>
+
+    <string name="warning">Achtung</string>
+    <string name="danger">Gefahr</string>
+
+    <string name="wgk_1">WGK 1</string>
+    <string name="wgk_2">WGK 2</string>
+    <string name="wgk_3">WGK 3</string>
+
+    <string name="none_dash">-</string>
+
+    <string name="decomposition_at">Zersetzung bei %1$d&#160;°C</string>
+</resources>
