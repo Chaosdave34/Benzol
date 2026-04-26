@@ -1,1 +1,1 @@
-Development continues on codeberg: https://codeberg.org/NeoSpark/Benzol
+Development continues on codeberg: [https://codeberg.org/NeoSpark/Benzol](https://codeberg.org/JCF-Regensburg/Benzol)
